@@ -139,6 +139,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Common.h" />
+    <ClInclude Include="D3D12Fence.h" />
+    <ClInclude Include="D3D12RhiGlobal.h" />
+    <ClInclude Include="D3D12RhiModule.h" />
+    <ClInclude Include="D3D12RhiUtil.h" />
+    <ClInclude Include="D3D12Viewport.h" />
+    <ClInclude Include="d3dx12.h" />
+    <ClInclude Include="EngineLoop.h" />
+    <ClInclude Include="Global.h" />
+    <ClInclude Include="ModuleInterface.h" />
+    <ClInclude Include="ModuleManager.h" />
+    <ClInclude Include="ModuleRegister.h" />
+    <ClInclude Include="Util.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="D3D12RhiModule.cpp" />
+    <ClCompile Include="D3D12Viewport.cpp" />
+    <ClCompile Include="EngineLoop.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
