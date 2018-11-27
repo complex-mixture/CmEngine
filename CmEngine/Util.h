@@ -15,7 +15,7 @@ do											\
 #define LogW(_format, ...)						\
 do												\
 {												\
-	char buffer[1024];							\
+	wchar_t buffer[1024];							\
 	swprintf_s(buffer, _format, __VA_ARGS__);	\
 	OutputDebugStringW(buffer);					\
 } while (0)

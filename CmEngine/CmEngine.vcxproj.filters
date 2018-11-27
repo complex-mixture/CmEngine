@@ -16,6 +16,33 @@
     <Filter Include="Launch\Private">
       <UniqueIdentifier>{fb5479e7-32c6-4725-b35f-7788d423a733}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Slate">
+      <UniqueIdentifier>{be8bb5b0-4c65-4af9-8a94-6c1177d11159}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Slate\Private">
+      <UniqueIdentifier>{9d3a4f0e-e326-4867-a554-cd544ca44798}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{513ca852-cb46-444b-8614-18b812f576a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Private">
+      <UniqueIdentifier>{504e2417-9ca5-4b7e-b34f-bbf23a336bd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource">
+      <UniqueIdentifier>{487ea596-70f7-4444-87b5-67771fd1b7ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render">
+      <UniqueIdentifier>{f83ecf65-0f0e-47e1-8eb6-1e2368e9a7f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFrameWork">
+      <UniqueIdentifier>{d150fb61-777d-42e6-9353-54a5eb9cad1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\Private">
+      <UniqueIdentifier>{c5f7d7bb-4522-484f-a9f2-f67da7f22e64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Private">
+      <UniqueIdentifier>{d73a4dc1-0bea-465b-8578-f3a61ecae5c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -48,14 +75,50 @@
     <ClInclude Include="d3dx12.h">
       <Filter>D3D12Rhi\Private</Filter>
     </ClInclude>
-    <ClInclude Include="EngineLoop.h">
-      <Filter>Launch\Private</Filter>
-    </ClInclude>
     <ClInclude Include="D3D12Fence.h">
       <Filter>D3D12Rhi</Filter>
     </ClInclude>
     <ClInclude Include="D3D12RhiUtil.h">
       <Filter>D3D12Rhi\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Slate</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowManager.h">
+      <Filter>Slate</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTimer.h">
+      <Filter>Launch\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineCommon.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderModule.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderScene.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderSetting.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="CpuRenderFrameResource.h">
+      <Filter>Render\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="GpuRenderFrameResource.h">
+      <Filter>Render\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderModuleImpl.h">
+      <Filter>Render\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineLoop.h">
+      <Filter>Launch</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -71,5 +134,39 @@
     <ClCompile Include="D3D12Viewport.cpp">
       <Filter>D3D12Rhi\Private</Filter>
     </ClCompile>
+    <ClCompile Include="WindowManager.cpp">
+      <Filter>Slate\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Slate\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Engine\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTimer.cpp">
+      <Filter>Launch\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderModuleImpl.cpp">
+      <Filter>Render\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="CpuRenderFrameResource.cpp">
+      <Filter>Render\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="GpuRenderFrameResource.cpp">
+      <Filter>Render\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Global.cpp">
+      <Filter>Core\Private</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\Download\bitbug_favicon.ico">
+      <Filter>Resource</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CmEngine.rc">
+      <Filter>Resource</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

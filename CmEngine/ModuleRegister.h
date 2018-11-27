@@ -10,7 +10,7 @@ struct ModuleRegister
 	static_assert(std::is_base_of_v<IModuleInterface, ModuleClass>, "the module class is not drived from IModuleInterface");
 
 	template<template<typename> typename _first, template<typename> typename ... _rest>
-	__forceinline static void __Exec(const std::string & _moduleName)
+	__forceinline static void __Exec(const std::wstring & _moduleName)
 	{
 		_first<MyType>::Exec(_moduleName);
 		__Exec<_rest...>(_moduleName);
@@ -21,7 +21,7 @@ struct ModuleRegister
 	{
 	}
 
-	ModuleRegister(const std::string & _moduleName)
+	ModuleRegister(const std::wstring & _moduleName)
 	{
 		__Exec<_executor...>(_moduleName);
 	}
@@ -32,7 +32,7 @@ struct MRE_Main
 {
 	using ModuleRegister = _moduleRegister;
 
-	__forceinline static void Exec(const std::string & _moduleName)
+	__forceinline static void Exec(const std::wstring & _moduleName)
 	{
 		FModuleInfo _moduleInfo;
 		_moduleInfo.mModuleName = _moduleName;
@@ -50,24 +50,24 @@ struct MRE_Main
 template<typename _moduleRegister>
 struct MRE_Check
 {
-	__forceinline static void Exec(const std::string & _moduleName)
+	__forceinline static void Exec(const std::wstring & _moduleName)
 	{
 		bool IsModuleRegisted = FModuleManager::Get().GetModuleInfos().count(_moduleName) > 0;
 		if (IsModuleRegisted)
-			DebugMessageBoxA("module error", "%s module was registed for more than one times", _moduleName.c_str());
+			DebugMessageBoxW(L"module error", L"%s module was registed for more than one times", _moduleName.c_str());
 	}
 };
 
 template<typename _moduleRegister>
 struct MRE_Log
 {
-	__forceinline static void Exec(const std::string & _moduleName)
+	__forceinline static void Exec(const std::wstring & _moduleName)
 	{
-		LogA("the %s module is registed", _moduleName.c_str());
+		LogW(L"the %s module is registed\n", _moduleName.c_str());
 	}
 };
 
-#define RegistModule(_ModuleClass, _ModuleName, ...) ModuleRegister<_ModuleClass, __VA_ARGS__> __##_ModuleName##_moduleRegister(#_ModuleName);
+#define RegistModule(_ModuleClass, _ModuleName, ...) ModuleRegister<_ModuleClass, __VA_ARGS__> __##_ModuleName##_moduleRegister(L###_ModuleName);
 
 #ifdef DEBUG
 #define RegistDefaultModule(_ModuleClass, _ModuleName) RegistModule(_ModuleClass, _ModuleName, MRE_Check, MRE_Main, MRE_Log)

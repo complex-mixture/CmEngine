@@ -18,10 +18,10 @@ void FD3D12Viewport::__Init()
 	desc.OutputWindow = mHwnd;
 	desc.SampleDesc.Quality = 0;
 	desc.SampleDesc.Count = 1;
-	desc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+	desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 	desc.Windowed = !bIsFullScreen;
 
-	VerifyD3D12Result(GFactory->CreateSwapChain(GDevice, &desc, &mSwapChain));
+	VerifyD3D12Result(GFactory->CreateSwapChain(GCommandQueue, &desc, &mSwapChain));
 	for (auto i = 0; i != mBackBufferCount; ++i)
 	{
 		VerifyD3D12Result(mSwapChain->GetBuffer(i, IID_PPV_ARGS(&mBackBuffers[i])));
@@ -36,6 +36,7 @@ FD3D12Viewport::FD3D12Viewport(HWND _windowHandle, uint32_t _sizeX, uint32_t _si
 	bIsFullScreen(_isFullscreen)
 {
 	mBackBufferCount = DefaultBackBufferCount;
+	bShouldPresent = true;
 
 	__Init();
 }
@@ -107,5 +108,9 @@ uint32_t FD3D12Viewport::Present()
 FD3D12Viewport::~FD3D12Viewport()
 {
 	WaitForCompletion();
+	for (auto i = 0; i != mBackBufferCount; ++i)
+	{
+		mBackBuffers[i]->Release();
+	}
 	mSwapChain->Release();
 }

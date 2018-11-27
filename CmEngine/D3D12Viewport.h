@@ -46,7 +46,7 @@ private:
 	uint32_t mBackBufferCount;
 	uint32_t mCurrentBackBufferIndex = 0;
 	ID3D12Resource * mBackBuffers[MaxBackBufferCount] = { 0 };
-	uint64_t mLastUseFenceValue;
+	uint64_t mLastUseFenceValue = 0;
 
 	uint32_t bIsFullScreen : 1;
 	uint32_t bShouldPresent : 1;

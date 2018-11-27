@@ -3,13 +3,20 @@
 #include "ModuleRegister.h"
 #include "d3dx12.h"
 #include <vector>
+#include <dxgidebug.h>
 #include <set>
 #include "D3D12Viewport.h"
 #include "D3D12Fence.h"
 #include "D3D12RhiUtil.h"
+#include <windows.h>
 
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dxgi.lib")
+
+#ifdef DEBUG
+#include <dxgidebug.h>
+#pragma comment(lib, "dxguid.lib")
+#endif // DEBUG
 
 IDXGIFactory * GFactory = nullptr;
 IDXGIAdapter* GAdapter = nullptr;
@@ -17,9 +24,10 @@ ID3D12Device * GDevice = nullptr;
 ID3D12GraphicsCommandList * GCommandList = nullptr;
 ID3D12CommandQueue * GCommandQueue = nullptr;
 FD3D12Fence * GFence = nullptr;
+std::array<ID3D12CommandAllocator*, 3> GAllocators;
 std::vector<IDXGIAdapter*> GAdapters;
 
-class FD3D12RhiInterface : public ID3D12RhiInterface
+class D3D12RhiModuleImpl : public ID3D12RhiModuleInterface
 {
 	std::set<FD3D12Viewport*> mSwapChains;
 public:
@@ -29,14 +37,13 @@ public:
 	uint32_t Present();
 };
 
-
-void FD3D12RhiInterface::Init()
+void D3D12RhiModuleImpl::Init()
 {
 #ifdef DEBUG
 	ID3D12Debug * debugController = nullptr;
 	VerifyD3D12Result(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)));
 	debugController->EnableDebugLayer();
-	debugController->Release();
+	//debugController->Release();
 #endif
 
 	VerifyD3D12Result(CreateDXGIFactory(IID_PPV_ARGS(&GFactory)));
@@ -44,15 +51,18 @@ void FD3D12RhiInterface::Init()
 	{
 		UINT i = 0;
 		IDXGIAdapter * _adapter = nullptr;
-		while (GFactory->EnumAdapters(i, &_adapter) != DXGI_ERROR_NOT_FOUND)
+		while (GFactory->EnumAdapters(i++, &_adapter) != DXGI_ERROR_NOT_FOUND)
 			GAdapters.push_back(_adapter);
 		if (GAdapters.size() == 0)
+		{
 			DebugMessageBoxW(L"D3D12", L"没有可用的显示适配器");
+		}
 		GAdapter = GAdapters[0];
 	}
 	VerifyD3D12Result(D3D12CreateDevice(GAdapter, D3D_FEATURE_LEVEL_12_0, IID_PPV_ARGS(&GDevice)));
-	VerifyD3D12Result(GDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, nullptr, nullptr, IID_PPV_ARGS(&GCommandList)));
-	GFence = new FD3D12Fence(0);
+	for (int i = 0; i != GAllocators.size(); ++i)
+		VerifyD3D12Result(GDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&GAllocators[i])));
+	VerifyD3D12Result(GDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, GAllocators[0], nullptr, IID_PPV_ARGS(&GCommandList)));
 
 	{
 		D3D12_COMMAND_QUEUE_DESC desc;
@@ -63,15 +73,26 @@ void FD3D12RhiInterface::Init()
 		VerifyD3D12Result(GDevice->CreateCommandQueue(&desc, IID_PPV_ARGS(&GCommandQueue)));
 	}
 
+	GCommandList->Close();
+	GFence = new FD3D12Fence(0);
+
 	Assert(GFactory && GAdapter && GDevice && GCommandList && GCommandQueue);
 }
 
-void FD3D12RhiInterface::Clear()
+void D3D12RhiModuleImpl::Clear()
 {
 	GFactory->Release();
 	GDevice->Release();
 	GCommandList->Release();
 	GCommandQueue->Release();
+
+	delete GFence;
+	for (int i = 0; i != 3; ++i)
+	{
+		GAllocators[i]->Release();
+		GAllocators[i] = nullptr;
+	}
+
 	for (auto _ele : GAdapters)
 		_ele->Release();
 
@@ -80,17 +101,28 @@ void FD3D12RhiInterface::Clear()
 	GDevice = nullptr;
 	GCommandList = nullptr;
 	GCommandQueue = nullptr;
+	GFence = nullptr;
 	GAdapters.clear();
+
+#ifdef DEBUG
+	IDXGIDebug * debug = nullptr;
+	HMODULE handle = LoadLibrary(L"DXGIDebug.dll");
+	using DXGIGetDebugInterfaceFuncType = HRESULT(WINAPI *)(REFIID, void **);
+	DXGIGetDebugInterfaceFuncType DXGIGetDebugInterfaceFunc = reinterpret_cast<DXGIGetDebugInterfaceFuncType>(GetProcAddress(handle, "DXGIGetDebugInterface"));
+	DXGIGetDebugInterfaceFunc(IID_PPV_ARGS(&debug));
+	debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
+	debug->Release();
+#endif // DEBUG
 }
 
-FD3D12Viewport * FD3D12RhiInterface::CreateViewport(HWND _windowHandle, uint32_t _sizeX, uint32_t _sizeY, bool _isFullscreen, DXGI_FORMAT _pixelFormat)
+FD3D12Viewport * D3D12RhiModuleImpl::CreateViewport(HWND _windowHandle, uint32_t _sizeX, uint32_t _sizeY, bool _isFullscreen, DXGI_FORMAT _pixelFormat)
 {
 	FD3D12Viewport * newSwapChain = new FD3D12Viewport(_windowHandle, _sizeX, _sizeY, _isFullscreen, _pixelFormat);
 	mSwapChains.insert(newSwapChain);
 	return newSwapChain;
 }
 
-uint32_t FD3D12RhiInterface::Present()
+uint32_t D3D12RhiModuleImpl::Present()
 {
 	uint32_t count = 0;
 	for (auto _ele : mSwapChains)
@@ -99,4 +131,4 @@ uint32_t FD3D12RhiInterface::Present()
 	return count;
 }
 
-RegistDefaultModule(FD3D12RhiInterface, D3D12Rhi);
+RegistDefaultModule(D3D12RhiModuleImpl, D3D12Rhi);

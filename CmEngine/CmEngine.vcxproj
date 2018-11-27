@@ -146,18 +146,44 @@
     <ClInclude Include="D3D12RhiUtil.h" />
     <ClInclude Include="D3D12Viewport.h" />
     <ClInclude Include="d3dx12.h" />
+    <ClInclude Include="Engine.h" />
+    <ClInclude Include="EngineCommon.h" />
     <ClInclude Include="EngineLoop.h" />
+    <ClInclude Include="CpuRenderFrameResource.h" />
+    <ClInclude Include="GameTimer.h" />
     <ClInclude Include="Global.h" />
+    <ClInclude Include="GpuRenderFrameResource.h" />
     <ClInclude Include="ModuleInterface.h" />
     <ClInclude Include="ModuleManager.h" />
     <ClInclude Include="ModuleRegister.h" />
+    <ClInclude Include="RenderModule.h" />
+    <ClInclude Include="RenderModuleImpl.h" />
+    <ClInclude Include="RenderScene.h" />
+    <ClInclude Include="RenderSetting.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Util.h" />
+    <ClInclude Include="Window.h" />
+    <ClInclude Include="WindowManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CpuRenderFrameResource.cpp" />
     <ClCompile Include="D3D12RhiModule.cpp" />
     <ClCompile Include="D3D12Viewport.cpp" />
+    <ClCompile Include="Engine.cpp" />
     <ClCompile Include="EngineLoop.cpp" />
+    <ClCompile Include="GameTimer.cpp" />
+    <ClCompile Include="Global.cpp" />
+    <ClCompile Include="GpuRenderFrameResource.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="RenderModuleImpl.cpp" />
+    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="WindowManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CmEngine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\Download\bitbug_favicon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
