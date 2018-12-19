@@ -9,3 +9,8 @@ constexpr bool IsReleaseMode = false;
 constexpr bool IsDebugMode = false;
 constexpr bool IsReleaseMode = true;
 #endif
+
+constexpr float PI = 3.1415928f;
+constexpr float PI2 = 2 * PI;
+
+#pragma warning(disable : 4244)

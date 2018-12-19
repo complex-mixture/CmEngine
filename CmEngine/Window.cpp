@@ -2,6 +2,7 @@
 #include "WindowManager.h"
 #include "ModuleManager.h"
 #include "D3D12RhiModule.h"
+#include "RenderModule.h"
 
 LRESULT FWindow::WndProc(HWND _hwnd, UINT _msg, WPARAM _wParam, LPARAM _lParam)
 {
@@ -34,9 +35,8 @@ FWindow::FWindow(DWORD _windowStyleEx, DWORD _windowStyle, UINT _x, UINT _y, UIN
 void FWindow::Close()
 {
 	FWindowManager::Get().EraseHandleMap(mHwnd);
-	mViewport->WaitForCompletion();
-	delete mViewport;
 	DestroyWindow(mHwnd);
+	GetRenderModule()->AddTaskOnRenderThreadFlush([_viewport = mViewport]() {delete _viewport; });
 	mHwnd = nullptr;
 	mViewport = nullptr;
 }

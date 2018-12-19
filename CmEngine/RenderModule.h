@@ -2,18 +2,27 @@
 #include "ModuleManager.h"
 #include "RenderSetting.h"
 #include <d3d12.h>
+#include <functional>
+
 class FRenderScene;
 class FD3D12Viewport;
+class FCanvas;
+class UWorld;
 
 __interface IRenderModuleInterface : IModuleInterface
 {
 	//module interface
 	void Init();
 	void Clear();
+	void RequestExit();
 
 	//called on game thread
-	void DeferCollectRenderFrameResource(FD3D12Viewport * _renderViewport, FRenderSetting _renderSetting, FRenderScene * _renderScene);
-	void DeferCollectRenderFrameResource(ID3D12Resource * _renderTarget, FRenderSetting _renderSetting, FRenderScene * _renderScene);
+	void DeferCollectRenderFrameResource(FCanvas _canvas, UWorld * _world, FRenderSetting _renderSetting);
+	void AddRenderThreadTask(std::function<void()> _function);
+	void AddTaskOnFrameEnd(std::function<void()> _function);
+	void AddTaskOnRenderThreadFlush(std::function<void()> _function);
+
+	//called on game thread, keep the CollectRenderFrameResource called between the BeginFrame_GameThread and EndFrame_GameThead
 	void BeginFrame_GameThread();
 	void CollectRenderFrameResource();
 	void EndFrame_GameThead();

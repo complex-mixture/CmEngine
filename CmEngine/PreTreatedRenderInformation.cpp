@@ -1,0 +1,107 @@
+#include "PreTreatedRenderInformation.h"
+#include "UnTreatedRenderInformation.h"
+
+FPreTreatedRenderStaticMesh::FPreTreatedRenderStaticMesh(const FUntreatedRenderStaticMesh & _utsm)
+{
+	DirectX::XMMATRIX worldMatrixInv = XMMatrixInverse(&XMMatrixDeterminant(_utsm.mWorldMatrix), _utsm.mWorldMatrix);
+	XMStoreFloat4x4(&mObjCb.mWroldMatrix, XMMatrixTranspose(_utsm.mWorldMatrix));
+	XMStoreFloat4x4(&mObjCb.mWroldMatrixInv, XMMatrixTranspose(worldMatrixInv));
+
+	mIndicesCount = _utsm.mStaticMesh->GetIndicesCount();
+	mVertexBufferView = _utsm.mStaticMesh->GetVertexBufferView();
+	mIndexBufferView = _utsm.mStaticMesh->GetIndexBufferView();
+
+	mRootSignature = _utsm.mMaterials->GetRootSignature();
+	mPipelineState = _utsm.mMaterials->GetPipelineState();
+}
+
+FPreTreatedRenderInformation::FPreTreatedRenderInformation(const FUntreatedRenderInformation & _utri, FGpuRenderFrameResource * _gpuRenderFrameResource)
+{
+	if (_utri.mCanvas.mViewport == nullptr)
+	{
+		mRenderTarget = _utri.mCanvas.mRendertarget;
+		mRenderTargetView = _utri.mCanvas.mRendertargetView;
+	}
+	else
+	{
+		mRenderTarget = _utri.mCanvas.mViewport->GetCurrentBackBuffer();
+		mRenderTargetView = _utri.mCanvas.mViewport->GetCurrentBackBufferView().mCpuHandle;
+	}
+
+	mD3DViewport = _utri.mCanvas.mD3D12Viewport;
+	mScissorRect = _utri.mCanvas.mScissorRect;
+
+	DirectX::XMMATRIX viewMatrix = _utri.mViewMatrix;
+	DirectX::XMMATRIX projMatrix = DirectX::XMMatrixPerspectiveFovLH(90.f, _utri.mCanvas.GetAspectRatio(), 1.f, 1000.f);
+	DirectX::XMMATRIX viewProjMatrix = viewMatrix * projMatrix;
+
+	DirectX::XMMATRIX viewMatrixInv = XMMatrixInverse(&XMMatrixDeterminant(viewMatrix), viewMatrix);
+	DirectX::XMMATRIX projMatrixInv = XMMatrixInverse(&XMMatrixDeterminant(projMatrix), projMatrix);
+	DirectX::XMMATRIX viewProjMatrixInv = XMMatrixInverse(&XMMatrixDeterminant(viewProjMatrix), viewProjMatrix);
+
+	XMStoreFloat4x4(&mPassCb.mViewMatrix, XMMatrixTranspose(viewMatrix));
+	XMStoreFloat4x4(&mPassCb.mVireMatrixInv, XMMatrixTranspose(viewMatrixInv));
+	XMStoreFloat4x4(&mPassCb.mProjMatrix, XMMatrixTranspose(projMatrix));
+	XMStoreFloat4x4(&mPassCb.mProjMatrixInv, XMMatrixTranspose(projMatrixInv));
+	XMStoreFloat4x4(&mPassCb.mViewProjMatrix, XMMatrixTranspose(viewProjMatrix));
+	XMStoreFloat4x4(&mPassCb.mViewProjMatrixInv, XMMatrixTranspose(viewProjMatrixInv));
+
+	mPassCb.mRenderTargetSize = XMFLOAT2(mD3DViewport.Width, mD3DViewport.Height);
+	mPassCb.mRenderTargetSizeInv = XMFLOAT2(1.f / mD3DViewport.Width, 1.f / mD3DViewport.Height);
+
+	mPassCb.mEyePosition = _utri.mEyePosition;
+
+	mPassCb.mDeltaTime = _utri.mDeltaTime;
+	mPassCb.mTotalTime = _utri.mTotalTime;
+
+	mPassCb.mAmbientColor = XMFLOAT3(0.2f, 0.2f, 0.2f);
+
+	mPassCb.unused[0] = 123.f;
+	mPassCb.unused[1] = 456.f;
+
+	uint32_t lightIndex = 0;
+
+	for (auto const & _ele : _utri.mUntreatedDirectionLights)
+	{
+		mPassCb.mLights[lightIndex].mColor = _ele.mColor;
+		mPassCb.mLights[lightIndex].mDirection = _ele.mDirection;
+		mPassCb.mLights[lightIndex].mIntensity = _ele.mIntensity;
+		lightIndex++;
+	}
+	mPassCb.mPointLightIndexStart = lightIndex;
+
+	for (auto const & _ele : _utri.mUntreatedPointLights)
+	{
+		mPassCb.mLights[lightIndex].mColor = _ele.mColor;
+		mPassCb.mLights[lightIndex].mIntensity = _ele.mIntensity;
+		mPassCb.mLights[lightIndex].mPosition = _ele.mPosition;
+		mPassCb.mLights[lightIndex].mFalloffStart = _ele.mFallOffStart;
+		mPassCb.mLights[lightIndex].mFalloffEnd = _ele.mFallOffEnd;
+		lightIndex++;
+	}
+	mPassCb.mSpotLightIndexStart = lightIndex;
+
+	for (auto const & _ele : _utri.mUntreatedSpotLights)
+	{
+		mPassCb.mLights[lightIndex].mColor = _ele.mColor;
+		mPassCb.mLights[lightIndex].mIntensity = _ele.mIntensity;
+		mPassCb.mLights[lightIndex].mPosition = _ele.mPosition;
+		mPassCb.mLights[lightIndex].mFalloffStart = _ele.mFallOffStart;
+		mPassCb.mLights[lightIndex].mFalloffEnd = _ele.mFallOffEnd;
+		mPassCb.mLights[lightIndex].mInnerConeAngle = _ele.mInnerConeAngle;
+		mPassCb.mLights[lightIndex].mOuterConeAngle = _ele.mOuterConeAngle;
+		lightIndex++;
+	}
+
+	mPreUreatedRenderStaticMeshs.resize(_utri.mUntreatedRenderStaticMeshs.size());
+	for (size_t i = 0; i != _utri.mUntreatedRenderStaticMeshs.size(); ++i)
+	{
+		new(&mPreUreatedRenderStaticMeshs[i]) FPreTreatedRenderStaticMesh(_utri.mUntreatedRenderStaticMeshs[i]);
+		uint32_t relatedLightsCount = 0;
+		for (uint32_t i = 0; i != lightIndex; ++i)
+		{
+			mPreUreatedRenderStaticMeshs[i].mObjCb.mRelatedLightIndeices[i] = i;
+		}
+		mPreUreatedRenderStaticMeshs[i].mObjCb.mRelatedLightCount = lightIndex;
+	}
+}

@@ -43,6 +43,45 @@
     <Filter Include="Core\Private">
       <UniqueIdentifier>{d73a4dc1-0bea-465b-8578-f3a61ecae5c9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameFrameWork\Private">
+      <UniqueIdentifier>{fbaf3b7d-56d7-45eb-a25a-7b68145cbbd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{a544dfa9-4d79-45ad-9c84-3e09630daef0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\Private">
+      <UniqueIdentifier>{8ba9dcc3-496e-43b4-be05-58b040e07984}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCore">
+      <UniqueIdentifier>{4dbafb1e-c165-444a-b628-a8ceaf2c0649}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCore\Vertex">
+      <UniqueIdentifier>{ba2adef3-1b16-4ddb-928c-13d0dbdd59a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCore\StaticMesh">
+      <UniqueIdentifier>{349d3e58-326c-4d43-8890-4ffec87048a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCore\Private">
+      <UniqueIdentifier>{35c9c288-86d7-4dcb-b60b-7cd5edddba56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCore\Private\StaticMesh">
+      <UniqueIdentifier>{9f3996d7-574d-452c-a372-9117ed02f2d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCore\Materials">
+      <UniqueIdentifier>{0fd02d52-bd2f-4920-b461-efd18e2170fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCore\Private\Materials">
+      <UniqueIdentifier>{9f8ca63b-a5e2-4534-a4af-8ee747b909cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCore\Texture">
+      <UniqueIdentifier>{ae1eb4f1-0bfb-48c4-815c-f075cca54168}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCore\Private\Texture">
+      <UniqueIdentifier>{5f072648-62ab-4bb1-982a-3aebf670eddc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFrameWork\Light">
+      <UniqueIdentifier>{0c271c5b-23d3-47b9-86e1-8b90e5e9c24c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -72,14 +111,8 @@
     <ClInclude Include="ModuleRegister.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="d3dx12.h">
-      <Filter>D3D12Rhi\Private</Filter>
-    </ClInclude>
     <ClInclude Include="D3D12Fence.h">
       <Filter>D3D12Rhi</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D12RhiUtil.h">
-      <Filter>D3D12Rhi\Private</Filter>
     </ClInclude>
     <ClInclude Include="Window.h">
       <Filter>Slate</Filter>
@@ -102,9 +135,6 @@
     <ClInclude Include="RenderModule.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="RenderScene.h">
-      <Filter>Render</Filter>
-    </ClInclude>
     <ClInclude Include="RenderSetting.h">
       <Filter>Render</Filter>
     </ClInclude>
@@ -119,6 +149,99 @@
     </ClInclude>
     <ClInclude Include="EngineLoop.h">
       <Filter>Launch</Filter>
+    </ClInclude>
+    <ClInclude Include="Canvas.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="d3dx12.h">
+      <Filter>D3D12Rhi</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>GameFrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraActor.h">
+      <Filter>GameFrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>GameFrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBufferSruct.h">
+      <Filter>Render\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="UnTreatedRenderInformation.h">
+      <Filter>Render\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="UploadBuffer.h">
+      <Filter>D3D12Rhi</Filter>
+    </ClInclude>
+    <ClInclude Include="PreTreatedRenderInformation.h">
+      <Filter>Render\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="TextuerPool.h">
+      <Filter>D3D12Rhi</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D12RhiUtil.h">
+      <Filter>D3D12Rhi</Filter>
+    </ClInclude>
+    <ClInclude Include="DescriptorHandleManagerBase.h">
+      <Filter>D3D12Rhi</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseRenderer.h">
+      <Filter>Renderer\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="RendererCreater.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="RendererInterface.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>ShaderCore\Vertex</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticMesh.h">
+      <Filter>ShaderCore\StaticMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticMeshManager.h">
+      <Filter>ShaderCore\StaticMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Materials.h">
+      <Filter>ShaderCore\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialsManager.h">
+      <Filter>ShaderCore\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManagerBase.h">
+      <Filter>ShaderCore</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>ShaderCore\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>ShaderCore\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="DDSTextureLoader.h">
+      <Filter>ShaderCore\Private\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="DescriptorHandleManager.h">
+      <Filter>D3D12Rhi</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticMeshActor.h">
+      <Filter>GameFrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="TreatedRenderInformation.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionLightActor.h">
+      <Filter>GameFrameWork\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="LightActor.h">
+      <Filter>GameFrameWork\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLightActor.h">
+      <Filter>GameFrameWork\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLightActor.h">
+      <Filter>GameFrameWork\Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +280,60 @@
     </ClCompile>
     <ClCompile Include="Global.cpp">
       <Filter>Core\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Canvas.cpp">
+      <Filter>Render\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
+      <Filter>Core\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>GameFrameWork\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticMeshActor.cpp">
+      <Filter>GameFrameWork\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="TextuerPool.cpp">
+      <Filter>D3D12Rhi\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="DescriptorHandleManagerBase.cpp">
+      <Filter>D3D12Rhi\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseRenderer.cpp">
+      <Filter>Renderer\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="RendererCreater.cpp">
+      <Filter>Renderer\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticMeshManager.cpp">
+      <Filter>ShaderCore\Private\StaticMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticMesh.cpp">
+      <Filter>ShaderCore\Private\StaticMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Materials.cpp">
+      <Filter>ShaderCore\Private\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialsManager.cpp">
+      <Filter>ShaderCore\Private\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="DDSTextureLoader.cpp">
+      <Filter>ShaderCore\Private\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>ShaderCore\Private\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>ShaderCore\Private\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="UnTreatedRenderInformation.cpp">
+      <Filter>Render\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="PreTreatedRenderInformation.cpp">
+      <Filter>Render\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="TreatedRenderInformation.cpp">
+      <Filter>Render\Private</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -12,7 +12,7 @@ extern uint64_t GFrameCount;
 extern std::thread::id GGameThreadId;
 extern std::thread::id GRenderThreadId;
 
-__forceinline bool IsInGaneThread()
+__forceinline bool IsInGameThread()
 {
 	return std::this_thread::get_id() == GGameThreadId;
 }

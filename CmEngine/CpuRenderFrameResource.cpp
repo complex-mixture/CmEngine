@@ -1,4 +1,9 @@
 #include "CpuRenderFrameResource.h"
+#include "Canvas.h"
+#include "World.h"
+#include "CameraActor.h"
+#include "StaticMeshActor.h"
+#include "DirectionLightActor.h"
 
 void FCpuRenderFrameResource::Init()
 {
@@ -6,26 +11,61 @@ void FCpuRenderFrameResource::Init()
 	mDataEndUseEvent = CreateEvent(NULL, false, true, NULL);
 }
 
+void FCpuRenderFrameResource::Clear()
+{
+	CloseHandle(mDataEndUseEvent);
+	CloseHandle(mDataReadyEvent);
+	mDataEndUseEvent = nullptr;
+	mDataReadyEvent = nullptr;
+}
+
 void FCpuRenderFrameResource::Reset()
 {
-	mViewports.resize(0);
-	mRenderInformations.resize(0);
+	mRenderThreadTasks.resize(0);
+	mTasksOnFrameEnd.resize(0);
+	mTasksOnRenderThreadFlush.resize(0);
+	mCollectedRenderRequest.resize(0);
+	mUntreatedRenderInformations.resize(0);
+	mCanvases.resize(0);
+	mCollectedRenderRequest.resize(0);
+#ifdef DEBUG
+	mIsReady = true;
+#endif // DEBUG
 }
 
-void FCpuRenderFrameResource::DeferCollectRenderFrameResource(FD3D12Viewport * _renderViewport, FRenderSetting _renderSetting, FRenderScene * _renderScene)
+void FCpuRenderFrameResource::DeferCollectRenderFrameResource(FCanvas _canvas, UWorld * _world, FRenderSetting _renderSetting)
 {
-	mViewports.push_back(_renderViewport);
-	DeferCollectRenderFrameResource(_renderViewport->GetCurrentBackBuffer(), _renderSetting, _renderScene);
+	Assert(mIsReady);
+	mCanvases.push_back(_canvas);
+	mCollectedRenderRequest.push_back(std::make_tuple(_canvas, _world, _renderSetting));
 }
 
-void FCpuRenderFrameResource::DeferCollectRenderFrameResource(ID3D12Resource * _renderTarget, FRenderSetting _renderSetting, FRenderScene * _renderScene)
+void FCpuRenderFrameResource::AddRenderThreadTask(std::function<void()> _function)
 {
-	mRenderInformations.push_back(RenderInformation{ _renderTarget, _renderSetting });
+	Assert(mIsReady);
+	mRenderThreadTasks.push_back(_function);
+}
+
+void FCpuRenderFrameResource::AddTaskOnFrameEnd(std::function<void()> _function)
+{
+	Assert(mIsReady);
+	mTasksOnFrameEnd.push_back(_function);
+}
+
+void FCpuRenderFrameResource::AddTaskOnRenderThreadFlush(std::function<void()> _function)
+{
+	Assert(mIsReady);
+	mTasksOnRenderThreadFlush.push_back(_function);
 }
 
 void FCpuRenderFrameResource::Construct()
 {
-	Sleep(100);
+	Assert(mIsReady);
+	for (auto & _ele : mCollectedRenderRequest)
+	{
+		FUntreatedRenderInformation utri(std::get<0>(_ele), std::get<1>(_ele), this);
+		mUntreatedRenderInformations.push_back(std::make_pair(std::move(utri), std::get<2>(_ele)));
+	}
 }
 
 void FCpuRenderFrameResource::BeginUse_GameThread()
@@ -35,6 +75,9 @@ void FCpuRenderFrameResource::BeginUse_GameThread()
 
 void FCpuRenderFrameResource::EndUse_GameThread()
 {
+#ifdef DEBUG
+	mIsReady = false;
+#endif // DEBUG
 	SetEvent(mDataReadyEvent);
 }
 

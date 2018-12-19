@@ -1,26 +1,30 @@
 #pragma once
 #include "Util.h"
-#include <mutex>
 #include "RenderSetting.h"
-#include "RenderScene.h"
-#include "D3D12Viewport.h"
 #include <d3d12.h>
-#include <map>
+#include <vector>
+#include "Canvas.h"
+#include "UnTreatedRenderInformation.h"
+#include <functional>
 
-struct RenderInformation
-{
-	ID3D12Resource * mRenderTarget = nullptr;
-	FRenderSetting mRenderSetting;
-};
+struct FUntreatedRenderInformation;
+class UWorld;
 
 class FCpuRenderFrameResource : FNoncopyable
 {
+	friend FUntreatedRenderInformation;
 public:
 	void Init();
+	void Clear();
 	void Reset();
 
-	void DeferCollectRenderFrameResource(FD3D12Viewport * _renderViewport, FRenderSetting _renderSetting, FRenderScene * _renderScene);
-	void DeferCollectRenderFrameResource(ID3D12Resource * _renderTarget, FRenderSetting _renderSetting, FRenderScene * _renderScene);
+	void RequestExit() { mShuldExit = true; }
+	bool ShouldExit()const { return mShuldExit; }
+
+	void DeferCollectRenderFrameResource(FCanvas _canvas, UWorld * _world, FRenderSetting _renderSetting);
+	void AddRenderThreadTask(std::function<void()> _function);
+	void AddTaskOnFrameEnd(std::function<void()> _function);
+	void AddTaskOnRenderThreadFlush(std::function<void()> _function);
 
 	void Construct();
 
@@ -30,10 +34,20 @@ public:
 	void EndUse_RenderThread();
 
 public:
-	std::vector<FD3D12Viewport*> mViewports;
-	std::vector<RenderInformation> mRenderInformations;
+	std::vector<std::pair<FUntreatedRenderInformation, FRenderSetting>> mUntreatedRenderInformations;
+	std::vector<FCanvas> mCanvases;
+	std::vector<std::function<void()>> mRenderThreadTasks;
+	std::vector<std::function<void()>> mTasksOnFrameEnd;
+	std::vector<std::function<void()>> mTasksOnRenderThreadFlush;
+	bool mShuldExit;
+
+private:
+	std::vector<std::tuple<FCanvas, UWorld*, FRenderSetting>> mCollectedRenderRequest;
 
 private:
 	HANDLE mDataReadyEvent = nullptr;
 	HANDLE mDataEndUseEvent = nullptr;
+#ifdef DEBUG
+	bool mIsReady = false;
+#endif // DEBUG
 };

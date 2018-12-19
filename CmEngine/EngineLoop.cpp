@@ -6,6 +6,7 @@
 #include <thread>
 #include "Global.h"
 #include "RenderModule.h"
+#include "D3D12RhiModule.h"
 
 FEngineLoop GEngineLoop;
 uint64_t GFrameCount = 0;
@@ -16,7 +17,7 @@ void FEngineLoop::PreInit(HINSTANCE hInstance, LPWSTR lpCmdLine)
 		mInstance = hInstance;
 		mCmdLine = lpCmdLine;
 	}
-	GGameThreadId == std::this_thread::get_id();
+	GGameThreadId = std::this_thread::get_id();
 	FModuleManager::Get().LoadModule(L"D3D12Rhi");
 	FModuleManager::Get().LoadModule(L"SlateCore");
 	FModuleManager::Get().LoadModule(L"Render");
@@ -26,24 +27,32 @@ void FEngineLoop::PreInit(HINSTANCE hInstance, LPWSTR lpCmdLine)
 void FEngineLoop::Init()
 {
 	GEngine = new FEngine;
+	GetRenderModule()->BeginFrame_GameThread();
 	GEngine->Init();
+	GetRenderModule()->CollectRenderFrameResource();
+	GetRenderModule()->EndFrame_GameThead();
 	mTimer.Start();
 }
 
 void FEngineLoop::Tick()
 {
 	mTimer.Tick();
-	FWindowManager::Get().PumpMessages();
 	GetRenderModule()->BeginFrame_GameThread();
+	FWindowManager::Get().PumpMessages();
 	GEngine->Tick(mTimer.DeltaTime());
 	GetRenderModule()->CollectRenderFrameResource();
 	GetRenderModule()->EndFrame_GameThead();
 	GFrameCount++;
+	if (GFrameCount % 100 == 0)
+		LogA("%I64u, [%f]\n", GFrameCount, GetTotalTime());
 }
 
 void FEngineLoop::Exit()
 {
+	GetRenderModule()->BeginFrame_GameThread();
 	GEngine->Exit();
+	GetRenderModule()->CollectRenderFrameResource();
+	GetRenderModule()->EndFrame_GameThead();
 	delete GEngine;
 	FModuleManager::Get().UnloadModule(L"Render");
 	FModuleManager::Get().UnloadModule(L"SlateCore");

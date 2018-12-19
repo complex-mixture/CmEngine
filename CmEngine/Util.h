@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <windows.h>
 #include "Common.h"
+#include <string>
+#include <fstream>
 #include <assert.h>
 
 #define LogA(_format, ...)					\
@@ -90,7 +92,7 @@ do																					\
 			TEXT(__FILE__), TEXT(__FUNCTION__),  (int)__LINE__, L###_expression);	\
 } while (0)
 #else
-#define Assert ((void)0)
+#define Assert(_expression) ((void)0)
 #endif
 
 /**
@@ -108,3 +110,24 @@ private:
 	FNoncopyable(const FNoncopyable&) = delete;
 	FNoncopyable& operator=(const FNoncopyable&) = delete;
 };
+
+template<typename _charType>
+void LoadStringFromFile(std::ifstream & _ifs, std::basic_string<_charType> & _dest)
+{
+	uint64_t stringSize = 0;
+	_ifs.read(reinterpret_cast<char*>(&stringSize), sizeof(uint64_t));
+	_dest.resize(stringSize);
+	_ifs.read(reinterpret_cast<char*>(&_dest[0]), sizeof(std::basic_string<_charType>::value_type) * stringSize);
+}
+
+template<typename _charType>
+void SaveStringToFile(std::ofstream & _ofs, const std::basic_string<_charType> & _source)
+{
+	uint64_t stringSize = _source.size();
+	_ofs.write(reinterpret_cast<char*>(&stringSize), sizeof(uint64_t));
+	_ofs.write(reinterpret_cast<const char*>(_source.data()), sizeof(std::basic_string<_charType>::value_type) * stringSize);
+}
+
+float GetTotalTime();
+
+float GetDeltaTime();

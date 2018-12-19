@@ -1,8 +1,8 @@
 #pragma once
-
 #include "Util.h"
 
 class FWindow;
+class UWorld;
 
 class FEngine : FNoncopyable
 {
@@ -14,8 +14,8 @@ public:
 	virtual void Exit();
 
 private:
+	UWorld * mMainWorld;
 	FWindow * mClientWindow;
 	FWindow * mClientWindow2;
 };
 extern FEngine * GEngine;
-

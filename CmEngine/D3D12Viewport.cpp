@@ -1,18 +1,22 @@
 #include "D3D12Viewport.h"
 #include "D3D12RhiGlobal.h"
 #include "D3D12RhiUtil.h"
+#include "d3dx12.h"
+#include "DescriptorHandleManager.h"
+#include "Util.h"
+#include "Global.h"
 
 void FD3D12Viewport::__Init()
 {
 	DXGI_SWAP_CHAIN_DESC desc;
 	desc.BufferCount = mBackBufferCount;
 	desc.BufferDesc.Format = mPixelFormat;
-	desc.BufferDesc.Height = mSizeX;
+	desc.BufferDesc.Height = mSizeY;
 	desc.BufferDesc.RefreshRate.Denominator = 60;
 	desc.BufferDesc.RefreshRate.Numerator = 1;
 	desc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 	desc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UPPER_FIELD_FIRST;
-	desc.BufferDesc.Width = mSizeY;
+	desc.BufferDesc.Width = mSizeX;
 	desc.BufferUsage = DXGI_USAGE_BACK_BUFFER | DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 	desc.OutputWindow = mHwnd;
@@ -25,6 +29,16 @@ void FD3D12Viewport::__Init()
 	for (auto i = 0; i != mBackBufferCount; ++i)
 	{
 		VerifyD3D12Result(mSwapChain->GetBuffer(i, IID_PPV_ARGS(&mBackBuffers[i])));
+	}
+
+	for (auto i = 0; i != mBackBufferCount; ++i)
+	{
+		D3D12_RENDER_TARGET_VIEW_DESC desc;
+		desc.Format = mPixelFormat;
+		desc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+		desc.Texture2D.MipSlice = 0;
+		desc.Texture2D.PlaneSlice = 0;
+		mBackBufferViews[i] = FDescriptorHandleManager<D3D12_RENDER_TARGET_VIEW_DESC>::Get().CreateView(mBackBuffers[i], desc);
 	}
 }
 
@@ -60,6 +74,7 @@ void FD3D12Viewport::Resize(uint32_t _sizeX, uint32_t _sizeY, bool _isFullscreen
 		{
 			mBackBuffers[i]->Release();
 			mBackBuffers[i] = nullptr;
+			FDescriptorHandleManager<D3D12_RENDER_TARGET_VIEW_DESC>::Get().FreeSlot(mBackBufferViews[i]);
 		}
 	}
 
@@ -86,12 +101,29 @@ void FD3D12Viewport::Resize(uint32_t _sizeX, uint32_t _sizeY, bool _isFullscreen
 		}
 		mLastUseFenceValue = 0;
 		mCurrentBackBufferIndex = 0;
+
+		for (auto i = 0; i != mBackBufferCount; ++i)
+		{
+			D3D12_RENDER_TARGET_VIEW_DESC desc;
+			desc.Format = mPixelFormat;
+			desc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+			desc.Texture2D.MipSlice = 0;
+			desc.Texture2D.PlaneSlice = 0;
+			mBackBufferViews[i] = FDescriptorHandleManager<D3D12_RENDER_TARGET_VIEW_DESC>::Get().CreateView(mBackBuffers[i], desc);
+		}
 	}
 }
 
 ID3D12Resource * FD3D12Viewport::GetCurrentBackBuffer() const
 {
+	Assert(IsInRenderThread());
 	return mBackBuffers[mCurrentBackBufferIndex];
+}
+
+FDescriptorHandle FD3D12Viewport::GetCurrentBackBufferView() const
+{
+	Assert(IsInRenderThread());
+	return mBackBufferViews[mCurrentBackBufferIndex];
 }
 
 uint32_t FD3D12Viewport::Present()
@@ -110,6 +142,7 @@ FD3D12Viewport::~FD3D12Viewport()
 	WaitForCompletion();
 	for (auto i = 0; i != mBackBufferCount; ++i)
 	{
+		FDescriptorHandleManager<D3D12_RENDER_TARGET_VIEW_DESC>::Get().FreeSlot(mBackBufferViews[i]);
 		mBackBuffers[i]->Release();
 	}
 	mSwapChain->Release();

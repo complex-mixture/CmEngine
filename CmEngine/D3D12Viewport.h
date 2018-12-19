@@ -5,6 +5,7 @@
 #include "D3D12Fence.h"
 #include "Util.h"
 #include "D3D12RhiGlobal.h"
+#include "DescriptorHandleManager.h"
 
 constexpr D3D12_RECT ZeroRect = D3D12_RECT{ 0, 0, 0, 0 };
 
@@ -25,6 +26,9 @@ public:
 	void Resize(uint32_t _sizeX, uint32_t _sizeY, bool _isFullscreen, DXGI_FORMAT _pixelFormat);
 
 	ID3D12Resource * GetCurrentBackBuffer()const;
+	FDescriptorHandle GetCurrentBackBufferView()const;
+	uint32_t GetWeight()const { return mSizeX; }
+	uint32_t GetHeight()const { return mSizeY; }
 	void WaitForCompletion()const { GFence->WaitForCompletion(mLastUseFenceValue); }
 	void SetLastUseFenceValue(uint64_t _value) { mLastUseFenceValue = max(mLastUseFenceValue, _value); }
 
@@ -46,6 +50,7 @@ private:
 	uint32_t mBackBufferCount;
 	uint32_t mCurrentBackBufferIndex = 0;
 	ID3D12Resource * mBackBuffers[MaxBackBufferCount] = { 0 };
+	FDescriptorHandle mBackBufferViews[MaxBackBufferCount] = {};
 	uint64_t mLastUseFenceValue = 0;
 
 	uint32_t bIsFullScreen : 1;

@@ -12,6 +12,8 @@ public:
 	void RequestExit(bool _force);
 	__forceinline bool ShouldExit()const { return bShouldExit; }
 
+	const FGameTimer & GetTimer()const { return mTimer; }
+
 	__forceinline HINSTANCE GetInstance()const { return mInstance; }
 	__forceinline LPWSTR GetCmdLine()const { return mCmdLine; }
 private:

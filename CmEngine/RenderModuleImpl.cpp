@@ -2,23 +2,28 @@
 #include "Global.h"
 #include "EngineLoop.h"
 #include "D3D12RhiModule.h"
+#include "Canvas.h"
+#include <DirectXColors.h>
+#include "d3dx12.h"
+#include "RendererInterface.h"
+#include "RendererCreater.h"
 
 FCpuRenderFrameResource * FRenderModule::RequestCpuFrameRenderResource()
 {
+	Assert(IsInGameThread());
 	return &mCpuFrameRenderResource[mCurrentCpuFrameRenderResourceIndex];
-	return &mCpuFrameRenderResource[0];
 }
 
-FGpuRenderFrameResource * FRenderModule::RequestGpuFrameRenderReosurce()
+FGpuRenderFrameResource * FRenderModule::RequestGpuFrameRenderResource()
 {
+	Assert(IsInRenderThread());
 	return &mGpuFrameRenderResource[mCurrentGpuFrameRenderResourceIndex];
-	return &mGpuFrameRenderResource[0];
 }
 
 void FRenderModule::RenderThreadMain()
 {
-	GRenderThreadId == std::this_thread::get_id();
-	while (!GEngineLoop.ShouldExit())
+	GRenderThreadId = std::this_thread::get_id();
+	while (!ShouldExit())
 	{
 		BeginFrame_RenderThread();
 		RenderScene_RenderThread();
@@ -39,18 +44,62 @@ void FRenderModule::Init()
 
 void FRenderModule::Clear()
 {
+	FRenderModule::RequestExit();
 	if (mRenderThread.joinable())
 		mRenderThread.join();
+	for (int i = 0; i != 3; ++i)
+	{
+		mCpuFrameRenderResource[i].Clear();
+		mGpuFrameRenderResource[i].Clear();
+	}
 }
 
-void FRenderModule::DeferCollectRenderFrameResource(FD3D12Viewport * _renderViewport, FRenderSetting _renderSetting, FRenderScene * _renderScene)
+void FRenderModule::RequestExit()
 {
-	RequestCpuFrameRenderResource()->DeferCollectRenderFrameResource(_renderViewport, _renderSetting, _renderScene);
+	HANDLE event = CreateEvent(nullptr, false, false, nullptr);
+
+	BeginFrame_GameThread();
+	EndFrame_GameThead();
+	BeginFrame_GameThread();
+	EndFrame_GameThead();
+
+	BeginFrame_GameThread();
+	RequestCpuFrameRenderResource()->AddTaskOnFrameEnd([&]() {GFence->SetEventOnCompletion(GFence->Signal(), event); });
+	EndFrame_GameThead();
+
+	BeginFrame_GameThread();
+	RequestCpuFrameRenderResource()->RequestExit();
+	EndFrame_GameThead();
+
+	WaitForSingleObject(event, INFINITE);
 }
 
-void FRenderModule::DeferCollectRenderFrameResource(ID3D12Resource * _renderTarget, FRenderSetting _renderSetting, FRenderScene * _renderScene)
+void FRenderModule::DeferCollectRenderFrameResource(FCanvas _canvas, UWorld * _world, FRenderSetting _renderSetting)
 {
-	RequestCpuFrameRenderResource()->DeferCollectRenderFrameResource(_renderTarget, _renderSetting, _renderScene);
+	Assert(IsInGameThread());
+	RequestCpuFrameRenderResource()->DeferCollectRenderFrameResource(_canvas, _world, _renderSetting);
+}
+
+void FRenderModule::AddRenderThreadTask(std::function<void()> _function)
+{
+	Assert(IsInGameThread());
+	RequestCpuFrameRenderResource()->AddRenderThreadTask(_function);
+}
+
+void FRenderModule::AddTaskOnFrameEnd(std::function<void()> _function)
+{
+	Assert(IsInGameThread());
+	RequestCpuFrameRenderResource()->AddTaskOnFrameEnd(_function);
+}
+
+void FRenderModule::AddTaskOnRenderThreadFlush(std::function<void()> _function)
+{
+	if (IsInGameThread())
+		RequestCpuFrameRenderResource()->AddTaskOnRenderThreadFlush(_function);
+	else if (IsInRenderThread())
+		RequestGpuFrameRenderResource()->AddTaskOnRenderThreadFlush(_function);
+	else
+		Assert(false);
 }
 
 void FRenderModule::BeginFrame_GameThread()
@@ -75,7 +124,7 @@ void FRenderModule::EndFrame_GameThead()
 
 void FRenderModule::BeginFrame_RenderThread()
 {
-	FGpuRenderFrameResource * currentGpuRenderFrameResource = RequestGpuFrameRenderReosurce();
+	FGpuRenderFrameResource * currentGpuRenderFrameResource = RequestGpuFrameRenderResource();
 	currentGpuRenderFrameResource->BeginUse_RenderThread();
 	currentGpuRenderFrameResource->Reset();
 	currentGpuRenderFrameResource->Construct();
@@ -83,16 +132,23 @@ void FRenderModule::BeginFrame_RenderThread()
 
 void FRenderModule::RenderScene_RenderThread()
 {
-	//TODO: 
+	FGpuRenderFrameResource * currentGpuRenderFrameResource = RequestGpuFrameRenderResource();
+	auto & treatedRenderInformations = currentGpuRenderFrameResource->GetTreatedRenderInformation();
+	for (auto & _ele : treatedRenderInformations)
+	{
+		IRendererInterface * renderer = FRendererCreater::Get().CreateRenderer(_ele.second);
+		renderer->RenderScene(&_ele.first);
+		renderer->Release();
+	}
 }
 
 void FRenderModule::EndFrame_RenderThead()
 {
-	FGpuRenderFrameResource * currentGpuRenderFrameResource = RequestGpuFrameRenderReosurce();
+	FGpuRenderFrameResource * currentGpuRenderFrameResource = RequestGpuFrameRenderResource();
 	GCommandList->Close();
 	ID3D12CommandList * commandLists[] = { GCommandList };
 	GCommandQueue->ExecuteCommandLists(1, commandLists);
-	std::vector<FD3D12Viewport*>& presentViewports = currentGpuRenderFrameResource->GetPresentViewports();
+	std::set<FD3D12Viewport*>& presentViewports = currentGpuRenderFrameResource->GetPresentViewports();
 	for (auto _ele : presentViewports)
 		_ele->Present();
 	uint64_t fenceValue = GFence->Signal();
@@ -100,5 +156,9 @@ void FRenderModule::EndFrame_RenderThead()
 		_ele->SetLastUseFenceValue(fenceValue);
 	currentGpuRenderFrameResource->EndUse_RenderThread(fenceValue);
 	mCurrentGpuFrameRenderResourceIndex = (mCurrentGpuFrameRenderResourceIndex + 1) % 3;
+}
 
+bool FRenderModule::ShouldExit()
+{
+	return RequestGpuFrameRenderResource()->GetCpuRenderFrameResource()->ShouldExit();
 }
