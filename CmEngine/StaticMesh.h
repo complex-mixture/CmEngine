@@ -3,7 +3,6 @@
 #include <vector>
 #include <string>
 #include <d3d12.h>
-#include "Vertex.h"
 using namespace DirectX;
 
 class UStaticMesh

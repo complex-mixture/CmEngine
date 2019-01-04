@@ -41,39 +41,41 @@ inline void UStaticMesh<Vertex_default>::__Contruct(const FbxMesh * _mesh)
 		mVertexes[i].mPosition.z = vertexs[indices[i]][2];
 	}
 
-	//switch (colors->GetReferenceMode())
-	//{
-	//case FbxLayerElement::eDirect:
-	//{
-	//	const FbxLayerElementArrayTemplate<FbxColor> & directArray = colors->GetDirectArray();
+/*
+	switch (colors->GetReferenceMode())
+	{
+	case FbxLayerElement::eDirect:
+	{
+		const FbxLayerElementArrayTemplate<FbxColor> & directArray = colors->GetDirectArray();
 
-	//	for (size_t i = 0; i != mVertexesCount; ++i)
-	//	{
-	//		mVertexes[i].mColor.x = directArray[i].mRed;
-	//		mVertexes[i].mColor.y = directArray[i].mGreen;
-	//		mVertexes[i].mColor.z = directArray[i].mBlue;
-	//		mVertexes[i].mColor.w = directArray[i].mAlpha;
-	//	}
-	//}
-	//break;
-	//case FbxLayerElement::eIndex:
-	//case FbxLayerElement::eIndexToDirect:
-	//{
-	//	const FbxLayerElementArrayTemplate<FbxColor> & directArray = colors->GetDirectArray();
-	//	const FbxLayerElementArrayTemplate<int> & indicesArray = colors->GetIndexArray();
+		for (size_t i = 0; i != mVertexesCount; ++i)
+		{
+			mVertexes[i].mColor.x = directArray[i].mRed;
+			mVertexes[i].mColor.y = directArray[i].mGreen;
+			mVertexes[i].mColor.z = directArray[i].mBlue;
+			mVertexes[i].mColor.w = directArray[i].mAlpha;
+		}
+	}
+	break;
+	case FbxLayerElement::eIndex:
+	case FbxLayerElement::eIndexToDirect:
+	{
+		const FbxLayerElementArrayTemplate<FbxColor> & directArray = colors->GetDirectArray();
+		const FbxLayerElementArrayTemplate<int> & indicesArray = colors->GetIndexArray();
 
-	//	for (size_t i = 0; i != mVertexesCount; ++i)
-	//	{
-	//		int index = indicesArray[i];
-	//		mVertexes[i].mColor.x = directArray[index].mRed;
-	//		mVertexes[i].mColor.y = directArray[index].mGreen;
-	//		mVertexes[i].mColor.z = directArray[index].mBlue;
-	//		mVertexes[i].mColor.w = directArray[index].mAlpha;
-	//	}
-	//}
-	//break;
-	//default: Assert(false);
-	//}
+		for (size_t i = 0; i != mVertexesCount; ++i)
+		{
+			int index = indicesArray[i];
+			mVertexes[i].mColor.x = directArray[index].mRed;
+			mVertexes[i].mColor.y = directArray[index].mGreen;
+			mVertexes[i].mColor.z = directArray[index].mBlue;
+			mVertexes[i].mColor.w = directArray[index].mAlpha;
+		}
+	}
+	break;
+	default: Assert(false);
+	}
+*/
 
 	switch (uvs->GetReferenceMode())
 	{

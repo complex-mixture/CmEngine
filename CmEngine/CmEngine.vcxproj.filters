@@ -55,9 +55,6 @@
     <Filter Include="ShaderCore">
       <UniqueIdentifier>{4dbafb1e-c165-444a-b628-a8ceaf2c0649}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ShaderCore\Vertex">
-      <UniqueIdentifier>{ba2adef3-1b16-4ddb-928c-13d0dbdd59a1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ShaderCore\StaticMesh">
       <UniqueIdentifier>{349d3e58-326c-4d43-8890-4ffec87048a5}</UniqueIdentifier>
     </Filter>
@@ -81,6 +78,9 @@
     </Filter>
     <Filter Include="GameFrameWork\Light">
       <UniqueIdentifier>{0c271c5b-23d3-47b9-86e1-8b90e5e9c24c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCore\ShaderParameters">
+      <UniqueIdentifier>{16f19561-e9ea-4132-8932-4b835da69128}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -195,9 +195,6 @@
     <ClInclude Include="RendererInterface.h">
       <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Vertex.h">
-      <Filter>ShaderCore\Vertex</Filter>
-    </ClInclude>
     <ClInclude Include="StaticMesh.h">
       <Filter>ShaderCore\StaticMesh</Filter>
     </ClInclude>
@@ -242,6 +239,9 @@
     </ClInclude>
     <ClInclude Include="PointLightActor.h">
       <Filter>GameFrameWork\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderParameter.h">
+      <Filter>ShaderCore\ShaderParameters</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

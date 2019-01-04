@@ -204,6 +204,7 @@
     <ClInclude Include="RenderSetting.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ResourceManagerBase.h" />
+    <ClInclude Include="ShaderParameter.h" />
     <ClInclude Include="SpotLightActor.h" />
     <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="StaticMeshActor.h" />
@@ -216,7 +217,6 @@
     <ClInclude Include="UnTreatedRenderInformation.h" />
     <ClInclude Include="UploadBuffer.h" />
     <ClInclude Include="Util.h" />
-    <ClInclude Include="Vertex.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WindowManager.h" />
     <ClInclude Include="World.h" />

@@ -74,4 +74,3 @@ struct MRE_Log
 #else
 #define RegistDefaultModule(_ModuleClass, _ModuleName) RegistModule(_ModuleClass, _ModuleName, MRE_Main)
 #endif // DEBUG
-

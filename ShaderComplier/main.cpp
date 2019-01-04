@@ -3,6 +3,7 @@
 #include "..\CmEngine\d3dx12.h"
 #include <stdint.h>
 #include <fstream>
+#include <vector>
 #pragma comment(lib, "d3dcompiler")
 #pragma comment(lib, "d3d12.lib")
 
@@ -60,6 +61,16 @@ int main()
 	fs.write(reinterpret_cast<const char*>(&fitVertexIdCount), sizeof(uint64_t));
 	fs.write(reinterpret_cast<const char*>(&vertexId), sizeof(uint64_t));
 
+	std::vector<D3D12_ROOT_PARAMETER_TYPE> parameterIdentifications = {
+		D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE,
+		D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE,
+	};
+
+	uint64_t parameterIdentificationCount = parameterIdentifications.size();
+
+	fs.write(reinterpret_cast<const char*>(&parameterIdentificationCount), sizeof(uint64_t));
+	fs.write(reinterpret_cast<const char*>(parameterIdentifications.data()), sizeof(D3D12_ROOT_PARAMETER_TYPE) * parameterIdentificationCount);
+
 	uint64_t rootSignatureBufferSize = destBlob->GetBufferSize();
 	fs.write(reinterpret_cast<const char*>(&rootSignatureBufferSize), sizeof(uint64_t));
 	fs.write(reinterpret_cast<const char*>(destBlob->GetBufferPointer()), rootSignatureBufferSize);
@@ -77,17 +88,6 @@ int main()
 	fs.write(reinterpret_cast<const char*>(&shadersize), sizeof(uint64_t));
 	fs.write(reinterpret_cast<const char*>(&shadersize), sizeof(uint64_t));
 	fs.write(reinterpret_cast<const char*>(&shadersize), sizeof(uint64_t));
-
-	//struct Vertex_default
-	//{
-	//	static constexpr uint64_t VertexId = 1;
-
-	//	DirectX::XMFLOAT3 mPosition;
-	//	DirectX::XMFLOAT2 mUV;
-	//	DirectX::XMFLOAT3 mTangent;
-	//	DirectX::XMFLOAT3 mBinomal;
-	//};
-
 
 	static constexpr D3D12_INPUT_ELEMENT_DESC InputElementDescs[] = {
 		D3D12_INPUT_ELEMENT_DESC{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
@@ -114,15 +114,8 @@ int main()
 	desc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
 
 	fs.write(reinterpret_cast<const char*>(&desc.InputLayout.NumElements), sizeof(UINT));
-	for (int i = 0; i != 4; ++i)
+	for (int i = 0; i != desc.InputLayout.NumElements; ++i)
 	{
-		//LPCSTR SemanticName;
-		//UINT SemanticIndex;
-		//DXGI_FORMAT Format;
-		//UINT InputSlot;
-		//UINT AlignedByteOffset;
-		//D3D12_INPUT_CLASSIFICATION InputSlotClass;
-		//UINT InstanceDataStepRate;
 		auto & inputElement = desc.InputLayout.pInputElementDescs[i];
 		SaveStringToFile<char>(fs, inputElement.SemanticName);
 		fs.write(reinterpret_cast<const char*>(&inputElement.SemanticIndex), sizeof(UINT));

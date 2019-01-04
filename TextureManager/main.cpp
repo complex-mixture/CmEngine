@@ -1,7 +1,6 @@
 #include <string>
 #include <fstream>
 
-
 template<typename _charType>
 void LoadStringFromFile(std::ifstream & _ifs, std::basic_string<_charType> & _dest)
 {
@@ -19,7 +18,6 @@ void SaveStringToFile(std::ofstream & _ofs, const std::basic_string<_charType> &
 	_ofs.write(reinterpret_cast<const char*>(_source.data()), sizeof(std::basic_string<_charType>::value_type) * stringSize);
 }
 
-
 int main()
 {
 	std::wstring a[] = {
@@ -31,7 +29,6 @@ int main()
 
 	uint64_t textureCount = _countof(a) / 2;
 
-
 	std::ofstream ofs(L"TextureManager.data", std::ios::binary | std::ios::out);
 
 	ofs.write(reinterpret_cast<const char*>(&textureCount), sizeof(uint64_t));
@@ -40,5 +37,4 @@ int main()
 	{
 		SaveStringToFile<wchar_t>(ofs, _ele);
 	}
-
 }

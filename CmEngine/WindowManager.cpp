@@ -10,7 +10,6 @@ LRESULT FWindowManager::WndProc(HWND _hwnd, UINT _msg, WPARAM _wParam, LPARAM _l
 {
 	std::unordered_map<HWND, FWindow*> & _hwndMap = Get().mHwndMap;
 	auto it = _hwndMap.find(_hwnd);
-	//Assert(it != _hwndMap.end());
 
 	if (it == _hwndMap.end())
 		return DefWindowProcW(_hwnd, _msg, _wParam, _lParam);

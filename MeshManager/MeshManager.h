@@ -48,6 +48,6 @@ inline void FMeshManager::AddStaticMesh(std::string _fbxFileName, const std::wst
 	UStaticMesh<_vertexType> staticMesh;
 	staticMesh.Construct(rootNode->GetChild(0)->GetMesh());
 	staticMesh.SaveToFile(_destFileName);
-
+	fbxScene->Destroy();
 	mMap.insert(std::make_pair(_meshName, _destFileName));
 }

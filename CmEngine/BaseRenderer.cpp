@@ -1,6 +1,6 @@
 #include "BaseRenderer.h"
 #include <DirectXColors.h>
-#include "TextureManager.h"
+#include "ShaderParameter.h"
 #include "DescriptorHandleManager.h"
 
 void FBaseRenderer::RenderScene(FTreatedRenderInformation * _renderInformation)
@@ -20,8 +20,24 @@ void FBaseRenderer::RenderScene(FTreatedRenderInformation * _renderInformation)
 		GCommandList->SetPipelineState(_ele.mPipelineState);
 		GCommandList->SetGraphicsRootConstantBufferView(0, ri->mMainPassCb->GetElementGpuAddress(0));
 		GCommandList->SetGraphicsRootConstantBufferView(1, ri->mObjCb->GetElementGpuAddress(_ele.mIndexInObjCb));
-		GCommandList->SetGraphicsRootDescriptorTable(2, FTextureManager::Get().LoadMesh(L"bricks")->GetDescriptorHandle().mGpuHandle);
-		GCommandList->SetGraphicsRootDescriptorTable(3, FTextureManager::Get().LoadMesh(L"default_nmap")->GetDescriptorHandle().mGpuHandle);
+		for (uint64_t i = 0; i != _ele.mShaderParameters.size(); ++i)
+		{
+			switch (_ele.mShaderParameters[i].mParameterType)
+			{
+			case D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE:
+				GCommandList->SetGraphicsRootDescriptorTable(i + 2, _ele.mShaderParameters[i].mParameterDescriptorTable);
+				break;
+			case D3D12_ROOT_PARAMETER_TYPE_CBV:
+				GCommandList->SetComputeRootConstantBufferView(i + 2, _ele.mShaderParameters[i].mParameterConstantBufferView);
+				break;
+			case D3D12_ROOT_PARAMETER_TYPE_SRV:
+				GCommandList->SetGraphicsRootShaderResourceView(i + 2, _ele.mShaderParameters[i].mParameterShaderResourcedView);
+				break;
+			case D3D12_ROOT_PARAMETER_TYPE_UAV:
+				GCommandList->SetGraphicsRootUnorderedAccessView(i + 2, _ele.mShaderParameters[i].mParameterUnorderedAccessView);
+				break;
+			}
+		}
 		GCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		GCommandList->IASetIndexBuffer(&_ele.mIndexBufferView);
 		GCommandList->IASetVertexBuffers(0, 1, &_ele.mVertexBufferView);

@@ -51,4 +51,5 @@ FTreatedRenderStaticMesh::FTreatedRenderStaticMesh(const FPreTreatedRenderStatic
 	mIndexBufferView = _ptsm.mIndexBufferView;
 	mRootSignature = _ptsm.mRootSignature;
 	mPipelineState = _ptsm.mPipelineState;
+	mShaderParameters = _ptsm.mShaderParameters;
 }

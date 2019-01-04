@@ -18,6 +18,7 @@ struct FUntreatedRenderStaticMesh
 	DirectX::XMMATRIX mWorldMatrix;
 	UStaticMesh * mStaticMesh;
 	UMaterials * mMaterials;
+	std::vector<FShaderParameter> mShaderParameters;
 
 	FUntreatedRenderStaticMesh() = default;
 	FUntreatedRenderStaticMesh(const AStaticMeshActor * _actor)
@@ -25,6 +26,7 @@ struct FUntreatedRenderStaticMesh
 		mWorldMatrix = _actor->GetWorldMatrix();
 		mStaticMesh = _actor->GetStaticMesh();
 		mMaterials = _actor->GetMaterials();
+		mShaderParameters = _actor->GetShaderParameters();
 	}
 };
 

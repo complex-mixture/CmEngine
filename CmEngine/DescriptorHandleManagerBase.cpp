@@ -37,10 +37,22 @@ void FDescriptorHandleManagerBase::Init(D3D12_DESCRIPTOR_HEAP_TYPE _heapType, ui
 	mBitMap = new uint32_t[mBitMapIntCount];
 	memset(mBitMap, 0x00, mBitMapIntCount * 4);
 	D3D12_DESCRIPTOR_HEAP_DESC desc;
-	if (_heapType == D3D12_DESCRIPTOR_HEAP_TYPE_DSV || _heapType == D3D12_DESCRIPTOR_HEAP_TYPE_RTV)
+
+	switch (_heapType)
+	{
+	case D3D12_DESCRIPTOR_HEAP_TYPE_RTV:
+	case D3D12_DESCRIPTOR_HEAP_TYPE_DSV:
 		desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-	else
+		break;
+	case D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV:
+	case D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER:
+	case D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES:
 		desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+		break;
+	default:
+		Assert(false);
+	}
+
 	desc.NodeMask = 0;
 	desc.NumDescriptors = _descriptorCount;
 	desc.Type = _heapType;

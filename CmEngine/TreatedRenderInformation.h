@@ -2,6 +2,7 @@
 #include "UploadBuffer.h"
 #include "ConstantBufferSruct.h"
 #include <d3d12.h>
+#include "ShaderParameter.h"
 
 class FGpuRenderFrameResource;
 struct FPreTreatedRenderStaticMesh;
@@ -17,6 +18,8 @@ struct FTreatedRenderStaticMesh
 
 	ID3D12RootSignature * mRootSignature;
 	ID3D12PipelineState * mPipelineState;
+
+	std::vector<FShaderParameter> mShaderParameters;
 
 	FTreatedRenderStaticMesh() = default;
 	FTreatedRenderStaticMesh(const FPreTreatedRenderStaticMesh & _ptsm);

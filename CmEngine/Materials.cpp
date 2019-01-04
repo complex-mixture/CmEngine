@@ -5,6 +5,7 @@
 #include <vector>
 #include "D3D12RhiGlobal.h"
 #include "D3D12RhiUtil.h"
+#include "ShaderParameter.h"
 
 void UMaterials::Init(std::wstring _fileName)
 {
@@ -12,11 +13,24 @@ void UMaterials::Init(std::wstring _fileName)
 
 	uint64_t fitVertexIdCount = 0;
 	fs.read(reinterpret_cast<char*>(&fitVertexIdCount), sizeof(uint64_t));
-	for (int i = 0; i != fitVertexIdCount; ++i)
+	for (uint64_t i = 0; i != fitVertexIdCount; ++i)
 	{
 		uint64_t fitVertexId = 0;
 		fs.read(reinterpret_cast<char*>(&fitVertexId), sizeof(uint64_t));
-		mFitVertexId.insert(fitVertexId);
+		mFitVertexIds.insert(fitVertexId);
+	}
+
+	uint64_t parameterIdentificationCount = 0;
+	fs.read(reinterpret_cast<char*>(&parameterIdentificationCount), sizeof(uint64_t));
+	mParameterIdentifications.resize(parameterIdentificationCount);
+	if (parameterIdentificationCount != 0)
+	{
+		fs.read(reinterpret_cast<char*>(&mParameterIdentifications[0]), sizeof(D3D12_ROOT_PARAMETER_TYPE) * parameterIdentificationCount);
+	}
+
+	for (uint64_t i = 0; i != parameterIdentificationCount; ++i)
+	{
+		Assert(mParameterIdentifications[i] != D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS);
 	}
 
 	uint64_t rootSignatureBufferSize = 0;
@@ -69,7 +83,11 @@ void UMaterials::Init(std::wstring _fileName)
 			fs.read(reinterpret_cast<char*>(&inputElements[i].InstanceDataStepRate), sizeof(UINT));
 		}
 	}
-
+	inputElements[0];
+	inputElements[1];
+	inputElements[2];
+	inputElements[3];
+	inputElements[4];
 	desc.InputLayout.NumElements = numInputElements;
 	desc.InputLayout.pInputElementDescs = inputElements;
 

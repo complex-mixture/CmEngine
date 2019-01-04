@@ -3,6 +3,7 @@
 #include <d3d12.h>
 #include "ConstantBufferSruct.h"
 #include <vector>
+#include "ShaderParameter.h"
 
 class FGpuRenderFrameResource;
 struct FUntreatedRenderInformation;
@@ -18,6 +19,8 @@ struct FPreTreatedRenderStaticMesh
 
 	ID3D12RootSignature * mRootSignature;
 	ID3D12PipelineState * mPipelineState;
+
+	std::vector<FShaderParameter> mShaderParameters;
 
 	FPreTreatedRenderStaticMesh() = default;
 	FPreTreatedRenderStaticMesh(const FUntreatedRenderStaticMesh & _utsm);

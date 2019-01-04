@@ -13,6 +13,8 @@ FPreTreatedRenderStaticMesh::FPreTreatedRenderStaticMesh(const FUntreatedRenderS
 
 	mRootSignature = _utsm.mMaterials->GetRootSignature();
 	mPipelineState = _utsm.mMaterials->GetPipelineState();
+
+	mShaderParameters = _utsm.mShaderParameters;
 }
 
 FPreTreatedRenderInformation::FPreTreatedRenderInformation(const FUntreatedRenderInformation & _utri, FGpuRenderFrameResource * _gpuRenderFrameResource)
@@ -56,9 +58,6 @@ FPreTreatedRenderInformation::FPreTreatedRenderInformation(const FUntreatedRende
 
 	mPassCb.mAmbientColor = XMFLOAT3(0.2f, 0.2f, 0.2f);
 
-	mPassCb.unused[0] = 123.f;
-	mPassCb.unused[1] = 456.f;
-
 	uint32_t lightIndex = 0;
 
 	for (auto const & _ele : _utri.mUntreatedDirectionLights)
@@ -98,9 +97,9 @@ FPreTreatedRenderInformation::FPreTreatedRenderInformation(const FUntreatedRende
 	{
 		new(&mPreUreatedRenderStaticMeshs[i]) FPreTreatedRenderStaticMesh(_utri.mUntreatedRenderStaticMeshs[i]);
 		uint32_t relatedLightsCount = 0;
-		for (uint32_t i = 0; i != lightIndex; ++i)
+		for (uint32_t j = 0; j != lightIndex; ++j)
 		{
-			mPreUreatedRenderStaticMeshs[i].mObjCb.mRelatedLightIndeices[i] = i;
+			mPreUreatedRenderStaticMeshs[i].mObjCb.mRelatedLightIndeices[j] = j;
 		}
 		mPreUreatedRenderStaticMeshs[i].mObjCb.mRelatedLightCount = lightIndex;
 	}

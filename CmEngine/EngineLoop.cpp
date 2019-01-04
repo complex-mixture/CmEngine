@@ -43,8 +43,6 @@ void FEngineLoop::Tick()
 	GetRenderModule()->CollectRenderFrameResource();
 	GetRenderModule()->EndFrame_GameThead();
 	GFrameCount++;
-	if (GFrameCount % 100 == 0)
-		LogA("%I64u, [%f]\n", GFrameCount, GetTotalTime());
 }
 
 void FEngineLoop::Exit()

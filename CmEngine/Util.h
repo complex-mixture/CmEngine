@@ -95,6 +95,8 @@ do																					\
 #define Assert(_expression) ((void)0)
 #endif
 
+#define Comment(...)
+
 /**
 * utility template for a class that should not be copyable.
 * Derive from this class to make your class non-copyable

@@ -36,7 +36,7 @@ public:
 	void CollectRenderFrameResource();
 	void EndFrame_GameThead();
 
-	//called on render thread
+	//called on render thread 
 	void BeginFrame_RenderThread();
 	void RenderScene_RenderThread();
 	void EndFrame_RenderThead();

@@ -30,6 +30,7 @@ public:
 	XMFLOAT3 GetScale()const { return mScale; }
 
 	virtual void Tick(float _deltaTime) {}
+	virtual void EndPlay() {}
 
 private:
 	XMFLOAT3 mPosition = XMFLOAT3(0.f, 0.f, 0.f);

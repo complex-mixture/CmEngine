@@ -10,7 +10,7 @@ public:
 	void Init() = delete;
 	void Clear() = delete;
 
-	ResourceType * LoadMesh(std::wstring _name)
+	ResourceType * LoadResource(std::wstring _name)
 	{
 		auto it = mMap.find(_name);
 		if (it == mMap.end())
