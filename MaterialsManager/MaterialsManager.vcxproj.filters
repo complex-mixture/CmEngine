@@ -4,6 +4,12 @@
     <Filter Include="Private">
       <UniqueIdentifier>{d1417abf-1bdc-4b70-b9a1-58a19122df24}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{6ffeedfb-a324-46d3-8c05-0c49799a80df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\ShaderUtil">
+      <UniqueIdentifier>{aa66d0e5-7e3c-445d-bcb0-f8dac233c88f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MaterialsManager.h" />
@@ -17,5 +23,24 @@
     <ClCompile Include="main.cpp">
       <Filter>Private</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="LightCommon.hlsli">
+      <Filter>Shader\ShaderUtil</Filter>
+    </None>
+    <None Include="Util.hlsli">
+      <Filter>Shader\ShaderUtil</Filter>
+    </None>
+    <None Include="BaseColor.hlsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="GoochShaderUtil.hlsli">
+      <Filter>Shader\ShaderUtil</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="VertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

@@ -58,10 +58,10 @@ void UMaterials::Init(std::wstring _fileName)
 
 	desc.pRootSignature = mRootSignature;
 	desc.VS = { shaderBuffer[0], shaderBufferSize[0] };
-	desc.PS = { shaderBuffer[1], shaderBufferSize[1] };
+	desc.HS = { shaderBuffer[1], shaderBufferSize[1] };
 	desc.DS = { shaderBuffer[2], shaderBufferSize[2] };
-	desc.HS = { shaderBuffer[3], shaderBufferSize[3] };
-	desc.GS = { shaderBuffer[4], shaderBufferSize[4] };
+	desc.GS = { shaderBuffer[3], shaderBufferSize[3] };
+	desc.PS = { shaderBuffer[4], shaderBufferSize[4] };
 
 	UINT numInputElements = 0;
 	D3D12_INPUT_ELEMENT_DESC * inputElements = nullptr;

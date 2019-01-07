@@ -4,7 +4,7 @@
 
 void FMaterialsManager::Init()
 {
-	std::ifstream fs(mFileName);
+	std::ifstream fs(mFileName, std::ios::in | std::ios::binary);
 
 	uint64_t elementCount = 0;
 	fs.read(reinterpret_cast<char*>(&elementCount), sizeof(elementCount));

@@ -2,6 +2,9 @@
 #include <fstream>
 #include "Util.h"
 
+#pragma comment(lib, "d3dcompiler")
+#pragma comment(lib, "d3d12.lib")
+
 void FMaterialsManager::Init()
 {
 	std::ifstream ifs(mManagerFileName, std::ios::in | std::ios::binary);
@@ -24,6 +27,18 @@ void FMaterialsManager::Init()
 	}
 }
 
+void FMaterialsManager::Save()
+{
+	std::ofstream ofs(mManagerFileName, std::ios::out | std::ios::binary);
+	uint64_t elementCount = mMap.size();
+	ofs.write(reinterpret_cast<const char*>(&elementCount), sizeof(uint64_t));
+	for (auto const & _ele : mMap)
+	{
+		SaveStringToFile(ofs, _ele.first);
+		SaveStringToFile(ofs, _ele.second);
+	}
+}
+
 void FMaterialsManager::Clear()
 {
 	Save();
@@ -31,7 +46,8 @@ void FMaterialsManager::Clear()
 
 void FMaterialsManager::AddMaterials(
 	std::function<void(
-		_Out_ Comment(VertexId) uint64_t &,
+		_Out_ Comment(VertexIds) std::vector<uint64_t> &,
+		_Out_ Comment(parameterIdentifications) std::vector<D3D12_ROOT_PARAMETER_TYPE> &,
 		_Out_ std::vector<CD3DX12_ROOT_PARAMETER> &,
 		_Out_ std::vector<CD3DX12_STATIC_SAMPLER_DESC> &,
 		_Out_ D3D12_ROOT_SIGNATURE_FLAGS &,
@@ -48,28 +64,103 @@ void FMaterialsManager::AddMaterials(
 	const std::wstring & _destFileName
 )
 {
-	uint64_t vertexId;
+	std::vector<uint64_t> suitedVertexIds;
+	std::vector<D3D12_ROOT_PARAMETER_TYPE> parameterIdentifications;
 	std::vector<CD3DX12_ROOT_PARAMETER> rootParameters;
 	std::vector<CD3DX12_STATIC_SAMPLER_DESC> staticSamplerDescs;
 	D3D12_ROOT_SIGNATURE_FLAGS rootSignatureFlag = D3D12_ROOT_SIGNATURE_FLAG_NONE;
 	D3D_ROOT_SIGNATURE_VERSION rootSignatureVersion = D3D_ROOT_SIGNATURE_VERSION_1_1;
-	ID3DBlob * shaderBuffers[5] = {};
+	ID3DBlob * shaderBlobs[5] = {};
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipeLineStateDesc;
 
 	_materialsInitFunc(
-		vertexId,
+		suitedVertexIds,
+		parameterIdentifications,
 		rootParameters,
 		staticSamplerDescs,
 		rootSignatureFlag,
 		rootSignatureVersion,
-		shaderBuffers[0],
-		shaderBuffers[1],
-		shaderBuffers[2],
-		shaderBuffers[3],
-		shaderBuffers[4],
+		shaderBlobs[0],
+		shaderBlobs[1],
+		shaderBlobs[2],
+		shaderBlobs[3],
+		shaderBlobs[4],
 		graphicsPipeLineStateDesc
 	);
 
+	ID3DBlob * rootSignatureBlob = nullptr;
+	ID3DBlob * rootSignatureErrorBlob = nullptr;
 
+	D3D12SerializeRootSignature(
+		&CD3DX12_ROOT_SIGNATURE_DESC(
+			rootParameters.size(),
+			&rootParameters[0],
+			staticSamplerDescs.size(),
+			&staticSamplerDescs[0],
+			rootSignatureFlag
+		),
+		rootSignatureVersion,
+		&rootSignatureBlob,
+		&rootSignatureErrorBlob
+	);
 
+	if (rootSignatureErrorBlob)
+	{
+		DebugMessageBoxA("D3D12SerializeRootSignature Error", reinterpret_cast<const char*>(rootSignatureErrorBlob->GetBufferPointer()));
+	}
+
+	std::ofstream ofs(_destFileName, std::ios::out | std::ios::binary);
+
+	uint64_t suitedVertexIdCount = suitedVertexIds.size();
+	ofs.write(reinterpret_cast<const char*>(&suitedVertexIdCount), sizeof(uint64_t));
+	ofs.write(reinterpret_cast<const char*>(suitedVertexIds.data()), sizeof(uint64_t) * suitedVertexIdCount);
+
+	uint64_t parameterIdentificationCount = parameterIdentifications.size();
+	ofs.write(reinterpret_cast<const char*>(&parameterIdentificationCount), sizeof(uint64_t));
+	ofs.write(reinterpret_cast<const char*>(parameterIdentifications.data()), sizeof(D3D12_ROOT_PARAMETER_TYPE) * parameterIdentificationCount);
+
+	uint64_t rootSignatureBufferSize = rootSignatureBlob->GetBufferSize();
+	ofs.write(reinterpret_cast<const char*>(&rootSignatureBufferSize), sizeof(uint64_t));
+	ofs.write(reinterpret_cast<const char*>(rootSignatureBlob->GetBufferPointer()), rootSignatureBufferSize);
+
+	for (int i = 0; i != 5; ++i)
+	{
+		uint64_t shaderBlobSize = shaderBlobs[i] ? shaderBlobs[i]->GetBufferSize() : 0;
+		ofs.write(reinterpret_cast<const char*>(&shaderBlobSize), sizeof(uint64_t));
+		if (shaderBlobs[i] != nullptr)
+		{
+			ofs.write(reinterpret_cast<const char*>(shaderBlobs[i]->GetBufferPointer()), shaderBlobSize);
+		}
+	}
+
+	ofs.write(reinterpret_cast<const char*>(&graphicsPipeLineStateDesc.InputLayout.NumElements), sizeof(UINT));
+	for (int i = 0; i != graphicsPipeLineStateDesc.InputLayout.NumElements; ++i)
+	{
+		auto & inputElement = graphicsPipeLineStateDesc.InputLayout.pInputElementDescs[i];
+		SaveStringToFile<char>(ofs, inputElement.SemanticName);
+		ofs.write(reinterpret_cast<const char*>(&inputElement.SemanticIndex), sizeof(UINT));
+		ofs.write(reinterpret_cast<const char*>(&inputElement.Format), sizeof(DXGI_FORMAT));
+		ofs.write(reinterpret_cast<const char*>(&inputElement.InputSlot), sizeof(UINT));
+		ofs.write(reinterpret_cast<const char*>(&inputElement.AlignedByteOffset), sizeof(UINT));
+		ofs.write(reinterpret_cast<const char*>(&inputElement.InputSlotClass), sizeof(D3D12_INPUT_CLASSIFICATION));
+		ofs.write(reinterpret_cast<const char*>(&inputElement.InstanceDataStepRate), sizeof(UINT));
+	}
+
+	ofs.write(reinterpret_cast<const char*>(&graphicsPipeLineStateDesc.StreamOutput), sizeof(D3D12_STREAM_OUTPUT_DESC));
+	ofs.write(reinterpret_cast<const char*>(&graphicsPipeLineStateDesc.BlendState), sizeof(D3D12_BLEND_DESC));
+	ofs.write(reinterpret_cast<const char*>(&graphicsPipeLineStateDesc.SampleMask), sizeof(UINT));
+	ofs.write(reinterpret_cast<const char*>(&graphicsPipeLineStateDesc.RasterizerState), sizeof(D3D12_RASTERIZER_DESC));
+	ofs.write(reinterpret_cast<const char*>(&graphicsPipeLineStateDesc.DepthStencilState), sizeof(D3D12_DEPTH_STENCIL_DESC));
+	ofs.write(reinterpret_cast<const char*>(&graphicsPipeLineStateDesc.IBStripCutValue), sizeof(D3D12_INDEX_BUFFER_STRIP_CUT_VALUE));
+	ofs.write(reinterpret_cast<const char*>(&graphicsPipeLineStateDesc.PrimitiveTopologyType), sizeof(D3D12_PRIMITIVE_TOPOLOGY_TYPE));
+	ofs.write(reinterpret_cast<const char*>(&graphicsPipeLineStateDesc.NumRenderTargets), sizeof(UINT));
+	ofs.write(reinterpret_cast<const char*>(graphicsPipeLineStateDesc.RTVFormats), sizeof(DXGI_FORMAT) * _countof(graphicsPipeLineStateDesc.RTVFormats));
+	ofs.write(reinterpret_cast<const char*>(&graphicsPipeLineStateDesc.DSVFormat), sizeof(DXGI_FORMAT));
+	ofs.write(reinterpret_cast<const char*>(&graphicsPipeLineStateDesc.SampleDesc), sizeof(DXGI_SAMPLE_DESC));
+	ofs.write(reinterpret_cast<const char*>(&graphicsPipeLineStateDesc.NodeMask), sizeof(UINT));
+	ofs.write(reinterpret_cast<const char*>(&graphicsPipeLineStateDesc.CachedPSO), sizeof(D3D12_CACHED_PIPELINE_STATE));
+	ofs.write(reinterpret_cast<const char*>(&graphicsPipeLineStateDesc.Flags), sizeof(D3D12_PIPELINE_STATE_FLAGS));
+	ofs.close();
+
+	mMap.insert(std::make_pair(_materialsName, _destFileName));
 }

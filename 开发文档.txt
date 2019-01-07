@@ -1,3 +1,5 @@
-optional : texture pool的编写
-加shader怼算法
-场景管理
+//TODO:
+texture pool
+加个水面
+视差贴图，高度图
+阴影

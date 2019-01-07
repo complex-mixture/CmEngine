@@ -83,7 +83,6 @@ void UStaticMesh::CommitResource()
 
 	UpdateSubresources<1>(GCommandList, mIndicesGpu, mUploadIndicesBuffer, 0, 0, 1, &subResourceDataIndices);
 
-
 	D3D12_RESOURCE_BARRIER resourceBarrierAfter[] = {
 		CD3DX12_RESOURCE_BARRIER::Transition(mVertexesGpu, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_COMMON),
 		CD3DX12_RESOURCE_BARRIER::Transition(mIndicesGpu, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_COMMON),
