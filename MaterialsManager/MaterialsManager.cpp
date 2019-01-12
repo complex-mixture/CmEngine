@@ -34,8 +34,8 @@ void FMaterialsManager::Save()
 	ofs.write(reinterpret_cast<const char*>(&elementCount), sizeof(uint64_t));
 	for (auto const & _ele : mMap)
 	{
-		SaveStringToFile(ofs, _ele.first);
-		SaveStringToFile(ofs, _ele.second);
+		SaveStringToFile<wchar_t>(ofs, _ele.first);
+		SaveStringToFile<wchar_t>(ofs, _ele.second);
 	}
 }
 
@@ -91,12 +91,12 @@ void FMaterialsManager::AddMaterials(
 	ID3DBlob * rootSignatureBlob = nullptr;
 	ID3DBlob * rootSignatureErrorBlob = nullptr;
 
-	D3D12SerializeRootSignature(
+	HRESULT hr =  D3D12SerializeRootSignature(
 		&CD3DX12_ROOT_SIGNATURE_DESC(
 			rootParameters.size(),
-			&rootParameters[0],
+			rootParameters.size() != 0 ? &rootParameters[0] : nullptr,
 			staticSamplerDescs.size(),
-			&staticSamplerDescs[0],
+			staticSamplerDescs.size() != 0 ? &staticSamplerDescs[0] : nullptr,
 			rootSignatureFlag
 		),
 		rootSignatureVersion,

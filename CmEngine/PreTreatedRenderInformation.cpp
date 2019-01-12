@@ -67,28 +67,32 @@ FPreTreatedRenderInformation::FPreTreatedRenderInformation(const FUntreatedRende
 		mPassCb.mLights[lightIndex].mIntensity = _ele.mIntensity;
 		lightIndex++;
 	}
-	mPassCb.mPointLightIndexStart = lightIndex;
+	mPassCb.mDirectionLightIndexEnd = lightIndex- 1;
 
 	for (auto const & _ele : _utri.mUntreatedPointLights)
 	{
 		mPassCb.mLights[lightIndex].mColor = _ele.mColor;
 		mPassCb.mLights[lightIndex].mIntensity = _ele.mIntensity;
 		mPassCb.mLights[lightIndex].mPosition = _ele.mPosition;
-		mPassCb.mLights[lightIndex].mFalloffStart = _ele.mFallOffStart;
+		mPassCb.mLights[lightIndex].mFallOffBegin = _ele.mFallOffStart;
 		mPassCb.mLights[lightIndex].mFalloffEnd = _ele.mFallOffEnd;
+		mPassCb.mLights[lightIndex].mFallOffBeginSqr = _ele.mFallOffStart * _ele.mFallOffStart;
+		mPassCb.mLights[lightIndex].mFallOffEndSqr = _ele.mFallOffEnd * _ele.mFallOffEnd;
 		lightIndex++;
 	}
-	mPassCb.mSpotLightIndexStart = lightIndex;
+	mPassCb.mPointLightIndexEnd = lightIndex - 1;
 
 	for (auto const & _ele : _utri.mUntreatedSpotLights)
 	{
 		mPassCb.mLights[lightIndex].mColor = _ele.mColor;
 		mPassCb.mLights[lightIndex].mIntensity = _ele.mIntensity;
 		mPassCb.mLights[lightIndex].mPosition = _ele.mPosition;
-		mPassCb.mLights[lightIndex].mFalloffStart = _ele.mFallOffStart;
+		mPassCb.mLights[lightIndex].mFallOffBegin = _ele.mFallOffStart;
 		mPassCb.mLights[lightIndex].mFalloffEnd = _ele.mFallOffEnd;
-		mPassCb.mLights[lightIndex].mInnerConeAngle = _ele.mInnerConeAngle;
-		mPassCb.mLights[lightIndex].mOuterConeAngle = _ele.mOuterConeAngle;
+		mPassCb.mLights[lightIndex].mFallOffBeginSqr = _ele.mFallOffStart * _ele.mFallOffStart;
+		mPassCb.mLights[lightIndex].mFallOffEndSqr = _ele.mFallOffEnd * _ele.mFallOffEnd;
+		mPassCb.mLights[lightIndex].mCosHalfInnerConeAngle = cos(_ele.mInnerConeAngle / 2);
+		mPassCb.mLights[lightIndex].mCosHalfInnerConeAngle = cos(_ele.mOuterConeAngle / 2);
 		lightIndex++;
 	}
 

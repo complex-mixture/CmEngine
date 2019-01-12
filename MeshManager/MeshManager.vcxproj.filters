@@ -5,6 +5,7 @@
     <ClInclude Include="Util.h" />
     <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="Vertex.h" />
+    <ClInclude Include="MeshConstructHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -18,8 +19,5 @@
     <Filter Include="Private">
       <UniqueIdentifier>{5e77ddda-4649-4f69-9ae1-c7bff8e3a4c8}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="MeshLoader.inl" />
   </ItemGroup>
 </Project>

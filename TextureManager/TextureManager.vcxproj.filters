@@ -9,8 +9,16 @@
     <ClCompile Include="main.cpp">
       <Filter>Private</Filter>
     </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Util.h" />
+    <ClInclude Include="TextureManager.h" />
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
 </Project>

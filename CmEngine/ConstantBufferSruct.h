@@ -6,12 +6,13 @@ struct FLight
 	DirectX::XMFLOAT3 mPosition = DirectX::XMFLOAT3{ 0.f, 0.f, 0.f };
 	float mIntensity = -1.f;
 	DirectX::XMFLOAT3 mColor = DirectX::XMFLOAT3{ 0.f, 0.f, 0.f };
-	float mFalloffEnd = -1.f;
+	float mFallOffBegin = -1.f;
 	DirectX::XMFLOAT3 mDirection = DirectX::XMFLOAT3{ 0.f, 0.f, 0.f };
-	float mFalloffStart = -1.f;
-	float mInnerConeAngle = -1.f;
-	float mOuterConeAngle = -1.f;
-	float unused[2];
+	float mFalloffEnd = -1.f;
+	float mCosHalfInnerConeAngle = -1.f;
+	float mCosHalfOuterConeAngle = -1.f;
+	float mFallOffBeginSqr = -1.f;
+	float mFallOffEndSqr = -1.f;
 };
 
 struct PassCb
@@ -28,8 +29,8 @@ struct PassCb
 	float mDeltaTime;
 	DirectX::XMFLOAT3 mAmbientColor;
 	float mTotalTime;
-	uint32_t mPointLightIndexStart;
-	uint32_t mSpotLightIndexStart;
+	uint32_t mDirectionLightIndexEnd;
+	uint32_t mPointLightIndexEnd;
 	float unused[2];
 	FLight mLights[255];
 };

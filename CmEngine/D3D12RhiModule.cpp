@@ -9,6 +9,7 @@
 #include "D3D12Fence.h"
 #include "D3D12RhiUtil.h"
 #include <windows.h>
+#include "DescriptorHandleManager.h"
 
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dxgi.lib")
@@ -17,8 +18,6 @@
 #include <dxgidebug.h>
 #pragma comment(lib, "dxguid.lib")
 #endif // DEBUG
-#include "DescriptorHandleManager.h"
-#include <d3d12.h>
 
 IDXGIFactory * GFactory = nullptr;
 IDXGIAdapter* GAdapter = nullptr;

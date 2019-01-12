@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="MeshConstructHelper.h" />
     <ClInclude Include="MeshManager.h" />
     <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="Util.h" />
@@ -157,7 +158,7 @@
     <ClCompile Include="MeshManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="MeshLoader.inl" />
+    <ClInclude Include="MeshLoader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -22,15 +22,12 @@ void UStaticMesh::Init(std::wstring _fileName)
 	fs.read(reinterpret_cast<char*>(mIndicesBuffer), mIndexSize * mIndicesCount);
 	
 	fs.close();
-}
 
-void UStaticMesh::CommitResource()
-{
 	VerifyD3D12Result(GDevice->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 		D3D12_HEAP_FLAG_NONE,
 		&CD3DX12_RESOURCE_DESC::Buffer(mVertexSize * mVertexesCount),
-		D3D12_RESOURCE_STATE_COMMON,
+		D3D12_RESOURCE_STATE_COPY_DEST,
 		nullptr,
 		IID_PPV_ARGS(&mVertexesGpu)
 	));
@@ -39,7 +36,7 @@ void UStaticMesh::CommitResource()
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 		D3D12_HEAP_FLAG_NONE,
 		&CD3DX12_RESOURCE_DESC::Buffer(mIndexSize * mIndicesCount),
-		D3D12_RESOURCE_STATE_COMMON,
+		D3D12_RESOURCE_STATE_COPY_DEST,
 		nullptr,
 		IID_PPV_ARGS(&mIndicesGpu)
 	));
@@ -61,14 +58,10 @@ void UStaticMesh::CommitResource()
 		nullptr,
 		IID_PPV_ARGS(&mUploadIndicesBuffer)
 	));
+}
 
-	D3D12_RESOURCE_BARRIER resourceBarrierBefore[] = {
-		CD3DX12_RESOURCE_BARRIER::Transition(mVertexesGpu, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST),
-		CD3DX12_RESOURCE_BARRIER::Transition(mIndicesGpu, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST),
-	};
-
-	GCommandList->ResourceBarrier(_countof(resourceBarrierBefore), resourceBarrierBefore);
-
+void UStaticMesh::CommitResource()
+{
 	D3D12_SUBRESOURCE_DATA subResourceDataVertexes = {};
 	subResourceDataVertexes.pData = mVertexesBuffer;
 	subResourceDataVertexes.RowPitch = mVertexSize * mVertexesCount;

@@ -1,46 +1,50 @@
 #include "TextureManager.h"
-#include "RenderModule.h"
+#include "Util.h"
+#include "Texture.h"
 
 void FTextureManager::Init()
 {
-	std::ifstream fs(mFileName, std::ios::in | std::ios::binary);
-
-	uint64_t elementCount = 0;
-	fs.read(reinterpret_cast<char*>(&elementCount), sizeof(elementCount));
-	std::wstring meshName;
-	std::wstring fileName;
-	for (uint64_t i = 0; i != elementCount; ++i)
+	std::ifstream ifs(mManagerFileName, std::ios::in | std::ios::binary);
+	if (ifs.is_open())
 	{
-		LoadStringFromFile<wchar_t>(fs, meshName);
-		LoadStringFromFile<wchar_t>(fs, fileName);
-		UTexture * newTexture = new UTexture();
-		newTexture->Init(fileName);
-		mMap.insert(std::make_pair(meshName, newTexture));
+		uint64_t elementCount = 0;
+		ifs.read(reinterpret_cast<char*>(&elementCount), sizeof(uint64_t));
+		std::wstring textureName;
+		std::wstring fileName;
+		for (uint64_t i = 0; i != elementCount; ++i)
+		{
+			LoadStringFromFile<wchar_t>(ifs, textureName);
+			LoadStringFromFile<wchar_t>(ifs, fileName);
+			mMap.insert(std::make_pair(textureName, fileName));
+		}
 	}
-	fs.close();
+	else
+	{
+		LogW(L"File (%s) not exit", mManagerFileName.c_str());
+	}
+}
 
-	GetRenderModule()->AddRenderThreadTask([&]() {
-		for (auto _ele : mMap)
-			_ele.second->Commit();
+void FTextureManager::Save()
+{
+	std::ofstream ofs(mManagerFileName, std::ios::out | std::ios::binary);
+	uint64_t elementCount = mMap.size();
+	ofs.write(reinterpret_cast<const char*>(&elementCount), sizeof(uint64_t));
+	for (auto const & _ele : mMap)
+	{
+		SaveStringToFile<wchar_t>(ofs, _ele.first);
+		SaveStringToFile<wchar_t>(ofs, _ele.second);
 	}
-	);
-
-	GetRenderModule()->AddTaskOnRenderThreadFlush([&]() {
-		for (auto _ele : mMap)
-			_ele.second->EndCommit();
-	}
-	);
 }
 
 void FTextureManager::Clear()
 {
-	GetRenderModule()->AddTaskOnRenderThreadFlush([&]() {
-		for (auto & _ele : mMap)
-		{
-			_ele.second->Clear();
-			delete _ele.second;
-			_ele.second = nullptr;
-		}
-		mMap.clear();
-	});
+	Save();
+}
+
+void FTextureManager::AddTexture(std::wstring _ddsFileName, std::wstring _textureName, std::wstring _destFileName)
+{
+	FTexture texture;
+	texture.Construct(_ddsFileName);
+	texture.SaveToFile(_destFileName);
+	mMap.insert(std::make_pair(_textureName, _destFileName));
 }

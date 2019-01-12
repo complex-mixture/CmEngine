@@ -10,6 +10,9 @@
     <Filter Include="Shader\ShaderUtil">
       <UniqueIdentifier>{aa66d0e5-7e3c-445d-bcb0-f8dac233c88f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\DebugShader">
+      <UniqueIdentifier>{14902f65-fc1b-4ae3-8ed0-a0b5de8b716b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MaterialsManager.h" />
@@ -37,10 +40,20 @@
     <None Include="GoochShaderUtil.hlsli">
       <Filter>Shader\ShaderUtil</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="VertexShader.hlsl">
+    <None Include="Gooch.hlsl">
       <Filter>Shader</Filter>
-    </FxCompile>
+    </None>
+    <None Include="WorldNormal.hlsl">
+      <Filter>Shader\DebugShader</Filter>
+    </None>
+    <None Include="GoochChair.hlsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="DebugUv.hlsl">
+      <Filter>Shader\DebugShader</Filter>
+    </None>
+    <None Include="SkyBox.hlsl">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

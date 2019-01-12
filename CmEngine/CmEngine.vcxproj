@@ -178,7 +178,6 @@
     <ClInclude Include="D3D12RhiUtil.h" />
     <ClInclude Include="D3D12Viewport.h" />
     <ClInclude Include="d3dx12.h" />
-    <ClInclude Include="DDSTextureLoader.h" />
     <ClInclude Include="DescriptorHandleManager.h" />
     <ClInclude Include="DirectionLightActor.h" />
     <ClInclude Include="Engine.h" />
@@ -212,6 +211,7 @@
     <ClInclude Include="PreTreatedRenderInformation.h" />
     <ClInclude Include="TextuerPool.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureLoaderHelper.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="TreatedRenderInformation.h" />
     <ClInclude Include="UnTreatedRenderInformation.h" />
@@ -227,7 +227,6 @@
     <ClCompile Include="CpuRenderFrameResource.cpp" />
     <ClCompile Include="D3D12RhiModule.cpp" />
     <ClCompile Include="D3D12Viewport.cpp" />
-    <ClCompile Include="DDSTextureLoader.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="EngineLoop.cpp" />
     <ClCompile Include="DescriptorHandleManagerBase.cpp" />
@@ -245,6 +244,7 @@
     <ClCompile Include="StaticMeshManager.cpp" />
     <ClCompile Include="TextuerPool.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TextureLoaderHelper.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="TreatedRenderInformation.cpp" />
     <ClCompile Include="UnTreatedRenderInformation.cpp" />

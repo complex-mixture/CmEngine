@@ -216,9 +216,6 @@
     <ClInclude Include="Texture.h">
       <Filter>ShaderCore\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="DDSTextureLoader.h">
-      <Filter>ShaderCore\Private\Texture</Filter>
-    </ClInclude>
     <ClInclude Include="DescriptorHandleManager.h">
       <Filter>D3D12Rhi</Filter>
     </ClInclude>
@@ -242,6 +239,9 @@
     </ClInclude>
     <ClInclude Include="ShaderParameter.h">
       <Filter>ShaderCore\ShaderParameters</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureLoaderHelper.h">
+      <Filter>ShaderCore\Private\Texture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -317,9 +317,6 @@
     <ClCompile Include="MaterialsManager.cpp">
       <Filter>ShaderCore\Private\Materials</Filter>
     </ClCompile>
-    <ClCompile Include="DDSTextureLoader.cpp">
-      <Filter>ShaderCore\Private\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>ShaderCore\Private\Texture</Filter>
     </ClCompile>
@@ -334,6 +331,9 @@
     </ClCompile>
     <ClCompile Include="TreatedRenderInformation.cpp">
       <Filter>Render\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureLoaderHelper.cpp">
+      <Filter>ShaderCore\Private\Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

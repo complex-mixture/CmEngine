@@ -7,10 +7,10 @@
 template<typename _vertexType>
 class UStaticMesh
 {
-	void __Contruct(const FbxMesh * _mesh);
+	void __Contruct(const FbxMesh * _mesh, bool _isExportFromUnreal);
 public:
 	UStaticMesh() = default;
-	void Construct(const FbxMesh * _mesh)
+	void Construct(const FbxMesh * _mesh, bool _isExportFromUnreal)
 	{
 		mIndicesCount = _mesh->GetPolygonVertexCount();
 		mVertexesCount = mIndicesCount;
@@ -33,7 +33,10 @@ public:
 		if (_mesh->GetPolygonSize(0) != 3)
 			DebugMessageBoxW(L"Mesh error", L"the mesh Polygon should be tri");
 		mVertexes.resize(mIndicesCount);
-		__Contruct(_mesh);
+
+		LogA("%s : polygon size [%d]\n", _mesh->GetName(), _mesh->GetPolygonSize(0));
+		LogA("%s : control points count [%d]\n", _mesh->GetName(), _mesh->GetControlPointsCount());
+		__Contruct(_mesh, _isExportFromUnreal);
 	}
 	void SaveToFile(const std::wstring & _fileName)
 	{
@@ -65,6 +68,4 @@ private:
 };
 
 template<typename _vertexType>
-inline void UStaticMesh<_vertexType>::__Contruct(const FbxMesh * _mesh) = delete;
-
-#include "MeshLoader.inl"
+inline void UStaticMesh<_vertexType>::__Contruct(const FbxMesh * _mesh, bool _isExportFromUnreal) = delete;

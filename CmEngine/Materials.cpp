@@ -83,11 +83,7 @@ void UMaterials::Init(std::wstring _fileName)
 			fs.read(reinterpret_cast<char*>(&inputElements[i].InstanceDataStepRate), sizeof(UINT));
 		}
 	}
-	inputElements[0];
-	inputElements[1];
-	inputElements[2];
-	inputElements[3];
-	inputElements[4];
+
 	desc.InputLayout.NumElements = numInputElements;
 	desc.InputLayout.pInputElementDescs = inputElements;
 
@@ -96,7 +92,6 @@ void UMaterials::Init(std::wstring _fileName)
 	fs.read(reinterpret_cast<char*>(&desc.SampleMask), sizeof(UINT));
 	fs.read(reinterpret_cast<char*>(&desc.RasterizerState), sizeof(D3D12_RASTERIZER_DESC));
 	fs.read(reinterpret_cast<char*>(&desc.DepthStencilState), sizeof(D3D12_DEPTH_STENCIL_DESC));
-
 	fs.read(reinterpret_cast<char*>(&desc.IBStripCutValue), sizeof(D3D12_INDEX_BUFFER_STRIP_CUT_VALUE));
 	fs.read(reinterpret_cast<char*>(&desc.PrimitiveTopologyType), sizeof(D3D12_PRIMITIVE_TOPOLOGY_TYPE));
 	fs.read(reinterpret_cast<char*>(&desc.NumRenderTargets), sizeof(UINT));

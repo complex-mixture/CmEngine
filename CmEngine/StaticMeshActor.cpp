@@ -4,7 +4,6 @@ void AStaticMeshActor::SetMaterials(UMaterials * _materials)
 {
 	Assert(_materials->IsFittedVertexId(mStaticMesh->GetVertexId()));
 
-
 	const std::vector<D3D12_ROOT_PARAMETER_TYPE> & newSpi = _materials->GetParameterIdentifications();
 	mShaderParameters.resize(newSpi.size());
 

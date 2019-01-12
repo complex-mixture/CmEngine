@@ -57,6 +57,11 @@ public:
 		const std::wstring & _destFileName
 	);
 
+	void EraseStaticMesh(const std::wstring & _materialsName)
+	{
+		mMap.erase(_materialsName);
+	}
+
 private:
 	std::map<std::wstring, std::wstring> mMap;
 	std::wstring mManagerFileName = L"MaterialsManager.data";

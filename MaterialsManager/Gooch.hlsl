@@ -16,8 +16,8 @@ cbuffer PassCb : register(b0)
     float gDeltaTime;
     float3 gAmbientLight;
     float gTotalTime;
-    uint gPointLightIndexStart;
-    uint gSpotLightIndexStart;
+    uint gDirectionLightIndexEnd;
+    uint gPointLightIndexEnd;
     float2 unused;
     Light gLights[255];
 }
@@ -73,21 +73,17 @@ float4 PsMain(in VertexOut _in) : SV_Target
 
     float3 destColor = baseColor * gAmbientLight;
 
-    for (uint i = 0; i != gRelatedLightCount; ++i)
-    {
-        if (gRelatedLightIndeices[i] < gPointLightIndexStart)
-        {
-            destColor += ComputeDirectionLight_Gooch(baseColor, gLights[gRelatedLightIndeices[i]], toEye, normal);
-        }
-        else if (gRelatedLightIndeices[i] < gSpotLightIndexStart)
-        {
-            destColor += ComputePointLight_Gooch(baseColor, gLights[gRelatedLightIndeices[i]], toEye, normal, _in.positionW);
-        }
-        else
-        {
-            destColor += ComputeSpotLight_Gooch(baseColor, gLights[gRelatedLightIndeices[i]], toEye, normal, _in.positionW);
-        }
-    }
+    destColor += ComputeLights_Gooch(
+                    gRelatedLightCount,
+                    gDirectionLightIndexEnd,
+                    gPointLightIndexEnd,
+                    gRelatedLightIndeices,
+                    gLights,
+                    normal,
+                    baseColor,
+                    toEye,
+                    _in.positionW
+                    );
 
     return float4(destColor, 1.f);
 }
