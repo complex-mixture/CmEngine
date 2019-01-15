@@ -46,31 +46,31 @@ float3 ComputeSpotLight_Gooch(float3 _baseColor, Light _spotLight, float3 _toEye
 
 float3 ComputeLights_Gooch(
 in const uint _relatedLightCount,
-in const uint _directionLightIndexEnd,
-in const uint _pointLightIndexEnd,
-in const uint _relatedLightIndeices[255],
-in const Light _lights[255],
+in const uint _pointLightIndexStart,
+in const uint _spotLightIndexStart,
+in const uint4 _relatedLightIndeices[64],
+in const Light _lights[256],
 in const float3 _normal,
 in const float3 baseColor,
 in const float3 toEye,
 in const float3 _positionW
 )
 {
-    float3 destColor;
+    float3 destColor = 0.f;
 
     for (uint i = 0; i != _relatedLightCount; ++i)
     {
-        if (_relatedLightIndeices[i] >= _directionLightIndexEnd)
+        if (_relatedLightIndeices[i / 4][i % 4] >= _spotLightIndexStart)
         {
-            destColor += ComputeDirectionLight_Gooch(baseColor, _lights[_relatedLightIndeices[i]], toEye, _normal);
+            destColor += ComputeSpotLight_Gooch(baseColor, _lights[_relatedLightIndeices[i / 4][i % 4]], toEye, _normal, _positionW);
         }
-        else if (_relatedLightIndeices[i] >= _pointLightIndexEnd)
+        else if (_relatedLightIndeices[i / 4][i % 4] >= _pointLightIndexStart)
         {
-            destColor += ComputePointLight_Gooch(baseColor, _lights[_relatedLightIndeices[i]], toEye, _normal, _positionW);
+            destColor += ComputePointLight_Gooch(baseColor, _lights[_relatedLightIndeices[i / 4][i % 4]], toEye, _normal, _positionW);
         }
         else
         {
-            destColor += ComputeSpotLight_Gooch(baseColor, _lights[_relatedLightIndeices[i]], toEye, _normal, _positionW);
+            destColor += ComputeDirectionLight_Gooch(baseColor, _lights[_relatedLightIndeices[i / 4][i % 4]], toEye, _normal);
         }
     }
 

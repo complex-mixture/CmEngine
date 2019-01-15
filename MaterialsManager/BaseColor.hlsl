@@ -14,10 +14,10 @@ cbuffer PassCb : register(b0)
     float gDeltaTime;
     float3 gAmbientLight;
     float gTotalTime;
-    uint gPointLightIndexStart;
-    uint gSpotLightIndexStart;
-    float2 unused;
-    Light gLights[255];
+    uint gDirectionLightIndexEnd;
+    uint gPointLightIndexEnd;
+    float2 pad0;
+    Light gLights[256];
 }
 
 cbuffer ObjCb : register(b1)
@@ -25,7 +25,8 @@ cbuffer ObjCb : register(b1)
     float4x4 gWroldMatrix;
     float4x4 gWroldMatrixInv;
     uint gRelatedLightCount;
-    uint gRelatedLightIndeices[255];
+    uint3 pad1;
+    uint4 gRelatedLightIndeices[64];
 }
 
 SamplerState AnisotropicSampler : register(s0);

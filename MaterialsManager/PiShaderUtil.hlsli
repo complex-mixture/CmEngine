@@ -11,7 +11,7 @@ float3 ComputeLight_Pi(float3 _baseColor, float3 _normal, float _lightIntensityF
     factor = factor / 2.f + 0.5f;
     float factor2 = min(1.f - dot(_normal, _toEye), 1.f);
     factor2 = factor2 * factor2 * (3.f - 2.f * factor2);
-    //factor *= min(1.f - dot(_normal, _toEye), 1.f);
+    //factor *= dot(_normal, _toEye) / 2.f + 0.5f;
     factor = factor * factor * (3.f - 2.f * factor);
     //factor *= factor2;
     return _light.mIntensity * _lightIntensityFactor * factor * _light.mColor * _baseColor;
@@ -43,90 +43,35 @@ float3 ComputeSpotLight_Pi(float3 _baseColor, Light _spotLight, float3 _toEye, f
 
 float3 ComputeLights_Pi(
 in const uint _relatedLightCount,
-in const uint _directionLightIndexEnd,
-in const uint _pointLightIndexEnd,
-in const uint _relatedLightIndeices[255],
-in const Light _lights[255],
+in const uint _pointLightIndexStart,
+in const uint _spotLightIndexStart,
+in const uint4 _relatedLightIndeices[64],
+in const Light _lights[256],
 in const float3 _normal,
 in const float3 baseColor,
 in const float3 toEye,
 in const float3 _positionW
 )
 {
-    float3 destColor;
+    float3 destColor = 0.f;
 
     for (uint i = 0; i != _relatedLightCount; ++i)
     {
-        if (_relatedLightIndeices[i] >= _directionLightIndexEnd)
+        if (_relatedLightIndeices[i / 4][i % 4] >= _spotLightIndexStart)
         {
-            destColor += ComputeDirectionLight_Pi(baseColor, _lights[_relatedLightIndeices[i]], toEye, _normal);
+            destColor += ComputeSpotLight_Pi(baseColor, _lights[_relatedLightIndeices[i / 4][i % 4]], toEye, _normal, _positionW);
         }
-        else if (_relatedLightIndeices[i] >= _pointLightIndexEnd)
+        else if (_relatedLightIndeices[i / 4][i % 4] >= _pointLightIndexStart)
         {
-            destColor += ComputePointLight_Pi(baseColor, _lights[_relatedLightIndeices[i]], toEye, _normal, _positionW);
+            destColor += ComputePointLight_Pi(baseColor, _lights[_relatedLightIndeices[i / 4][i % 4]], toEye, _normal, _positionW);
         }
         else
         {
-            destColor += ComputeSpotLight_Pi(baseColor, _lights[_relatedLightIndeices[i]], toEye, _normal, _positionW);
+            destColor += ComputeDirectionLight_Pi(baseColor, _lights[_relatedLightIndeices[i / 4][i % 4]], toEye, _normal);
         }
     }
 
     return destColor;
 }
-
-
-//float3 ComputeLights_Pi(
-//in const uint _relatedLightCount,
-//in const uint _relatedDirectionLightCount,
-//in const uint _relatedPointLightCount,
-//in const uint _relatedSpotLightCount,
-//in const uint _directionLightIndexEnd,
-//in const uint _pointLightIndexEnd,
-//in const uint4 _relatedLightIndeices[64],
-//in const Light _lights[256],
-//in const float3 _normal,
-//in const float3 baseColor,
-//in const float3 toEye,
-//in const float3 _positionW
-//)
-//{
-//    float3 destColor;
-
-//    //uint index = 0;
-//    //uint i;
-//    //for (i = 0; i != _relatedDirectionLightCount; ++index, ++index)
-//    //{
-//    //    destColor += ComputeDirectionLight_Pi(baseColor, _lights[_relatedLightIndeices[index / 4][index % 4]], toEye, _normal);
-//    //}
-
-//    //for (i = 0; i != _relatedPointLightCount; ++index, ++index)
-//    //{
-//    //    destColor += ComputePointLight_Pi(baseColor, _lights[_relatedLightIndeices[index / 4][index % 4]], toEye, _normal, _positionW);
-//    //}
-
-//    //for (i = 0; i != _relatedSpotLightCount; ++index, ++index)
-//    //{
-//    //    destColor += ComputeSpotLight_Pi(baseColor, _lights[_relatedLightIndeices[index / 4][index % 4]], toEye, _normal, _positionW);
-
-//    //}
-
-//    for (uint i = 0; i != _relatedLightCount; ++i)
-//    {
-//        if (_relatedLightIndeices[i] >= _directionLightIndexEnd)
-//        {
-//            destColor += ComputeDirectionLight_Pi(baseColor, _lights[_relatedLightIndeices[i]], toEye, _normal);
-//        }
-//        else if (_relatedLightIndeices[i] >= _pointLightIndexEnd)
-//        {
-//            destColor += ComputePointLight_Pi(baseColor, _lights[_relatedLightIndeices[i]], toEye, _normal, _positionW);
-//        }
-//        else
-//        {
-//            destColor += ComputeSpotLight_Pi(baseColor, _lights[_relatedLightIndeices[i]], toEye, _normal, _positionW);
-//        }
-//    }
-
-//    return destColor;
-//}
 
 #endif//__PI_SHADER_UTIL_HLSLI__

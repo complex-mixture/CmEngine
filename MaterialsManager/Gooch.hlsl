@@ -18,8 +18,8 @@ cbuffer PassCb : register(b0)
     float gTotalTime;
     uint gDirectionLightIndexEnd;
     uint gPointLightIndexEnd;
-    float2 unused;
-    Light gLights[255];
+    float2 pad0;
+    Light gLights[256];
 }
 
 cbuffer ObjCb : register(b1)
@@ -27,7 +27,8 @@ cbuffer ObjCb : register(b1)
     float4x4 gWroldMatrix;
     float4x4 gWroldMatrixInv;
     uint gRelatedLightCount;
-    uint gRelatedLightIndeices[255];
+    uint3 pad1;
+    uint4 gRelatedLightIndeices[64];
 }
 
 SamplerState AnisotropicSampler : register(s0);
@@ -68,7 +69,7 @@ float4 PsMain(in VertexOut _in) : SV_Target
     float3x3 tbn = ComputeTbnMatrix(_in.binormalW, _in.tangentW);
 
     float3 normal = SampleNormalMap(tbn, NormalMap, AnisotropicSampler, _in.uv).xyz;
-    float3 baseColor = SampleTexture2d(BaseColor, AnisotropicSampler, _in.uv).rbg;
+    float3 baseColor = SampleTexture2d(BaseColor, AnisotropicSampler, _in.uv).rgb;
     float3 toEye = normalize(gEyePosition - _in.positionW);
 
     float3 destColor = baseColor * gAmbientLight;

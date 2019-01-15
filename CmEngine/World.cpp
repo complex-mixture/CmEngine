@@ -41,12 +41,6 @@ void UWorld::BeginPlay()
 	newstaticMeshActor->SetMaterialsParameterDescriptorTable(1, FTextureManager::Get().LoadResource(L"DefaultN")->GetDescriptorHandle().mGpuHandle);
 	mStaticMeshActors.push_back(newstaticMeshActor);
 
-	//ADirectionLightActor * newDirectionLight = new ADirectionLightActor;
-	//newDirectionLight->SetRotation(DirectX::XMFLOAT3(-0.f, 0.f, PI / 2));
-	//newDirectionLight->SetColor(DirectX::XMFLOAT3(1.f, 1.f, 1.f));
-	//newDirectionLight->SetIntensity(1.f);
-	//mDirectionLights.push_back(newDirectionLight);
-
 	newstaticMeshActor = new AStaticMeshActor;
 	newstaticMeshActor->SetPosition(XMFLOAT3(240.f, -110.f, 50.f));
 	newstaticMeshActor->SetScale(XMFLOAT3(0.2f, 0.2f, 0.2f));
@@ -62,19 +56,33 @@ void UWorld::BeginPlay()
 	newstaticMeshActor->SetMaterials(FMaterialsManager::Get().LoadResource(L"DebugUv"));
 	mStaticMeshActors.push_back(newstaticMeshActor);
 
-	//APointLightActor * newPointLight = new APointLightActor;
-	//newPointLight->SetPosition(XMFLOAT3(240.f, -110.f, 50.f));
-	//newPointLight->SetColor(DirectX::XMFLOAT3(1.f, 1.f, 1.f));
-	//newPointLight->SetIntensity(1000.f);
-	//newPointLight->SetFallOffBegin(1.f);
-	//newPointLight->SetFallOffEnd(200.f);
-	//mPointLights.push_back(newPointLight);
+	newstaticMeshActor = new AStaticMeshActor;
+	newstaticMeshActor->SetPosition(XMFLOAT3(220.f, 190.f, 50.f));
+	newstaticMeshActor->SetScale(XMFLOAT3(0.2f, 0.2f, 0.2f));
+	newstaticMeshActor->SetRotation(DirectX::XMFLOAT3(0.f, PI / 2, 0.f));
+	newstaticMeshActor->SetStaticMesh(FStaticMeshManager::Get().LoadResource(L"Arrows"));
+	newstaticMeshActor->SetMaterials(FMaterialsManager::Get().LoadResource(L"DebugUv"));
+	mStaticMeshActors.push_back(newstaticMeshActor);
+
+	ADirectionLightActor * newDirectionLight = new ADirectionLightActor;
+	newDirectionLight->SetRotation(DirectX::XMFLOAT3(0.f, PI / 2, 0.f));
+	newDirectionLight->SetColor(DirectX::XMFLOAT3(1.f, 1.f, 1.f));
+	newDirectionLight->SetIntensity(0.2f);
+	mDirectionLights.push_back(newDirectionLight);
+
+	APointLightActor * newPointLight = new APointLightActor;
+	newPointLight->SetPosition(XMFLOAT3(240.f, -110.f, 50.f));
+	newPointLight->SetColor(DirectX::XMFLOAT3(1.f, 1.f, 1.f));
+	newPointLight->SetIntensity(1000.f);
+	newPointLight->SetFallOffBegin(1.f);
+	newPointLight->SetFallOffEnd(200.f);
+	mPointLights.push_back(newPointLight);
 
 	ASpotLightActor * newSpotLight = new ASpotLightActor;
 	newSpotLight->SetPosition(XMFLOAT3(220.f, 190.f, 10.f));
-	newSpotLight->SetRotation(XMFLOAT3(0.f, 0.f, - PI / 3.f));
+	newSpotLight->SetRotation(XMFLOAT3(0.f, 0.f, -PI / 3.f));
 	newSpotLight->SetColor(DirectX::XMFLOAT3(1.f, 1.f, 1.f));
-	newSpotLight->SetIntensity(10000.f);
+	newSpotLight->SetIntensity(5000.f);
 	newSpotLight->SetFallOffBegin(1.f);
 	newSpotLight->SetFallOffEnd(1000.f);
 	newSpotLight->SetInnerConeAngle(0.f);
@@ -96,7 +104,6 @@ void UWorld::Tick(float _deltaTime)
 	//XMFLOAT3 b = mCamera->GetRotation();
 	//b.z = fmod(b.z + _deltaTime * 1.f, PI2);
 	//mCamera->SetRotation(b);
-
 
 	//for (int i = 0; i != mSpotLights.size(); ++i)
 	//{

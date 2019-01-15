@@ -67,8 +67,8 @@ FPreTreatedRenderInformation::FPreTreatedRenderInformation(const FUntreatedRende
 		mPassCb.mLights[lightIndex].mDirection = _ele.mDirection;
 		lightIndex++;
 	}
-	mPassCb.mDirectionLightIndexEnd = lightIndex - 1;
 
+	mPassCb.mPointLightIndexStart = lightIndex;
 	for (auto const & _ele : _utri.mUntreatedPointLights)
 	{
 		mPassCb.mLights[lightIndex].mColor = _ele.mColor;
@@ -80,8 +80,8 @@ FPreTreatedRenderInformation::FPreTreatedRenderInformation(const FUntreatedRende
 		mPassCb.mLights[lightIndex].mFallOffEndSqr = _ele.mFallOffEnd * _ele.mFallOffEnd;
 		lightIndex++;
 	}
-	mPassCb.mPointLightIndexEnd = lightIndex - 1;
 
+	mPassCb.mSpotLightIndexStart = lightIndex;
 	for (auto const & _ele : _utri.mUntreatedSpotLights)
 	{
 		mPassCb.mLights[lightIndex].mColor = _ele.mColor;
@@ -101,14 +101,13 @@ FPreTreatedRenderInformation::FPreTreatedRenderInformation(const FUntreatedRende
 	for (size_t i = 0; i != _utri.mUntreatedRenderStaticMeshs.size(); ++i)
 	{
 		new(&mPreUreatedRenderStaticMeshs[i]) FPreTreatedRenderStaticMesh(_utri.mUntreatedRenderStaticMeshs[i]);
-		uint32_t relatedLightsCount = 0;
 		for (uint32_t j = 0; j != lightIndex; ++j)
 		{
 			mPreUreatedRenderStaticMeshs[i].mObjCb.mRelatedLightIndeices[j] = j;
 		}
 		mPreUreatedRenderStaticMeshs[i].mObjCb.mRelatedLightCount = lightIndex;
-		//mPreUreatedRenderStaticMeshs[i].mObjCb.mRelatedDirectionLightCount = _utri.mUntreatedDirectionLights.size();
-		//mPreUreatedRenderStaticMeshs[i].mObjCb.mRelatedPointLightCount = _utri.mUntreatedPointLights.size();
-		//mPreUreatedRenderStaticMeshs[i].mObjCb.mRelatedSpotLightCount = _utri.mUntreatedSpotLights.size();
+		mPreUreatedRenderStaticMeshs[i].mObjCb.mRelatedDirectionLightCount = _utri.mUntreatedDirectionLights.size();
+		mPreUreatedRenderStaticMeshs[i].mObjCb.mRelatedPointLightCount = _utri.mUntreatedPointLights.size();
+		mPreUreatedRenderStaticMeshs[i].mObjCb.mRelatedSpotLightCount = _utri.mUntreatedSpotLights.size();
 	}
 }

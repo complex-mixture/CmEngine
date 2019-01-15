@@ -29,10 +29,10 @@ struct PassCb
 	float mDeltaTime;
 	DirectX::XMFLOAT3 mAmbientColor;
 	float mTotalTime;
-	uint32_t mDirectionLightIndexEnd;
-	uint32_t mPointLightIndexEnd;
-	float unused[2];
-	FLight mLights[255];
+	uint32_t mPointLightIndexStart;
+	uint32_t mSpotLightIndexStart;
+	float pad[2];
+	FLight mLights[256];
 };
 
 struct ObjectCb
@@ -40,8 +40,8 @@ struct ObjectCb
 	DirectX::XMFLOAT4X4 mWroldMatrix;
 	DirectX::XMFLOAT4X4 mWroldMatrixInv;
 	uint32_t mRelatedLightCount = 0;
-	//uint32_t mRelatedDirectionLightCount = 0;
-	//uint32_t mRelatedPointLightCount = 0;
-	//uint32_t mRelatedSpotLightCount = 0;
-	uint32_t mRelatedLightIndeices[255] = {};
+	uint32_t mRelatedDirectionLightCount = 0;
+	uint32_t mRelatedPointLightCount = 0;
+	uint32_t mRelatedSpotLightCount = 0;
+	uint32_t mRelatedLightIndeices[256] = {};
 };

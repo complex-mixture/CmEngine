@@ -17,7 +17,7 @@ cbuffer PassCb : register(b0)
     uint gPointLightIndexStart;
     uint gSpotLightIndexStart;
     float2 unused;
-    Light gLights[255];
+    Light gLights[256];
 }
 
 cbuffer ObjCb : register(b1)
