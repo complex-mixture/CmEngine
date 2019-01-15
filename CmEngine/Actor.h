@@ -19,7 +19,6 @@ public:
 
 	XMFLOAT3 GetForwardDirection()const
 	{
-		XMVECTOR eyePosition = XMLoadFloat3(&GetPosition());
 		XMVECTOR _forwardDirection = XMVector3TransformNormal(XMVectorSet(1.f, 0.f, 0.f, 1.f), XMMatrixRotationRollPitchYawFromVector(XMLoadFloat3(&GetRotation())));
 		XMFLOAT3 returned;
 		XMStoreFloat3(&returned, _forwardDirection);

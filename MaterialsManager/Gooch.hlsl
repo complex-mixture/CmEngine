@@ -69,7 +69,7 @@ float4 PsMain(in VertexOut _in) : SV_Target
 
     float3 normal = SampleNormalMap(tbn, NormalMap, AnisotropicSampler, _in.uv).xyz;
     float3 baseColor = SampleTexture2d(BaseColor, AnisotropicSampler, _in.uv).rbg;
-    float3 toEye = gEyePosition - _in.positionW;
+    float3 toEye = normalize(gEyePosition - _in.positionW);
 
     float3 destColor = baseColor * gAmbientLight;
 

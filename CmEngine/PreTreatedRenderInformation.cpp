@@ -34,7 +34,7 @@ FPreTreatedRenderInformation::FPreTreatedRenderInformation(const FUntreatedRende
 	mScissorRect = _utri.mCanvas.mScissorRect;
 
 	DirectX::XMMATRIX viewMatrix = _utri.mViewMatrix;
-	DirectX::XMMATRIX projMatrix = DirectX::XMMatrixPerspectiveFovLH(90.f, _utri.mCanvas.GetAspectRatio(), 1.f, 1000.f);
+	DirectX::XMMATRIX projMatrix = DirectX::XMMatrixPerspectiveFovLH(PI / 2.f, _utri.mCanvas.GetAspectRatio(), 1.f, 1000.f);
 	DirectX::XMMATRIX viewProjMatrix = viewMatrix * projMatrix;
 
 	DirectX::XMMATRIX viewMatrixInv = XMMatrixInverse(&XMMatrixDeterminant(viewMatrix), viewMatrix);
@@ -67,16 +67,16 @@ FPreTreatedRenderInformation::FPreTreatedRenderInformation(const FUntreatedRende
 		mPassCb.mLights[lightIndex].mIntensity = _ele.mIntensity;
 		lightIndex++;
 	}
-	mPassCb.mDirectionLightIndexEnd = lightIndex- 1;
+	mPassCb.mDirectionLightIndexEnd = lightIndex - 1;
 
 	for (auto const & _ele : _utri.mUntreatedPointLights)
 	{
 		mPassCb.mLights[lightIndex].mColor = _ele.mColor;
 		mPassCb.mLights[lightIndex].mIntensity = _ele.mIntensity;
 		mPassCb.mLights[lightIndex].mPosition = _ele.mPosition;
-		mPassCb.mLights[lightIndex].mFallOffBegin = _ele.mFallOffStart;
+		mPassCb.mLights[lightIndex].mFallOffBegin = _ele.mFallOffBegin;
 		mPassCb.mLights[lightIndex].mFalloffEnd = _ele.mFallOffEnd;
-		mPassCb.mLights[lightIndex].mFallOffBeginSqr = _ele.mFallOffStart * _ele.mFallOffStart;
+		mPassCb.mLights[lightIndex].mFallOffBeginSqr = _ele.mFallOffBegin * _ele.mFallOffBegin;
 		mPassCb.mLights[lightIndex].mFallOffEndSqr = _ele.mFallOffEnd * _ele.mFallOffEnd;
 		lightIndex++;
 	}
@@ -87,12 +87,12 @@ FPreTreatedRenderInformation::FPreTreatedRenderInformation(const FUntreatedRende
 		mPassCb.mLights[lightIndex].mColor = _ele.mColor;
 		mPassCb.mLights[lightIndex].mIntensity = _ele.mIntensity;
 		mPassCb.mLights[lightIndex].mPosition = _ele.mPosition;
-		mPassCb.mLights[lightIndex].mFallOffBegin = _ele.mFallOffStart;
+		mPassCb.mLights[lightIndex].mFallOffBegin = _ele.mFallOffBegin;
 		mPassCb.mLights[lightIndex].mFalloffEnd = _ele.mFallOffEnd;
-		mPassCb.mLights[lightIndex].mFallOffBeginSqr = _ele.mFallOffStart * _ele.mFallOffStart;
+		mPassCb.mLights[lightIndex].mFallOffBeginSqr = _ele.mFallOffBegin * _ele.mFallOffBegin;
 		mPassCb.mLights[lightIndex].mFallOffEndSqr = _ele.mFallOffEnd * _ele.mFallOffEnd;
-		mPassCb.mLights[lightIndex].mCosHalfInnerConeAngle = cos(_ele.mInnerConeAngle / 2);
-		mPassCb.mLights[lightIndex].mCosHalfInnerConeAngle = cos(_ele.mOuterConeAngle / 2);
+		mPassCb.mLights[lightIndex].mCosHalfInnerConeAngle = cos(_ele.mInnerConeAngle / 2.f);
+		mPassCb.mLights[lightIndex].mCosHalfInnerConeAngle = cos(_ele.mOuterConeAngle / 2.f);
 		lightIndex++;
 	}
 
@@ -106,5 +106,8 @@ FPreTreatedRenderInformation::FPreTreatedRenderInformation(const FUntreatedRende
 			mPreUreatedRenderStaticMeshs[i].mObjCb.mRelatedLightIndeices[j] = j;
 		}
 		mPreUreatedRenderStaticMeshs[i].mObjCb.mRelatedLightCount = lightIndex;
+		//mPreUreatedRenderStaticMeshs[i].mObjCb.mRelatedDirectionLightCount = _utri.mUntreatedDirectionLights.size();
+		//mPreUreatedRenderStaticMeshs[i].mObjCb.mRelatedPointLightCount = _utri.mUntreatedPointLights.size();
+		//mPreUreatedRenderStaticMeshs[i].mObjCb.mRelatedSpotLightCount = _utri.mUntreatedSpotLights.size();
 	}
 }

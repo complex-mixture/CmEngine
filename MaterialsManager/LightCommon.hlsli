@@ -30,4 +30,4 @@ float ComputeDirectionFallOffFactor_SpotLight(in float3 _lightDirection, float3 
     return t * t * (3 - 2 * t);
 }
 
-#endif
+#endif//__LIGHT_COMMON_HLSLI__

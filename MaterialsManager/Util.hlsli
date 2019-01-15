@@ -19,4 +19,4 @@ float4 SampleTexture2d(Texture2D _texture, SamplerState _sampler, float2 _uv)
     return _texture.Sample(_sampler, _uv);
 }
 
-#endif
+#endif//__UTIL_HLSLI__

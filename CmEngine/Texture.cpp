@@ -2,6 +2,7 @@
 #include "D3D12RhiGlobal.h"
 #include <fstream>
 #include "D3D12RhiUtil.h"
+#include "Common.h"
 #include "TextureLoaderHelper.h"
 #include <winerror.h>
 
@@ -57,12 +58,10 @@ void UTexture::Init(std::wstring _fileName)
 		IID_PPV_ARGS(&mTextureGpu)
 	));
 
-	CD3DX12_RESOURCE_DESC bbb = CD3DX12_RESOURCE_DESC::Buffer(GetRequiredIntermediateSize(mTextureGpu, 0, resourceDesc.DepthOrArraySize * resourceDesc.MipLevels));
 	VerifyD3D12Result(GDevice->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 		D3D12_HEAP_FLAG_NONE,
-		&bbb,
-		//&CD3DX12_RESOURCE_DESC::Buffer(mDataLength),
+		&CD3DX12_RESOURCE_DESC::Buffer(GetRequiredIntermediateSize(mTextureGpu, 0, resourceDesc.DepthOrArraySize * resourceDesc.MipLevels)),
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(&mTextureUploader)
@@ -131,7 +130,7 @@ void UTexture::Init(std::wstring _fileName)
 	mDescriptorHandle = FDescriptorHandleManager<D3D12_SHADER_RESOURCE_VIEW_DESC>::Get().CreateView(mTextureGpu, srvDesc);
 }
 
-void UTexture::Commit()
+void UTexture::CommitResource()
 {
 	std::vector<D3D12_SUBRESOURCE_DATA> subresourceDatas;
 	subresourceDatas.resize(mMipLevels * mArraySize);
@@ -193,4 +192,5 @@ void UTexture::EndCommit()
 void UTexture::Clear()
 {
 	mTextureGpu->Release();
+	mTextureGpu = nullptr;
 }

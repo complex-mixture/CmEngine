@@ -13,4 +13,4 @@ constexpr bool IsReleaseMode = true;
 constexpr float PI = 3.1415928f;
 constexpr float PI2 = 2 * PI;
 
-#pragma warning(disable : 4244)
+#pragma warning(disable : 4244 4267)

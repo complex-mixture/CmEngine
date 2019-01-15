@@ -6,6 +6,7 @@
     <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="MeshConstructHelper.h" />
+    <ClInclude Include="MeshLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

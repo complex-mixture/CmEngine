@@ -40,5 +40,8 @@ struct ObjectCb
 	DirectX::XMFLOAT4X4 mWroldMatrix;
 	DirectX::XMFLOAT4X4 mWroldMatrixInv;
 	uint32_t mRelatedLightCount = 0;
+	//uint32_t mRelatedDirectionLightCount = 0;
+	//uint32_t mRelatedPointLightCount = 0;
+	//uint32_t mRelatedSpotLightCount = 0;
 	uint32_t mRelatedLightIndeices[255] = {};
 };

@@ -9,7 +9,7 @@ class AStaticMeshActor : public AActor
 {
 public:
 	void SetStaticMesh(UStaticMesh * _staticMesh) { mStaticMesh = _staticMesh; }
-	//after reset materials, the shader parameter should be reset
+	//after reset materials, the shader parameters will be reset
 	void SetMaterials(UMaterials * _materials);
 	UStaticMesh * GetStaticMesh()const { return mStaticMesh; }
 	UMaterials * GetMaterials()const { return mMaterials; }

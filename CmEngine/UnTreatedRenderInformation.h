@@ -50,7 +50,7 @@ struct FUntreatedPointLight
 	DirectX::XMFLOAT3 mColor;
 	DirectX::XMFLOAT3 mPosition;
 	float mIntensity;
-	float mFallOffStart;
+	float mFallOffBegin;
 	float mFallOffEnd;
 
 	FUntreatedPointLight() = default;
@@ -59,7 +59,7 @@ struct FUntreatedPointLight
 		mColor = _actor->GetColor();
 		mPosition = _actor->GetPosition();
 		mIntensity = _actor->GetIntensity();
-		mFallOffStart = _actor->GetFallOffStart();
+		mFallOffBegin = _actor->GetFallOffBegin();
 		mFallOffEnd = _actor->GetFallOffEnd();
 	}
 };

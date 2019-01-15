@@ -55,5 +55,11 @@
     <None Include="SkyBox.hlsl">
       <Filter>Shader</Filter>
     </None>
+    <None Include="PiShaderUtil.hlsli">
+      <Filter>Shader\ShaderUtil</Filter>
+    </None>
+    <None Include="Pi.hlsl">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

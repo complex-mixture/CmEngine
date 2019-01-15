@@ -22,7 +22,7 @@ class UTexture
 
 public:
 	void Init(std::wstring _fileName);
-	void Commit();
+	void CommitResource();
 	void EndCommit();
 	void Clear();
 

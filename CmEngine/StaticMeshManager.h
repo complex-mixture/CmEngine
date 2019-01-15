@@ -2,6 +2,7 @@
 #include "Util.h"
 #include <map>
 #include "ResourceManagerBase.h"
+
 class UStaticMesh;
 class FStaticMeshManager : public FResourceManagerBase<UStaticMesh>, FNoncopyable
 {

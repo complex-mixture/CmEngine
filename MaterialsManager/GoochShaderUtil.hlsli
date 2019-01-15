@@ -77,4 +77,4 @@ in const float3 _positionW
     return destColor;
 }
 
-#endif
+#endif//__GOOCH_SHADER_UTIL_HLSLI__
