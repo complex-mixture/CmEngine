@@ -26,7 +26,7 @@ float ComputeDistanceFalloffFactor_PunctualLight(in float _distance, in float _f
 
 float ComputeDirectionFallOffFactor_SpotLight(in float3 _lightDirection, float3 _toLight, float _cosHalfInnerConeAngle, float _cosHalfOuterConeAngle)
 {
-    float t = clamp((_cosHalfInnerConeAngle - _cosHalfOuterConeAngle) / (dot(_lightDirection, -_toLight) - _cosHalfOuterConeAngle), 0.f, 1.f);
+    float t = clamp((dot(_lightDirection, -_toLight) - _cosHalfOuterConeAngle) / (_cosHalfInnerConeAngle - _cosHalfOuterConeAngle), 0.f, 1.f);
     return t * t * (3 - 2 * t);
 }
 

@@ -13,9 +13,8 @@ float3 ComputeLight_Pi(float3 _baseColor, float3 _normal, float _lightIntensityF
     factor2 = factor2 * factor2 * (3.f - 2.f * factor2);
     //factor *= min(1.f - dot(_normal, _toEye), 1.f);
     factor = factor * factor * (3.f - 2.f * factor);
-    factor *= factor2;
+    //factor *= factor2;
     return _light.mIntensity * _lightIntensityFactor * factor * _light.mColor * _baseColor;
-    //return _baseColor * _light.mColor * _lightIntensityFactor * factor * _light.mIntensity;
 }
 
 float3 ComputeDirectionLight_Pi(float3 _baseColor, Light _directionLight, float3 _toEye, float3 _normal)

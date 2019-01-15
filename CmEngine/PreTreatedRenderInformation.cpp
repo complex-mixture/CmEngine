@@ -63,8 +63,8 @@ FPreTreatedRenderInformation::FPreTreatedRenderInformation(const FUntreatedRende
 	for (auto const & _ele : _utri.mUntreatedDirectionLights)
 	{
 		mPassCb.mLights[lightIndex].mColor = _ele.mColor;
-		mPassCb.mLights[lightIndex].mDirection = _ele.mDirection;
 		mPassCb.mLights[lightIndex].mIntensity = _ele.mIntensity;
+		mPassCb.mLights[lightIndex].mDirection = _ele.mDirection;
 		lightIndex++;
 	}
 	mPassCb.mDirectionLightIndexEnd = lightIndex - 1;
@@ -87,12 +87,13 @@ FPreTreatedRenderInformation::FPreTreatedRenderInformation(const FUntreatedRende
 		mPassCb.mLights[lightIndex].mColor = _ele.mColor;
 		mPassCb.mLights[lightIndex].mIntensity = _ele.mIntensity;
 		mPassCb.mLights[lightIndex].mPosition = _ele.mPosition;
+		mPassCb.mLights[lightIndex].mDirection = _ele.mDirection;
 		mPassCb.mLights[lightIndex].mFallOffBegin = _ele.mFallOffBegin;
 		mPassCb.mLights[lightIndex].mFalloffEnd = _ele.mFallOffEnd;
 		mPassCb.mLights[lightIndex].mFallOffBeginSqr = _ele.mFallOffBegin * _ele.mFallOffBegin;
 		mPassCb.mLights[lightIndex].mFallOffEndSqr = _ele.mFallOffEnd * _ele.mFallOffEnd;
 		mPassCb.mLights[lightIndex].mCosHalfInnerConeAngle = cos(_ele.mInnerConeAngle / 2.f);
-		mPassCb.mLights[lightIndex].mCosHalfInnerConeAngle = cos(_ele.mOuterConeAngle / 2.f);
+		mPassCb.mLights[lightIndex].mCosHalfOuterConeAngle = cos(_ele.mOuterConeAngle / 2.f);
 		lightIndex++;
 	}
 

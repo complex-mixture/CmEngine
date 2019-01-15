@@ -17,13 +17,14 @@ void UWorld::BeginPlay()
 	mCamera->SetRotation(XMFLOAT3(0.f, -PI / 18.f, 0.f));
 
 	AStaticMeshActor * newstaticMeshActor = new AStaticMeshActor;
-	//newstaticMeshActor->SetStaticMesh(FStaticMeshManager::Get().LoadResource(L"SkyBox"));
-	//newstaticMeshActor->SetMaterials(FMaterialsManager::Get().LoadResource(L"SkyBox"));
-	//newstaticMeshActor->SetMaterialsParameterDescriptorTable(0, FTextureManager::Get().LoadResource(L"SkyBoxB")->GetDescriptorHandle().mGpuHandle);
-	//mStaticMeshActors.push_back(newstaticMeshActor);
+	newstaticMeshActor->SetStaticMesh(FStaticMeshManager::Get().LoadResource(L"SkyBox"));
+	newstaticMeshActor->SetMaterials(FMaterialsManager::Get().LoadResource(L"SkyBox"));
+	newstaticMeshActor->SetMaterialsParameterDescriptorTable(0, FTextureManager::Get().LoadResource(L"SkyBoxB")->GetDescriptorHandle().mGpuHandle);
+	mStaticMeshActors.push_back(newstaticMeshActor);
 
 	newstaticMeshActor = new AStaticMeshActor;
-	newstaticMeshActor->SetPosition(XMFLOAT3(130.f, 200.f, 0.f));
+	newstaticMeshActor->SetPosition(XMFLOAT3(130.f, 400.f, 0.f));
+	newstaticMeshActor->SetScale(XMFLOAT3(2.f, 2.f, 2.f));
 	newstaticMeshActor->SetStaticMesh(FStaticMeshManager::Get().LoadResource(L"Floor400x400"));
 	newstaticMeshActor->SetMaterials(FMaterialsManager::Get().LoadResource(L"Pi"));
 	newstaticMeshActor->SetMaterialsParameterDescriptorTable(0, FTextureManager::Get().LoadResource(L"CobbleStoneRoughB")->GetDescriptorHandle().mGpuHandle);
@@ -36,7 +37,7 @@ void UWorld::BeginPlay()
 	newstaticMeshActor->SetRotation(XMFLOAT3(0.f, 0.f, PI / 2.f));
 	newstaticMeshActor->SetStaticMesh(FStaticMeshManager::Get().LoadResource(L"Dragon"));
 	newstaticMeshActor->SetMaterials(FMaterialsManager::Get().LoadResource(L"Pi"));
-	newstaticMeshActor->SetMaterialsParameterDescriptorTable(0, FTextureManager::Get().LoadResource(L"DefaultN")->GetDescriptorHandle().mGpuHandle);
+	newstaticMeshActor->SetMaterialsParameterDescriptorTable(0, FTextureManager::Get().LoadResource(L"CobbleStoneRoughB")->GetDescriptorHandle().mGpuHandle);
 	newstaticMeshActor->SetMaterialsParameterDescriptorTable(1, FTextureManager::Get().LoadResource(L"DefaultN")->GetDescriptorHandle().mGpuHandle);
 	mStaticMeshActors.push_back(newstaticMeshActor);
 
@@ -48,32 +49,34 @@ void UWorld::BeginPlay()
 
 	newstaticMeshActor = new AStaticMeshActor;
 	newstaticMeshActor->SetPosition(XMFLOAT3(240.f, -110.f, 50.f));
-	newstaticMeshActor->SetStaticMesh(FStaticMeshManager::Get().LoadResource(L"Arrow"));
+	newstaticMeshActor->SetScale(XMFLOAT3(0.2f, 0.2f, 0.2f));
+	newstaticMeshActor->SetStaticMesh(FStaticMeshManager::Get().LoadResource(L"Sphere"));
 	newstaticMeshActor->SetMaterials(FMaterialsManager::Get().LoadResource(L"DebugUv"));
 	mStaticMeshActors.push_back(newstaticMeshActor);
 
 	newstaticMeshActor = new AStaticMeshActor;
-	newstaticMeshActor->SetPosition(XMFLOAT3(220.f, 190.f, 50.f));
-	newstaticMeshActor->SetScale(XMFLOAT3(2.f, 2.f, 2.f));
+	newstaticMeshActor->SetPosition(XMFLOAT3(220.f, 190.f, 10.f));
+	newstaticMeshActor->SetScale(XMFLOAT3(20.f, 2.f, 2.f));
+	newstaticMeshActor->SetRotation(XMFLOAT3(0.f, 0.f, -PI / 3.f));
 	newstaticMeshActor->SetStaticMesh(FStaticMeshManager::Get().LoadResource(L"Arrow"));
 	newstaticMeshActor->SetMaterials(FMaterialsManager::Get().LoadResource(L"DebugUv"));
 	mStaticMeshActors.push_back(newstaticMeshActor);
 
-	APointLightActor * newPointLight = new APointLightActor;
-	newPointLight->SetPosition(XMFLOAT3(240.f, -110.f, 50.f));
-	newPointLight->SetColor(DirectX::XMFLOAT3(1.f, 1.f, 1.f));
-	newPointLight->SetIntensity(1000.f);
-	newPointLight->SetFallOffBegin(1.f);
-	newPointLight->SetFallOffEnd(200.f);
-	mPointLights.push_back(newPointLight);
+	//APointLightActor * newPointLight = new APointLightActor;
+	//newPointLight->SetPosition(XMFLOAT3(240.f, -110.f, 50.f));
+	//newPointLight->SetColor(DirectX::XMFLOAT3(1.f, 1.f, 1.f));
+	//newPointLight->SetIntensity(1000.f);
+	//newPointLight->SetFallOffBegin(1.f);
+	//newPointLight->SetFallOffEnd(200.f);
+	//mPointLights.push_back(newPointLight);
 
 	ASpotLightActor * newSpotLight = new ASpotLightActor;
-	newSpotLight->SetPosition(XMFLOAT3(220.f, 190.f, 50.f));
+	newSpotLight->SetPosition(XMFLOAT3(220.f, 190.f, 10.f));
+	newSpotLight->SetRotation(XMFLOAT3(0.f, 0.f, - PI / 3.f));
 	newSpotLight->SetColor(DirectX::XMFLOAT3(1.f, 1.f, 1.f));
-	newSpotLight->SetIntensity(8000.f);
+	newSpotLight->SetIntensity(10000.f);
 	newSpotLight->SetFallOffBegin(1.f);
 	newSpotLight->SetFallOffEnd(1000.f);
-	newSpotLight->SetRotation(XMFLOAT3(PI / 2.f, 0.f, - PI / 3.f));
 	newSpotLight->SetInnerConeAngle(0.f);
 	newSpotLight->SetOuterConeAngle(PI / 3.f);
 	mSpotLights.push_back(newSpotLight);
