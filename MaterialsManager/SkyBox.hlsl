@@ -1,3 +1,4 @@
+#include "Util.hlsli"
 #include "LightCommon.hlsli"
 
 cbuffer PassCb : register(b0)
@@ -51,5 +52,5 @@ void VsMain(in VertexIn _in, out VertexOut _out)
 
 float4 PsMain(in VertexOut _in) : SV_TARGET
 {
-    return BaseColor.Sample(LinerSampler, _in.position.xyz);
+    return SampleTextureCube(BaseColor, LinerSampler, _in.position.xyz);
 }

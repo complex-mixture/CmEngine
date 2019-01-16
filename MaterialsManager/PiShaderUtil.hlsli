@@ -9,11 +9,7 @@ float3 ComputeLight_Pi(float3 _baseColor, float3 _normal, float _lightIntensityF
     float3 reflectLight = cosNL * 2.f * _normal;
     float factor = dot(reflectLight - _toLight, _toEye);
     factor = factor / 2.f + 0.5f;
-    float factor2 = min(1.f - dot(_normal, _toEye), 1.f);
-    factor2 = factor2 * factor2 * (3.f - 2.f * factor2);
-    //factor *= dot(_normal, _toEye) / 2.f + 0.5f;
     factor = factor * factor * (3.f - 2.f * factor);
-    //factor *= factor2;
     return _light.mIntensity * _lightIntensityFactor * factor * _light.mColor * _baseColor;
 }
 

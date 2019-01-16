@@ -37,32 +37,32 @@ void UWorld::BeginPlay()
 	newstaticMeshActor->SetRotation(XMFLOAT3(0.f, 0.f, PI / 2.f));
 	newstaticMeshActor->SetStaticMesh(FStaticMeshManager::Get().LoadResource(L"Dragon"));
 	newstaticMeshActor->SetMaterials(FMaterialsManager::Get().LoadResource(L"Pi"));
-	newstaticMeshActor->SetMaterialsParameterDescriptorTable(0, FTextureManager::Get().LoadResource(L"CobbleStoneRoughB")->GetDescriptorHandle().mGpuHandle);
+	newstaticMeshActor->SetMaterialsParameterDescriptorTable(0, FTextureManager::Get().LoadResource(L"DefaultN")->GetDescriptorHandle().mGpuHandle);
 	newstaticMeshActor->SetMaterialsParameterDescriptorTable(1, FTextureManager::Get().LoadResource(L"DefaultN")->GetDescriptorHandle().mGpuHandle);
 	mStaticMeshActors.push_back(newstaticMeshActor);
 
-	newstaticMeshActor = new AStaticMeshActor;
-	newstaticMeshActor->SetPosition(XMFLOAT3(240.f, -110.f, 50.f));
-	newstaticMeshActor->SetScale(XMFLOAT3(0.2f, 0.2f, 0.2f));
-	newstaticMeshActor->SetStaticMesh(FStaticMeshManager::Get().LoadResource(L"Sphere"));
-	newstaticMeshActor->SetMaterials(FMaterialsManager::Get().LoadResource(L"DebugUv"));
-	mStaticMeshActors.push_back(newstaticMeshActor);
+	//newstaticMeshActor = new AStaticMeshActor;
+	//newstaticMeshActor->SetPosition(XMFLOAT3(240.f, -110.f, 50.f));
+	//newstaticMeshActor->SetScale(XMFLOAT3(0.2f, 0.2f, 0.2f));
+	//newstaticMeshActor->SetStaticMesh(FStaticMeshManager::Get().LoadResource(L"Sphere"));
+	//newstaticMeshActor->SetMaterials(FMaterialsManager::Get().LoadResource(L"DebugUv"));
+	//mStaticMeshActors.push_back(newstaticMeshActor);
 
-	newstaticMeshActor = new AStaticMeshActor;
-	newstaticMeshActor->SetPosition(XMFLOAT3(220.f, 190.f, 10.f));
-	newstaticMeshActor->SetScale(XMFLOAT3(20.f, 2.f, 2.f));
-	newstaticMeshActor->SetRotation(XMFLOAT3(0.f, 0.f, -PI / 3.f));
-	newstaticMeshActor->SetStaticMesh(FStaticMeshManager::Get().LoadResource(L"Arrow"));
-	newstaticMeshActor->SetMaterials(FMaterialsManager::Get().LoadResource(L"DebugUv"));
-	mStaticMeshActors.push_back(newstaticMeshActor);
+	//newstaticMeshActor = new AStaticMeshActor;
+	//newstaticMeshActor->SetPosition(XMFLOAT3(220.f, 190.f, 10.f));
+	//newstaticMeshActor->SetScale(XMFLOAT3(2.f, 2.f, 2.f));
+	//newstaticMeshActor->SetRotation(XMFLOAT3(0.f, 0.f, -PI / 3.f));
+	//newstaticMeshActor->SetStaticMesh(FStaticMeshManager::Get().LoadResource(L"Arrow"));
+	//newstaticMeshActor->SetMaterials(FMaterialsManager::Get().LoadResource(L"DebugUv"));
+	//mStaticMeshActors.push_back(newstaticMeshActor);
 
-	newstaticMeshActor = new AStaticMeshActor;
-	newstaticMeshActor->SetPosition(XMFLOAT3(220.f, 190.f, 50.f));
-	newstaticMeshActor->SetScale(XMFLOAT3(0.2f, 0.2f, 0.2f));
-	newstaticMeshActor->SetRotation(DirectX::XMFLOAT3(0.f, PI / 2, 0.f));
-	newstaticMeshActor->SetStaticMesh(FStaticMeshManager::Get().LoadResource(L"Arrows"));
-	newstaticMeshActor->SetMaterials(FMaterialsManager::Get().LoadResource(L"DebugUv"));
-	mStaticMeshActors.push_back(newstaticMeshActor);
+	//newstaticMeshActor = new AStaticMeshActor;
+	//newstaticMeshActor->SetPosition(XMFLOAT3(220.f, 190.f, 50.f));
+	//newstaticMeshActor->SetScale(XMFLOAT3(0.05f, 0.05f, 0.05f));
+	//newstaticMeshActor->SetRotation(DirectX::XMFLOAT3(0.f, PI / 2, 0.f));
+	//newstaticMeshActor->SetStaticMesh(FStaticMeshManager::Get().LoadResource(L"Arrows"));
+	//newstaticMeshActor->SetMaterials(FMaterialsManager::Get().LoadResource(L"DebugUv"));
+	//mStaticMeshActors.push_back(newstaticMeshActor);
 
 	ADirectionLightActor * newDirectionLight = new ADirectionLightActor;
 	newDirectionLight->SetRotation(DirectX::XMFLOAT3(0.f, PI / 2, 0.f));

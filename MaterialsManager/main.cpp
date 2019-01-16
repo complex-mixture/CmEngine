@@ -16,7 +16,7 @@
 
 int main()
 {
-	bool IsDebug = true;
+	bool IsDebug = false;
 	UINT CompilerFlag1 = 0;
 	if (IsDebug)
 		CompilerFlag1 |= D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;

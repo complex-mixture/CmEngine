@@ -14,9 +14,24 @@ float3 SampleNormalMap(float3x3 _tbnMatrix, Texture2D _texture, SamplerState _sa
     return mul(normal, _tbnMatrix);
 }
 
+float4 SampleTexture1d(Texture1D _texture, SamplerState _sampler, float _u)
+{
+    return _texture.Sample(_sampler, _u);
+}
+
 float4 SampleTexture2d(Texture2D _texture, SamplerState _sampler, float2 _uv)
 {
     return _texture.Sample(_sampler, _uv);
+}
+
+float4 SampleTexture3d(Texture3D _texture, SamplerState _sampler, float3 _uvw)
+{
+    return _texture.Sample(_sampler, _uvw);
+}
+
+float4 SampleTextureCube(TextureCube _texture, SamplerState _sampler, float3 _xyz)
+{
+    return _texture.Sample(_sampler, _xyz);
 }
 
 #endif//__UTIL_HLSLI__

@@ -28,9 +28,6 @@ cbuffer ObjCb : register(b1)
     float4x4 gWroldMatrixInv;
     uint gRelatedLightCount;
     uint3 pad1;
-    //uint gRelatedDirectionLightCount;
-    //uint gRelatedPointLightCount;
-    //uint gRelatedSpotLightCount;
     uint4 gRelatedLightIndeices[64];
 }
 
