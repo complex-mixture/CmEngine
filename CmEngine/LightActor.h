@@ -1,16 +1,6 @@
 #pragma once
 #include "Actor.h"
 
-enum class ELightType
-{
-	Unknow = -1,
-	Direction = 0,
-	Point,
-	Spot,
-	Num,
-	NumBits = 2
-};
-
 class ALightActor : public AActor
 {
 public:

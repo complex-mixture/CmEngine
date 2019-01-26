@@ -20,6 +20,15 @@ void UMaterials::Init(std::wstring _fileName)
 		mFitVertexIds.insert(fitVertexId);
 	}
 
+	uint64_t fitEntityTypeCount = 0;
+	fs.read(reinterpret_cast<char*>(&fitEntityTypeCount), sizeof(uint64_t));
+	for (uint64_t i = 0; i != fitEntityTypeCount; ++i)
+	{
+		EEntityType fitEntityType = EEntityType::Unknow;
+		fs.read(reinterpret_cast<char*>(&fitEntityType), sizeof(EEntityType));
+		mFitEntityTypes.insert(fitEntityType);
+	}
+
 	uint64_t parameterIdentificationCount = 0;
 	fs.read(reinterpret_cast<char*>(&parameterIdentificationCount), sizeof(uint64_t));
 	mParameterIdentifications.resize(parameterIdentificationCount);

@@ -21,15 +21,6 @@ cbuffer PassCb : register(b0)
     Light gLights[256];
 }
 
-cbuffer ObjCb : register(b1)
-{
-    float4x4 gWroldMatrix;
-    float4x4 gWroldMatrixInv;
-    uint gRelatedLightCount;
-    uint3 pad1;
-    uint4 gRelatedLightIndeices[64];
-}
-
 SamplerState LinerSampler : register(s0);
 TextureCube BaseColor : register(t0);
 

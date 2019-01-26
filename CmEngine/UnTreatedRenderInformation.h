@@ -1,29 +1,58 @@
 #pragma once
 #include <DirectXMath.h>
 #include <vector>
+#include "Canvas.h"
+#include "SkyBoxActor.h"
 #include "StaticMeshActor.h"
 #include "DirectionLightActor.h"
 #include "PointLightActor.h"
 #include "SpotLightActor.h"
-#include "Canvas.h"
+#include "CameraActor.h"
 
 class FCpuRenderFrameResource;
 class UWorld;
 class FCanvas;
-class UStaticMesh;
+class UMesh;
 class UMaterials;
 
-struct FUntreatedRenderStaticMesh
+struct FUntreatedCamera
 {
-	DirectX::XMMATRIX mWorldMatrix;
-	UStaticMesh * mStaticMesh;
+	float mFov;
+	float mNearClipDistance = 1.f;
+	float mFarClipDistance = 10000.f;
+
+	DirectX::XMFLOAT3 mPosition;
+	DirectX::XMFLOAT3 mRotation;
+
+	FUntreatedCamera() = default;
+	FUntreatedCamera(const ACameraActor * _actor)
+	{
+		mFov = _actor->GetFov();
+		mNearClipDistance = _actor->GetNearClipDistance();
+		mFarClipDistance = _actor->GetFarClipDistance();
+
+		mPosition = _actor->GetPosition();
+		mRotation = _actor->GetRotation();
+	}
+};
+
+struct FUntreatedStaticMesh
+{
+	DirectX::XMFLOAT3 mPosition;
+	DirectX::XMFLOAT3 mRotation;
+	DirectX::XMFLOAT3 mScale;
+
+	UMesh * mStaticMesh;
 	UMaterials * mMaterials;
 	std::vector<FShaderParameter> mShaderParameters;
 
-	FUntreatedRenderStaticMesh() = default;
-	FUntreatedRenderStaticMesh(const AStaticMeshActor * _actor)
+	FUntreatedStaticMesh() = default;
+	FUntreatedStaticMesh(const AStaticMeshActor * _actor)
 	{
-		mWorldMatrix = _actor->GetWorldMatrix();
+		mPosition = _actor->GetPosition();
+		mRotation = _actor->GetRotation();
+		mScale = _actor->GetScale();
+
 		mStaticMesh = _actor->GetStaticMesh();
 		mMaterials = _actor->GetMaterials();
 		mShaderParameters = _actor->GetShaderParameters();
@@ -79,14 +108,30 @@ struct FUntreatedSpotLight : FUntreatedPointLight
 	}
 };
 
+struct FUntreatedSkyBox
+{
+	UMesh * mStaticMesh;
+	UMaterials * mMaterials;
+	std::vector<FShaderParameter> mShaderParameters;
+
+	FUntreatedSkyBox() = default;
+	FUntreatedSkyBox(const ASkyBoxActor * _actor)
+	{
+		mStaticMesh = _actor->GetStaticMesh();
+		mMaterials = _actor->GetMaterials();
+		mShaderParameters = _actor->GetShaderParameters();
+	}
+};
+
 struct FUntreatedRenderInformation
 {
 	FCanvas mCanvas;
-	DirectX::XMMATRIX mViewMatrix;
-	DirectX::XMFLOAT3 mEyePosition;
 	float mDeltaTime;
 	float mTotalTime;
-	std::vector<FUntreatedRenderStaticMesh> mUntreatedRenderStaticMeshs;
+
+	FUntreatedCamera mUntreatedCamera;
+	FUntreatedSkyBox mUntreatedSkyBox;
+	std::vector<FUntreatedStaticMesh> mUntreatedStaticMeshs;
 	std::vector<FUntreatedDirectionLight> mUntreatedDirectionLights;
 	std::vector<FUntreatedPointLight> mUntreatedPointLights;
 	std::vector<FUntreatedSpotLight> mUntreatedSpotLights;

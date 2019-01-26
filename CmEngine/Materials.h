@@ -4,6 +4,7 @@
 #include <set>
 #include <vector>
 #include "ShaderParameter.h"
+#include "EEntityType.h"
 
 class UMaterials
 {
@@ -21,11 +22,17 @@ public:
 
 	bool IsFittedVertexId(uint64_t _vertexId)
 	{
-		return mFitVertexIds.find(_vertexId) != mFitVertexIds.end();
+		return mFitVertexIds.count(_vertexId) != 0;
+	}
+
+	bool IsFittedEntityType(EEntityType _entityType)
+	{
+		return mFitEntityTypes.count(_entityType) != 0;
 	}
 
 private:
 	std::set<uint64_t> mFitVertexIds;
+	std::set<EEntityType> mFitEntityTypes;
 	std::vector<D3D12_ROOT_PARAMETER_TYPE> mParameterIdentifications;
 	ID3D12PipelineState * mPipelineState;
 	ID3D12RootSignature * mRootSignature;

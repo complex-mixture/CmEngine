@@ -4,7 +4,7 @@
 #include "CpuRenderFrameResource.h"
 #include "D3D12RhiModule.h"
 #include "PreTreatedRenderInformation.h"
-#include "StaticMesh.h"
+#include "Mesh.h"
 #include "TreatedRenderInformation.h"
 #include "TextuerPool.h"
 #include "DescriptorHandleManager.h"
@@ -50,7 +50,7 @@ void FGpuRenderFrameResource::Init(FCpuRenderFrameResource * _cpuRenderFrameReso
 	mCpuRenderFrameResource = _cpuRenderFrameResource;
 	mAllocator = _allocator;
 	mMainPassCb = new FUploadConstantBuffer<PassCb>(1);
-	mObjCb = new FUploadConstantBuffer<ObjectCb>(64);
+	mObjCb = new FUploadConstantBuffer<ObjectCb>(1 << 15);
 }
 
 void FGpuRenderFrameResource::Clear()

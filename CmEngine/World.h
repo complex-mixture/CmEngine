@@ -1,11 +1,11 @@
 #pragma once
 #include <vector>
+#include <thread>
+#include <mutex>
 
 class ACameraActor;
-class AStaticMeshActor;
-class ADirectionLightActor;
-class APointLightActor;
-class ASpotLightActor;
+class ASkyBoxActor;
+class AActor;
 
 class UWorld
 {
@@ -15,15 +15,16 @@ public:
 	void EndPlay();
 
 	const ACameraActor * GetCamera()const { return mCamera; }
-	const std::vector<AStaticMeshActor*>& GetStaticMeshs()const { return mStaticMeshActors; }
-	const std::vector<ADirectionLightActor*>& GetDirectionLights()const { return mDirectionLights; }
-	const std::vector<APointLightActor*>& GetPointLights()const { return mPointLights; }
-	const std::vector<ASpotLightActor*>& GetSpotLights()const { return mSpotLights; }
+	const ASkyBoxActor * GetSkyBox()const { return mSkyBox; }
+	const std::vector<AActor*>& GetActors()const { return mActors; }
 
 private:
+	std::mutex mDataMutex;
+	std::thread mRecvThread;
+	float mLastPosition[3];
+	float mLastRotation[3];
+
 	ACameraActor * mCamera;
-	std::vector<AStaticMeshActor*> mStaticMeshActors;
-	std::vector<ADirectionLightActor*> mDirectionLights;
-	std::vector<APointLightActor*> mPointLights;
-	std::vector<ASpotLightActor*> mSpotLights;
+	ASkyBoxActor * mSkyBox;
+	std::vector<AActor*> mActors;
 };

@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include "Util.h"
 #include <fbxsdk.h>
-#include "StaticMesh.h"
+#include "Mesh.h"
 #pragma comment(lib, "libfbxsdk.lib")
 
 void FMeshManager::Init()

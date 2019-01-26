@@ -7,9 +7,25 @@
 
 class FGpuRenderFrameResource;
 struct FUntreatedRenderInformation;
-struct FUntreatedRenderStaticMesh;
+struct FUntreatedStaticMesh;
+struct FUntreatedSkyBox;
 
-struct FPreTreatedRenderStaticMesh
+struct FPreTreatedSkyBox
+{
+	uint64_t mIndicesCount;
+	D3D12_VERTEX_BUFFER_VIEW mVertexBufferView;
+	D3D12_INDEX_BUFFER_VIEW mIndexBufferView;
+
+	ID3D12RootSignature * mRootSignature;
+	ID3D12PipelineState * mPipelineState;
+
+	std::vector<FShaderParameter> mShaderParameters;
+
+	FPreTreatedSkyBox() = default;
+	FPreTreatedSkyBox(const FUntreatedSkyBox & _utskybox);
+};
+
+struct FPreTreatedStaticMesh
 {
 	ObjectCb mObjCb;
 
@@ -22,9 +38,10 @@ struct FPreTreatedRenderStaticMesh
 
 	std::vector<FShaderParameter> mShaderParameters;
 
-	FPreTreatedRenderStaticMesh() = default;
-	FPreTreatedRenderStaticMesh(const FUntreatedRenderStaticMesh & _utsm);
+	FPreTreatedStaticMesh() = default;
+	FPreTreatedStaticMesh(const FUntreatedStaticMesh & _utsm);
 };
+
 
 struct FPreTreatedRenderInformation
 {
@@ -35,7 +52,8 @@ struct FPreTreatedRenderInformation
 
 	PassCb mPassCb;
 
-	std::vector<FPreTreatedRenderStaticMesh> mPreUreatedRenderStaticMeshs;
+	FPreTreatedSkyBox mPtSkyBox;
+	std::vector<FPreTreatedStaticMesh> mPtStaticMeshs;
 
 	FPreTreatedRenderInformation() = default;
 	FPreTreatedRenderInformation(const FUntreatedRenderInformation & _utri, FGpuRenderFrameResource * _gpuRenderFrameResource);

@@ -2,34 +2,36 @@
 #include "World.h"
 #include "CameraActor.h"
 #include "Canvas.h"
+#include <array>
 
 FUntreatedRenderInformation::FUntreatedRenderInformation(FCanvas _canvas, UWorld * _world, FCpuRenderFrameResource * _cpuRenderFrameResource)
 {
+
 	mCanvas = _canvas;
-	mViewMatrix = _world->GetCamera()->GetViewMatrix();
-	mEyePosition = _world->GetCamera()->GetPosition();
 	mDeltaTime = GetDeltaTime();
 	mTotalTime = GetTotalTime();
 
-	auto staticMeshs = _world->GetStaticMeshs();
-	mUntreatedRenderStaticMeshs.resize(staticMeshs.size());
-	for (int i = 0; i != staticMeshs.size(); ++i)
-		new(&mUntreatedRenderStaticMeshs[i]) FUntreatedRenderStaticMesh(staticMeshs[i]);
+	auto & actors = _world->GetActors();
 
-	auto directionLights = _world->GetDirectionLights();
-	mUntreatedDirectionLights.resize(directionLights.size());
-	for (int i = 0; i != directionLights.size(); ++i)
-		new(&mUntreatedDirectionLights[i]) FUntreatedDirectionLight(directionLights[i]);
+	new(&mUntreatedCamera) FUntreatedCamera(_world->GetCamera());
+	new(&mUntreatedSkyBox) FUntreatedSkyBox(_world->GetSkyBox());
 
-	auto pointLights = _world->GetPointLights();
-	mUntreatedPointLights.resize(pointLights.size());
-	for (int i = 0; i != pointLights.size(); ++i)
-		new(&mUntreatedPointLights[i]) FUntreatedPointLight(pointLights[i]);
-
-	auto spotLights = _world->GetSpotLights();
-	mUntreatedSpotLights.resize(spotLights.size());
-	for (int i = 0; i != spotLights.size(); ++i)
-		new(&mUntreatedSpotLights[i]) FUntreatedSpotLight(spotLights[i]);
-
-	Assert(directionLights.size() + pointLights.size() + spotLights.size() <= 255);
+	for (auto _ele : actors)
+	{
+		switch (_ele->GetEntityType())
+		{
+		case EEntityType::SaticMesh:
+			mUntreatedStaticMeshs.push_back(FUntreatedStaticMesh(dynamic_cast<AStaticMeshActor*>(_ele)));
+			break;
+		case EEntityType::DirectionLight:
+			mUntreatedDirectionLights.push_back(FUntreatedDirectionLight(dynamic_cast<ADirectionLightActor*>(_ele)));
+			break;
+		case EEntityType::PontLight:
+			mUntreatedPointLights.push_back(FUntreatedPointLight(dynamic_cast<APointLightActor*>(_ele)));
+			break;
+		case EEntityType::SpotLight:
+			mUntreatedSpotLights.push_back(FUntreatedSpotLight(dynamic_cast<ASpotLightActor*>(_ele)));
+			break;
+		}
+	}
 }

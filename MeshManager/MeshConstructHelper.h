@@ -30,6 +30,16 @@ inline void ConstructIndices(_In_ uint64_t _vertexCount, _Out_ void * _vertexBuf
 	}
 }
 
+inline float ComputeBoundSphere(_In_ uint64_t _controlPointsCount, _In_ const FbxVector4 * _positions)
+{
+	float maxSphereRadiusSq = 0.f;
+	for (uint64_t i = 0; i != _controlPointsCount; ++i)
+	{
+		maxSphereRadiusSq = max(maxSphereRadiusSq, _positions[i].SquareLength());
+	}
+	return sqrtf(maxSphereRadiusSq);
+}
+
 template<typename _vertexType>
 void ConstructVertexPositions(_In_ uint64_t _vertexesCount, _Out_ _vertexType * _vertexes, _In_ const FbxVector4 * _positions, _In_ const int * _indexes, DirectX::XMFLOAT3 _vertexType::* _positionMember)
 {

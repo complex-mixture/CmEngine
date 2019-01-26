@@ -2,6 +2,8 @@
 #include "LightActor.h"
 class APointLightActor : public ALightActor
 {
+	SpecificEntityType(EEntityType::PontLight)
+
 public:
 	__forceinline void SetFallOffBegin(float _fallOffBegin) { mFallOffBegin = _fallOffBegin; }
 	__forceinline void SetFallOffEnd(float _fallOffEnd) { mFallOffEnd = _fallOffEnd; }

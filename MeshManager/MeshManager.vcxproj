@@ -149,7 +149,7 @@
   <ItemGroup>
     <ClInclude Include="MeshConstructHelper.h" />
     <ClInclude Include="MeshManager.h" />
-    <ClInclude Include="StaticMesh.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>

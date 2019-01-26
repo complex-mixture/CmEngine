@@ -2,7 +2,8 @@
 #include <d3dcompiler.h>
 
 //_Out_ Comment(VertexId) std::vector<uint64_t> & _suitedVertexIds, \
-//_Out_ std::vector<D3D12_ROOT_PARAMETER_TYPE> & _parameterIdentifications, \
+//_Out_ Comment(SuitedEntityType) std::vector<EEntityType> & _suitedEntityType, \
+//_Out_ Comment(parameterIdentifications) std::vector<D3D12_ROOT_PARAMETER_TYPE> & _parameterIdentifications, \
 //_Out_ std::vector<CD3DX12_ROOT_PARAMETER> & _rootParameters, \
 //_Out_ std::vector<CD3DX12_STATIC_SAMPLER_DESC> & _staticSamplerDescs, \
 //_Out_ D3D12_ROOT_SIGNATURE_FLAGS & _rootSignatureFlag, \
@@ -29,6 +30,9 @@ int main()
 
 		_suitedVertexIds.resize(1);
 		_suitedVertexIds[0] = 0;
+
+		_suitedEntityType.resize(1);
+		_suitedEntityType[0] = EEntityType::SaticMesh;
 
 		_parameterIdentifications.resize(1);
 		_parameterIdentifications[0] = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
@@ -86,6 +90,9 @@ int main()
 
 		_suitedVertexIds.resize(1);
 		_suitedVertexIds[0] = 0;
+
+		_suitedEntityType.resize(1);
+		_suitedEntityType[0] = EEntityType::SaticMesh;
 
 		_parameterIdentifications.resize(1);
 		_parameterIdentifications[0] = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
@@ -146,6 +153,9 @@ int main()
 		_suitedVertexIds.resize(1);
 		_suitedVertexIds[0] = 0;
 
+		_suitedEntityType.resize(1);
+		_suitedEntityType[0] = EEntityType::SaticMesh;
+
 		_rootParameters.resize(2);
 		_rootParameters[0].InitAsConstantBufferView(0);
 		_rootParameters[1].InitAsConstantBufferView(1);
@@ -195,6 +205,9 @@ int main()
 
 		_suitedVertexIds.resize(1);
 		_suitedVertexIds[0] = 0;
+
+		_suitedEntityType.resize(1);
+		_suitedEntityType[0] = EEntityType::SaticMesh;
 
 		_parameterIdentifications.resize(2);
 		_parameterIdentifications[0] = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
@@ -257,6 +270,9 @@ int main()
 		_suitedVertexIds.resize(1);
 		_suitedVertexIds[0] = 0;
 
+		_suitedEntityType.resize(1);
+		_suitedEntityType[0] = EEntityType::SaticMesh;
+
 		_parameterIdentifications.resize(2);
 		_parameterIdentifications[0] = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 		_parameterIdentifications[1] = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
@@ -318,13 +334,15 @@ int main()
 		_suitedVertexIds.resize(1);
 		_suitedVertexIds[0] = 1;
 
+		_suitedEntityType.resize(1);
+		_suitedEntityType[0] = EEntityType::SkyBox;
+
 		_parameterIdentifications.resize(1);
 		_parameterIdentifications[0] = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 
-		_rootParameters.resize(3);
+		_rootParameters.resize(2);
 		_rootParameters[0].InitAsConstantBufferView(0);
-		_rootParameters[1].InitAsConstantBufferView(1);
-		_rootParameters[2].InitAsDescriptorTable(1, &CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0), D3D12_SHADER_VISIBILITY_PIXEL);
+		_rootParameters[1].InitAsDescriptorTable(1, &CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0), D3D12_SHADER_VISIBILITY_PIXEL);
 
 		_staticSamplerDescs.resize(1);
 		_staticSamplerDescs[0].Init(0, D3D12_FILTER_MIN_MAG_MIP_LINEAR, D3D12_TEXTURE_ADDRESS_MODE_MIRROR, D3D12_TEXTURE_ADDRESS_MODE_MIRROR, D3D12_TEXTURE_ADDRESS_MODE_MIRROR);
@@ -377,6 +395,9 @@ int main()
 
 		_suitedVertexIds.resize(1);
 		_suitedVertexIds[0] = 0;
+
+		_suitedEntityType.resize(1);
+		_suitedEntityType[0] = EEntityType::SaticMesh;
 
 		_parameterIdentifications.resize(2);
 		_parameterIdentifications[0] = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;

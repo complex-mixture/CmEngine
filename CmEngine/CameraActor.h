@@ -1,18 +1,25 @@
 #pragma once
 #include <DirectXMath.h>
 #include "Actor.h"
+#include "Util.h"
 
 using namespace DirectX;
-static XMVECTOR forwardDirection = XMVectorSet(1.f, 0.f, 0.f, 1.f);
-static XMVECTOR upDirection = XMVectorSet(0.f, 0.f, 1.f, 1.f);
 
 class ACameraActor : public AActor
 {
+	SpecificEntityType(EEntityType::Camera)
+
 public:
-	XMMATRIX GetViewMatrix()const
-	{
-		XMVECTOR eyePosition = XMLoadFloat3(&GetPosition());
-		XMVECTOR _forwardDirection = XMVector3TransformNormal(forwardDirection, XMMatrixRotationRollPitchYawFromVector(XMLoadFloat3(&GetRotation())));
-		return XMMatrixLookToLH(eyePosition, _forwardDirection, upDirection);
-	}
+	float GetFov()const { return mFov; }
+	float GetNearClipDistance()const { return mNearClipDistance; }
+	float GetFarClipDistance()const { return mFarClipDistance; }
+
+	void SetFov(float _fov) { mFov = _fov; }
+	void SetNearClipDistance(float _nearClipDistance) { mNearClipDistance = _nearClipDistance; }
+	void SetFarClipDistance(float _farClipDistance) { mFarClipDistance = _farClipDistance; }
+
+private:
+	float mFov = PI / 2.f;
+	float mNearClipDistance = 1.f;
+	float mFarClipDistance = 10000.f;
 };

@@ -2,6 +2,8 @@
 #include "PointLightActor.h"
 class ASpotLightActor : public APointLightActor
 {
+	SpecificEntityType(EEntityType::SpotLight)
+
 public:
 	__forceinline void SetInnerConeAngle(float _innerConeAngle) { mInnerConeAngle = _innerConeAngle; }
 	__forceinline void SetOuterConeAngle(float _outerConeAngle) { mOuterConeAngle = _outerConeAngle; }

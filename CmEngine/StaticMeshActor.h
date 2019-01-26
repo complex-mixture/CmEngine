@@ -1,17 +1,20 @@
 #pragma once
 #include "Actor.h"
-#include "StaticMesh.h"
+#include "Mesh.h"
 #include "Materials.h"
 #include "Util.h"
 #include "ShaderParameter.h"
+#include "EEntityType.h"
 
 class AStaticMeshActor : public AActor
 {
+	SpecificEntityType(EEntityType::SaticMesh)
+
 public:
-	void SetStaticMesh(UStaticMesh * _staticMesh) { mStaticMesh = _staticMesh; }
+	void SetStaticMesh(UMesh * _staticMesh) { mStaticMesh = _staticMesh; }
 	//after reset materials, the shader parameters will be reset
 	void SetMaterials(UMaterials * _materials);
-	UStaticMesh * GetStaticMesh()const { return mStaticMesh; }
+	UMesh * GetStaticMesh()const { return mStaticMesh; }
 	UMaterials * GetMaterials()const { return mMaterials; }
 	const std::vector<FShaderParameter> & GetShaderParameters()const { return mShaderParameters; }
 
@@ -46,7 +49,7 @@ public:
 	void EndPlay()override {}
 
 private:
-	UStaticMesh * mStaticMesh;
+	UMesh * mStaticMesh;
 	UMaterials * mMaterials;
 	std::vector<FShaderParameter> mShaderParameters;
 };

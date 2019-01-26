@@ -2,6 +2,7 @@
 #include <DirectXColors.h>
 #include "ShaderParameter.h"
 #include "DescriptorHandleManager.h"
+#include "RendererUtil.h"
 
 void FBaseRenderer::RenderScene(FTreatedRenderInformation * _renderInformation)
 {
@@ -14,30 +15,23 @@ void FBaseRenderer::RenderScene(FTreatedRenderInformation * _renderInformation)
 	GCommandList->OMSetRenderTargets(1, &ri->mRenderTargetView, true, &ri->mDepthStencilView);
 	auto a = FDescriptorHandleManager<D3D12_SHADER_RESOURCE_VIEW_DESC>::Get().GetDescriptorHeap();
 	GCommandList->SetDescriptorHeaps(1, &a);
-	for (auto & _ele : _renderInformation->mTreatedRenderStaticMeshs)
+
+	GCommandList->SetGraphicsRootSignature(ri->mTreatedSkyBox.mRootSignature);
+	GCommandList->SetPipelineState(ri->mTreatedSkyBox.mPipelineState);
+	GCommandList->SetGraphicsRootConstantBufferView(0, ri->mMainPassCb->GetElementGpuAddress(0));
+	SetShaderParameters(ri->mTreatedSkyBox.mShaderParameters, 1);
+	GCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	GCommandList->IASetIndexBuffer(&ri->mTreatedSkyBox.mIndexBufferView);
+	GCommandList->IASetVertexBuffers(0, 1, &ri->mTreatedSkyBox.mVertexBufferView);
+	GCommandList->DrawIndexedInstanced(ri->mTreatedSkyBox.mIndicesCount, 1, 0, 0, 0);
+
+	for (auto & _ele : ri->mTreatedStaticMeshs)
 	{
 		GCommandList->SetGraphicsRootSignature(_ele.mRootSignature);
 		GCommandList->SetPipelineState(_ele.mPipelineState);
 		GCommandList->SetGraphicsRootConstantBufferView(0, ri->mMainPassCb->GetElementGpuAddress(0));
 		GCommandList->SetGraphicsRootConstantBufferView(1, ri->mObjCb->GetElementGpuAddress(_ele.mIndexInObjCb));
-		for (uint64_t i = 0; i != _ele.mShaderParameters.size(); ++i)
-		{
-			switch (_ele.mShaderParameters[i].mParameterType)
-			{
-			case D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE:
-				GCommandList->SetGraphicsRootDescriptorTable(i + 2, _ele.mShaderParameters[i].mParameterDescriptorTable);
-				break;
-			case D3D12_ROOT_PARAMETER_TYPE_CBV:
-				GCommandList->SetComputeRootConstantBufferView(i + 2, _ele.mShaderParameters[i].mParameterConstantBufferView);
-				break;
-			case D3D12_ROOT_PARAMETER_TYPE_SRV:
-				GCommandList->SetGraphicsRootShaderResourceView(i + 2, _ele.mShaderParameters[i].mParameterShaderResourcedView);
-				break;
-			case D3D12_ROOT_PARAMETER_TYPE_UAV:
-				GCommandList->SetGraphicsRootUnorderedAccessView(i + 2, _ele.mShaderParameters[i].mParameterUnorderedAccessView);
-				break;
-			}
-		}
+		SetShaderParameters(_ele.mShaderParameters, 2);
 		GCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		GCommandList->IASetIndexBuffer(&_ele.mIndexBufferView);
 		GCommandList->IASetVertexBuffers(0, 1, &_ele.mVertexBufferView);

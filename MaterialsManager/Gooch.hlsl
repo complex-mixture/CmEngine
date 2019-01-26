@@ -72,7 +72,7 @@ float4 PsMain(in VertexOut _in) : SV_Target
     float3 baseColor = SampleTexture2d(BaseColor, AnisotropicSampler, _in.uv).rgb;
     float3 toEye = normalize(gEyePosition - _in.positionW);
 
-    float3 destColor = baseColor * gAmbientLight;
+    float3 destColor = 0.f;
 
     destColor += ComputeLights_Gooch(
                     gRelatedLightCount,

@@ -10,6 +10,7 @@
 
 #define MaterialsInitFuncLeader(...) [__VA_ARGS__](\
 	_Out_ Comment(VertexId) std::vector<uint64_t> & _suitedVertexIds,\
+	_Out_ Comment(SuitedEntityType) std::vector<EEntityType> & _suitedEntityType,\
 	_Out_ Comment(parameterIdentifications) std::vector<D3D12_ROOT_PARAMETER_TYPE> & _parameterIdentifications,\
 	_Out_ std::vector<CD3DX12_ROOT_PARAMETER> & _rootParameters,\
 	_Out_ std::vector<CD3DX12_STATIC_SAMPLER_DESC> & _staticSamplerDescs,\
@@ -22,6 +23,18 @@
 	_Out_ Comment(PS) ID3DBlob *& _ps,\
 	_Out_ D3D12_GRAPHICS_PIPELINE_STATE_DESC & _graphicsPipeLineStateDesc\
 	)
+
+enum class EEntityType
+{
+	Unknow = 0,
+	Camera,
+	DirectionLight,
+	PontLight,
+	SpotLight,
+	SkyBox,
+	SaticMesh,
+	Num
+};
 
 class FMaterialsManager
 {
@@ -40,6 +53,7 @@ public:
 	void AddMaterials(
 		std::function<void(
 			_Out_ Comment(VertexId) std::vector<uint64_t> &,
+			_Out_ Comment(SuitedEntityType) std::vector<EEntityType> &,
 			_Out_ Comment(parameterIdentifications) std::vector<D3D12_ROOT_PARAMETER_TYPE> &,
 			_Out_ std::vector<CD3DX12_ROOT_PARAMETER> &,
 			_Out_ std::vector<CD3DX12_STATIC_SAMPLER_DESC> &,
@@ -57,7 +71,7 @@ public:
 		const std::wstring & _destFileName
 	);
 
-	void EraseStaticMesh(const std::wstring & _materialsName)
+	void EraseMaterials(const std::wstring & _materialsName)
 	{
 		mMap.erase(_materialsName);
 	}

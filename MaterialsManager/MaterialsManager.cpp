@@ -47,6 +47,7 @@ void FMaterialsManager::Clear()
 void FMaterialsManager::AddMaterials(
 	std::function<void(
 		_Out_ Comment(VertexIds) std::vector<uint64_t> &,
+		_Out_ Comment(SuitedEntityType) std::vector<EEntityType> &,
 		_Out_ Comment(parameterIdentifications) std::vector<D3D12_ROOT_PARAMETER_TYPE> &,
 		_Out_ std::vector<CD3DX12_ROOT_PARAMETER> &,
 		_Out_ std::vector<CD3DX12_STATIC_SAMPLER_DESC> &,
@@ -65,6 +66,7 @@ void FMaterialsManager::AddMaterials(
 )
 {
 	std::vector<uint64_t> suitedVertexIds;
+	std::vector<EEntityType> suitedEntityType;
 	std::vector<D3D12_ROOT_PARAMETER_TYPE> parameterIdentifications;
 	std::vector<CD3DX12_ROOT_PARAMETER> rootParameters;
 	std::vector<CD3DX12_STATIC_SAMPLER_DESC> staticSamplerDescs;
@@ -75,6 +77,7 @@ void FMaterialsManager::AddMaterials(
 
 	_materialsInitFunc(
 		suitedVertexIds,
+		suitedEntityType,
 		parameterIdentifications,
 		rootParameters,
 		staticSamplerDescs,
@@ -114,6 +117,10 @@ void FMaterialsManager::AddMaterials(
 	uint64_t suitedVertexIdCount = suitedVertexIds.size();
 	ofs.write(reinterpret_cast<const char*>(&suitedVertexIdCount), sizeof(uint64_t));
 	ofs.write(reinterpret_cast<const char*>(suitedVertexIds.data()), sizeof(uint64_t) * suitedVertexIdCount);
+
+	uint64_t suitedEntityTypeCount = suitedEntityType.size();
+	ofs.write(reinterpret_cast<const char*>(&suitedEntityTypeCount), sizeof(uint64_t));
+	ofs.write(reinterpret_cast<const char*>(suitedEntityType.data()), sizeof(EEntityType) * suitedEntityTypeCount);
 
 	uint64_t parameterIdentificationCount = parameterIdentifications.size();
 	ofs.write(reinterpret_cast<const char*>(&parameterIdentificationCount), sizeof(uint64_t));

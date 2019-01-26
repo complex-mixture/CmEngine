@@ -14,5 +14,6 @@ struct Vertex_default
 struct Vertex_SkyBox
 {
 	static constexpr uint64_t VertexId = 1;
+
 	DirectX::XMFLOAT3 mPosition;
 };

@@ -43,9 +43,6 @@
     <Filter Include="Core\Private">
       <UniqueIdentifier>{d73a4dc1-0bea-465b-8578-f3a61ecae5c9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameFrameWork\Private">
-      <UniqueIdentifier>{fbaf3b7d-56d7-45eb-a25a-7b68145cbbd7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Renderer">
       <UniqueIdentifier>{a544dfa9-4d79-45ad-9c84-3e09630daef0}</UniqueIdentifier>
     </Filter>
@@ -55,14 +52,8 @@
     <Filter Include="ShaderCore">
       <UniqueIdentifier>{4dbafb1e-c165-444a-b628-a8ceaf2c0649}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ShaderCore\StaticMesh">
-      <UniqueIdentifier>{349d3e58-326c-4d43-8890-4ffec87048a5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ShaderCore\Private">
       <UniqueIdentifier>{35c9c288-86d7-4dcb-b60b-7cd5edddba56}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ShaderCore\Private\StaticMesh">
-      <UniqueIdentifier>{9f3996d7-574d-452c-a372-9117ed02f2d4}</UniqueIdentifier>
     </Filter>
     <Filter Include="ShaderCore\Materials">
       <UniqueIdentifier>{0fd02d52-bd2f-4920-b461-efd18e2170fa}</UniqueIdentifier>
@@ -76,11 +67,23 @@
     <Filter Include="ShaderCore\Private\Texture">
       <UniqueIdentifier>{5f072648-62ab-4bb1-982a-3aebf670eddc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameFrameWork\Light">
-      <UniqueIdentifier>{0c271c5b-23d3-47b9-86e1-8b90e5e9c24c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ShaderCore\ShaderParameters">
       <UniqueIdentifier>{16f19561-e9ea-4132-8932-4b835da69128}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCore\Mesh">
+      <UniqueIdentifier>{349d3e58-326c-4d43-8890-4ffec87048a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCore\Private\Mesh">
+      <UniqueIdentifier>{9f3996d7-574d-452c-a372-9117ed02f2d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCore\EEntityType">
+      <UniqueIdentifier>{34d406e1-a302-4209-9062-c5bdf5d1d69e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Classes">
+      <UniqueIdentifier>{e2750932-4468-4ca6-8ab1-22fd211a19bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Classes\Light">
+      <UniqueIdentifier>{0c271c5b-23d3-47b9-86e1-8b90e5e9c24c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -120,9 +123,6 @@
     <ClInclude Include="WindowManager.h">
       <Filter>Slate</Filter>
     </ClInclude>
-    <ClInclude Include="Engine.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Resource</Filter>
     </ClInclude>
@@ -156,15 +156,6 @@
     <ClInclude Include="d3dx12.h">
       <Filter>D3D12Rhi</Filter>
     </ClInclude>
-    <ClInclude Include="World.h">
-      <Filter>GameFrameWork</Filter>
-    </ClInclude>
-    <ClInclude Include="CameraActor.h">
-      <Filter>GameFrameWork</Filter>
-    </ClInclude>
-    <ClInclude Include="Actor.h">
-      <Filter>GameFrameWork</Filter>
-    </ClInclude>
     <ClInclude Include="ConstantBufferSruct.h">
       <Filter>Render\Private</Filter>
     </ClInclude>
@@ -195,12 +186,6 @@
     <ClInclude Include="RendererInterface.h">
       <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="StaticMesh.h">
-      <Filter>ShaderCore\StaticMesh</Filter>
-    </ClInclude>
-    <ClInclude Include="StaticMeshManager.h">
-      <Filter>ShaderCore\StaticMesh</Filter>
-    </ClInclude>
     <ClInclude Include="Materials.h">
       <Filter>ShaderCore\Materials</Filter>
     </ClInclude>
@@ -219,29 +204,56 @@
     <ClInclude Include="DescriptorHandleManager.h">
       <Filter>D3D12Rhi</Filter>
     </ClInclude>
-    <ClInclude Include="StaticMeshActor.h">
-      <Filter>GameFrameWork</Filter>
-    </ClInclude>
     <ClInclude Include="TreatedRenderInformation.h">
       <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="DirectionLightActor.h">
-      <Filter>GameFrameWork\Light</Filter>
+      <Filter>Engine\Classes\Light</Filter>
     </ClInclude>
     <ClInclude Include="LightActor.h">
-      <Filter>GameFrameWork\Light</Filter>
+      <Filter>Engine\Classes\Light</Filter>
     </ClInclude>
     <ClInclude Include="SpotLightActor.h">
-      <Filter>GameFrameWork\Light</Filter>
+      <Filter>Engine\Classes\Light</Filter>
     </ClInclude>
     <ClInclude Include="PointLightActor.h">
-      <Filter>GameFrameWork\Light</Filter>
+      <Filter>Engine\Classes\Light</Filter>
     </ClInclude>
     <ClInclude Include="ShaderParameter.h">
       <Filter>ShaderCore\ShaderParameters</Filter>
     </ClInclude>
     <ClInclude Include="TextureLoaderHelper.h">
       <Filter>ShaderCore\Private\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>ShaderCore\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshManager.h">
+      <Filter>ShaderCore\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="EEntityType.h">
+      <Filter>ShaderCore\EEntityType</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>Engine\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraActor.h">
+      <Filter>Engine\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticMeshActor.h">
+      <Filter>Engine\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>Engine\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>Engine\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyBoxActor.h">
+      <Filter>Engine\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="RendererUtil.h">
+      <Filter>Renderer\Private</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -287,12 +299,6 @@
     <ClCompile Include="Util.cpp">
       <Filter>Core\Private</Filter>
     </ClCompile>
-    <ClCompile Include="World.cpp">
-      <Filter>GameFrameWork\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="StaticMeshActor.cpp">
-      <Filter>GameFrameWork\Private</Filter>
-    </ClCompile>
     <ClCompile Include="TextuerPool.cpp">
       <Filter>D3D12Rhi\Private</Filter>
     </ClCompile>
@@ -304,12 +310,6 @@
     </ClCompile>
     <ClCompile Include="RendererCreater.cpp">
       <Filter>Renderer\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="StaticMeshManager.cpp">
-      <Filter>ShaderCore\Private\StaticMesh</Filter>
-    </ClCompile>
-    <ClCompile Include="StaticMesh.cpp">
-      <Filter>ShaderCore\Private\StaticMesh</Filter>
     </ClCompile>
     <ClCompile Include="Materials.cpp">
       <Filter>ShaderCore\Private\Materials</Filter>
@@ -334,6 +334,21 @@
     </ClCompile>
     <ClCompile Include="TextureLoaderHelper.cpp">
       <Filter>ShaderCore\Private\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>ShaderCore\Private\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshManager.cpp">
+      <Filter>ShaderCore\Private\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticMeshActor.cpp">
+      <Filter>Engine\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Engine\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="RendererUtil.cpp">
+      <Filter>Renderer\Private</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

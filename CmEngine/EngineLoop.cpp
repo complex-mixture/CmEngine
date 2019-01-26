@@ -31,7 +31,7 @@ void FEngineLoop::Init()
 	GEngine->Init();
 	GetRenderModule()->CollectRenderFrameResource();
 	GetRenderModule()->EndFrame_GameThead();
-	mTimer.Start();
+	mTimer.Reset();
 }
 
 void FEngineLoop::Tick()

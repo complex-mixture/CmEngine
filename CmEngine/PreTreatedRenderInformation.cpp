@@ -1,10 +1,27 @@
 #include "PreTreatedRenderInformation.h"
 #include "UnTreatedRenderInformation.h"
+#include <DirectXCollision.h>
 
-FPreTreatedRenderStaticMesh::FPreTreatedRenderStaticMesh(const FUntreatedRenderStaticMesh & _utsm)
+FPreTreatedSkyBox::FPreTreatedSkyBox(const FUntreatedSkyBox & _utskybox)
 {
-	DirectX::XMMATRIX worldMatrixInv = XMMatrixInverse(&XMMatrixDeterminant(_utsm.mWorldMatrix), _utsm.mWorldMatrix);
-	XMStoreFloat4x4(&mObjCb.mWroldMatrix, XMMatrixTranspose(_utsm.mWorldMatrix));
+	mIndicesCount = _utskybox.mStaticMesh->GetIndicesCount();
+	mVertexBufferView = _utskybox.mStaticMesh->GetVertexBufferView();
+	mIndexBufferView = _utskybox.mStaticMesh->GetIndexBufferView();
+
+	mRootSignature = _utskybox.mMaterials->GetRootSignature();
+	mPipelineState = _utskybox.mMaterials->GetPipelineState();
+
+	mShaderParameters = _utskybox.mShaderParameters;
+}
+
+FPreTreatedStaticMesh::FPreTreatedStaticMesh(const FUntreatedStaticMesh & _utsm)
+{
+	DirectX::XMMATRIX worldMatrix = XMMatrixScalingFromVector(XMLoadFloat3(&_utsm.mScale));
+	worldMatrix *= XMMatrixRotationRollPitchYawFromVector(XMLoadFloat3(&_utsm.mRotation));
+	worldMatrix *= XMMatrixTranslationFromVector(XMLoadFloat3(&_utsm.mPosition));
+
+	DirectX::XMMATRIX worldMatrixInv = XMMatrixInverse(&XMMatrixDeterminant(worldMatrix), worldMatrix);
+	XMStoreFloat4x4(&mObjCb.mWroldMatrix, XMMatrixTranspose(worldMatrix));
 	XMStoreFloat4x4(&mObjCb.mWroldMatrixInv, XMMatrixTranspose(worldMatrixInv));
 
 	mIndicesCount = _utsm.mStaticMesh->GetIndicesCount();
@@ -33,8 +50,13 @@ FPreTreatedRenderInformation::FPreTreatedRenderInformation(const FUntreatedRende
 	mD3DViewport = _utri.mCanvas.mD3D12Viewport;
 	mScissorRect = _utri.mCanvas.mScissorRect;
 
-	DirectX::XMMATRIX viewMatrix = _utri.mViewMatrix;
-	DirectX::XMMATRIX projMatrix = DirectX::XMMatrixPerspectiveFovLH(PI / 2.f, _utri.mCanvas.GetAspectRatio(), 1.f, 1000.f);
+	XMVECTOR eyePosition = XMLoadFloat3(&_utri.mUntreatedCamera.mPosition);
+	XMVECTOR forwardDirection = XMVector3TransformNormal(XMVectorSet(1.f, 0.f, 0.f, 1.f), XMMatrixRotationRollPitchYawFromVector(XMLoadFloat3(&_utri.mUntreatedCamera.mRotation)));
+	XMVECTOR upDirection = XMVector3TransformNormal(XMVectorSet(0.f, 0.f, 1.f, 1.f), XMMatrixRotationRollPitchYawFromVector(XMLoadFloat3(&_utri.mUntreatedCamera.mRotation)));
+
+
+	DirectX::XMMATRIX viewMatrix = XMMatrixLookToLH(eyePosition, forwardDirection, upDirection);
+	DirectX::XMMATRIX projMatrix = DirectX::XMMatrixPerspectiveFovLH(_utri.mUntreatedCamera.mFov, _utri.mCanvas.GetAspectRatio(), _utri.mUntreatedCamera.mNearClipDistance, _utri.mUntreatedCamera.mFarClipDistance);
 	DirectX::XMMATRIX viewProjMatrix = viewMatrix * projMatrix;
 
 	DirectX::XMMATRIX viewMatrixInv = XMMatrixInverse(&XMMatrixDeterminant(viewMatrix), viewMatrix);
@@ -51,7 +73,7 @@ FPreTreatedRenderInformation::FPreTreatedRenderInformation(const FUntreatedRende
 	mPassCb.mRenderTargetSize = XMFLOAT2(mD3DViewport.Width, mD3DViewport.Height);
 	mPassCb.mRenderTargetSizeInv = XMFLOAT2(1.f / mD3DViewport.Width, 1.f / mD3DViewport.Height);
 
-	mPassCb.mEyePosition = _utri.mEyePosition;
+	mPassCb.mEyePosition = _utri.mUntreatedCamera.mPosition;
 
 	mPassCb.mDeltaTime = _utri.mDeltaTime;
 	mPassCb.mTotalTime = _utri.mTotalTime;
@@ -97,17 +119,26 @@ FPreTreatedRenderInformation::FPreTreatedRenderInformation(const FUntreatedRende
 		lightIndex++;
 	}
 
-	mPreUreatedRenderStaticMeshs.resize(_utri.mUntreatedRenderStaticMeshs.size());
-	for (size_t i = 0; i != _utri.mUntreatedRenderStaticMeshs.size(); ++i)
+	new(&mPtSkyBox) FPreTreatedSkyBox(_utri.mUntreatedSkyBox);
+
+	for (size_t i = 0, j = 0; i != _utri.mUntreatedStaticMeshs.size(); ++i)
 	{
-		new(&mPreUreatedRenderStaticMeshs[i]) FPreTreatedRenderStaticMesh(_utri.mUntreatedRenderStaticMeshs[i]);
-		for (uint32_t j = 0; j != lightIndex; ++j)
+		DirectX::XMVECTOR cameraForward = XMVector3Normalize(forwardDirection);
+		DirectX::XMVECTOR smPosition = XMLoadFloat3(&_utri.mUntreatedStaticMeshs[i].mPosition);
+		DirectX::XMVECTOR toSm = XMVector3Normalize(XMVectorSubtract(smPosition, eyePosition));
+
+		if(XMVectorGetX(XMVector3Dot(cameraForward, toSm)) < 0.f) continue;
+
+		mPtStaticMeshs.push_back(FPreTreatedStaticMesh(_utri.mUntreatedStaticMeshs[i]));
+
+		for (uint32_t k = 0; k != lightIndex; ++k)
 		{
-			mPreUreatedRenderStaticMeshs[i].mObjCb.mRelatedLightIndeices[j] = j;
+			mPtStaticMeshs[j].mObjCb.mRelatedLightIndeices[k] = k;
 		}
-		mPreUreatedRenderStaticMeshs[i].mObjCb.mRelatedLightCount = lightIndex;
-		mPreUreatedRenderStaticMeshs[i].mObjCb.mRelatedDirectionLightCount = _utri.mUntreatedDirectionLights.size();
-		mPreUreatedRenderStaticMeshs[i].mObjCb.mRelatedPointLightCount = _utri.mUntreatedPointLights.size();
-		mPreUreatedRenderStaticMeshs[i].mObjCb.mRelatedSpotLightCount = _utri.mUntreatedSpotLights.size();
+		mPtStaticMeshs[j].mObjCb.mRelatedLightCount = lightIndex;
+		mPtStaticMeshs[j].mObjCb.mRelatedDirectionLightCount = _utri.mUntreatedDirectionLights.size();
+		mPtStaticMeshs[j].mObjCb.mRelatedPointLightCount = _utri.mUntreatedPointLights.size();
+		mPtStaticMeshs[j].mObjCb.mRelatedSpotLightCount = _utri.mUntreatedSpotLights.size();
+		++j;
 	}
 }

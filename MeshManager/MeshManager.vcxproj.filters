@@ -3,10 +3,10 @@
   <ItemGroup>
     <ClInclude Include="MeshManager.h" />
     <ClInclude Include="Util.h" />
-    <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="MeshConstructHelper.h" />
     <ClInclude Include="MeshLoader.h" />
+    <ClInclude Include="Mesh.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

@@ -32,19 +32,21 @@ FTreatedRenderInformation::FTreatedRenderInformation(const FPreTreatedRenderInfo
 
 	mMainPassCb->StoreElement(0, _ptri.mPassCb);
 
-	mTreatedRenderStaticMeshs.resize(_ptri.mPreUreatedRenderStaticMeshs.size());
-	for (size_t i = 0; i != _ptri.mPreUreatedRenderStaticMeshs.size(); ++i)
+	new(&mTreatedSkyBox) FTreatedSkyBox(_ptri.mPtSkyBox);
+
+	mTreatedStaticMeshs.resize(_ptri.mPtStaticMeshs.size());
+	for (size_t i = 0; i != _ptri.mPtStaticMeshs.size(); ++i)
 	{
-		new(&mTreatedRenderStaticMeshs[i]) FTreatedRenderStaticMesh(_ptri.mPreUreatedRenderStaticMeshs[i]);
-		mObjCb->StoreElement(i, _ptri.mPreUreatedRenderStaticMeshs[i].mObjCb);
-		mTreatedRenderStaticMeshs[i].mIndexInObjCb = i;
+		new(&mTreatedStaticMeshs[i]) FTreatedStaticMesh(_ptri.mPtStaticMeshs[i]);
+		mObjCb->StoreElement(i, _ptri.mPtStaticMeshs[i].mObjCb);
+		mTreatedStaticMeshs[i].mIndexInObjCb = i;
 	}
 
 	mMainPassCb->Commit();
 	mObjCb->Commit();
 }
 
-FTreatedRenderStaticMesh::FTreatedRenderStaticMesh(const FPreTreatedRenderStaticMesh & _ptsm)
+FTreatedStaticMesh::FTreatedStaticMesh(const FPreTreatedStaticMesh & _ptsm)
 {
 	mIndicesCount = _ptsm.mIndicesCount;
 	mVertexBufferView = _ptsm.mVertexBufferView;
@@ -52,4 +54,14 @@ FTreatedRenderStaticMesh::FTreatedRenderStaticMesh(const FPreTreatedRenderStatic
 	mRootSignature = _ptsm.mRootSignature;
 	mPipelineState = _ptsm.mPipelineState;
 	mShaderParameters = _ptsm.mShaderParameters;
+}
+
+FTreatedSkyBox::FTreatedSkyBox(const FPreTreatedSkyBox & _ptSkyBox)
+{
+	mIndicesCount = _ptSkyBox.mIndicesCount;
+	mVertexBufferView = _ptSkyBox.mVertexBufferView;
+	mIndexBufferView = _ptSkyBox.mIndexBufferView;
+	mRootSignature = _ptSkyBox.mRootSignature;
+	mPipelineState = _ptSkyBox.mPipelineState;
+	mShaderParameters = _ptSkyBox.mShaderParameters;
 }
