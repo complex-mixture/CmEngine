@@ -13,11 +13,18 @@
 #include "SkyBoxActor.h"
 #pragma comment(lib, "ws2_32.lib")
 
+
+XMFLOAT3 beginPosition;
+XMFLOAT3 beginRotation;
 void UWorld::BeginPlay()
 {
 	mCamera = new ACameraActor;
 	mCamera->SetPosition(XMFLOAT3(0.f, 0.f, 120.f));
 	mCamera->SetRotation(XMFLOAT3(0.f, -PI / 18.f, 0.f));
+	//mCamera->SetRotation(XMFLOAT3(0.f, -PI / 2.f, 0.f));
+	beginPosition = XMFLOAT3(0.f, 0.f, 120.f);
+	beginRotation = XMFLOAT3(0.f, -PI / 18.f, 0.f);
+
 	//mCamera = new ACameraActor;
 	//mCamera->SetPosition(XMFLOAT3(0.f, 0.f, 100.f));
 	//mCamera->SetRotation(XMFLOAT3(0.f, PI / 2.f, 0.f));
@@ -47,18 +54,18 @@ void UWorld::BeginPlay()
 	newstaticMeshActor->SetMaterialsParameterDescriptorTable(1, FTextureManager::Get().LoadResource(L"DefaultN")->GetDescriptorHandle().mGpuHandle);
 	mActors.push_back(newstaticMeshActor);
 
-	for (int i = -200; i != 200; ++i)
-	{
-			newstaticMeshActor = new AStaticMeshActor;
-			newstaticMeshActor->SetPosition(XMFLOAT3(/*280 + */i * 20.f, 0.f, 80.f));
-			newstaticMeshActor->SetScale(XMFLOAT3(0.2f, 0.2f, 0.2f));
-			newstaticMeshActor->SetRotation(XMFLOAT3( 0.f, 0.f,-PI));
-			newstaticMeshActor->SetStaticMesh(FMeshManager::Get().LoadResource(L"Chair"));
-			newstaticMeshActor->SetMaterials(FMaterialsManager::Get().LoadResource(L"Pi"));
-			newstaticMeshActor->SetMaterialsParameterDescriptorTable(0, FTextureManager::Get().LoadResource(L"CobbleStoneRoughB")->GetDescriptorHandle().mGpuHandle);
-			newstaticMeshActor->SetMaterialsParameterDescriptorTable(1, FTextureManager::Get().LoadResource(L"CobbleStoneRoughN")->GetDescriptorHandle().mGpuHandle);
-			mActors.push_back(newstaticMeshActor);
-	}
+	//for (int i = -200; i != 200; ++i)
+	//{
+	//	newstaticMeshActor = new AStaticMeshActor;
+	//	newstaticMeshActor->SetPosition(XMFLOAT3(/*280 + */i * 20.f, 0.f, 80.f));
+	//	newstaticMeshActor->SetScale(XMFLOAT3(0.2f, 0.2f, 0.2f));
+	//	newstaticMeshActor->SetRotation(XMFLOAT3(0.f, 0.f, -PI));
+	//	newstaticMeshActor->SetStaticMesh(FMeshManager::Get().LoadResource(L"Chair"));
+	//	newstaticMeshActor->SetMaterials(FMaterialsManager::Get().LoadResource(L"Pi"));
+	//	newstaticMeshActor->SetMaterialsParameterDescriptorTable(0, FTextureManager::Get().LoadResource(L"CobbleStoneRoughB")->GetDescriptorHandle().mGpuHandle);
+	//	newstaticMeshActor->SetMaterialsParameterDescriptorTable(1, FTextureManager::Get().LoadResource(L"CobbleStoneRoughN")->GetDescriptorHandle().mGpuHandle);
+	//	mActors.push_back(newstaticMeshActor);
+	//}
 
 	//newstaticMeshActor = new AStaticMeshActor;
 	//newstaticMeshActor->SetPosition(XMFLOAT3(240.f, -110.f, 50.f));
@@ -113,22 +120,23 @@ void UWorld::BeginPlay()
 		WSAStartup(MAKEWORD(2, 2), &D);
 
 		SOCKET sock_eng = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-		char recvBuffer[1024 * 6];
+		char recvBuffer[24];
 
-		sockaddr addr;
-		addr.sa_family = AF_INET;
-		memset(addr.sa_data, 0x00, 14);
-		//addr.sin_family = AF_INET;
-		//addr.sin_addr.S_un.S_addr = 0ul;
-		//addr.sin_port = htons(2333);
+		sockaddr_in addr;
+
+		addr.sin_family = AF_INET;
+		addr.sin_addr.S_un.S_addr = INADDR_ANY;
+		addr.sin_port = htons(2333);
+
+		bind(sock_eng, (sockaddr*)&addr, sizeof(sockaddr_in));
 
 		while (true)
 		{
 			int formLen = sizeof(addr);
-			int recvcount = recvfrom(sock_eng, recvBuffer, 1024 * 6, 0, &addr, &formLen);
+			int recvcount = recvfrom(sock_eng, recvBuffer, 24, 0, (sockaddr*)&addr, &formLen);
 			if (recvcount < 24 || recvcount == SOCKET_ERROR) continue;
-			memcpy(mLastPosition, recvBuffer + (recvcount / 24 - 1) * 24, 12);
-			memcpy(mLastRotation, recvBuffer + (recvcount / 24 - 1) * 24 + 12, 12);
+			memcpy(mLastPosition, recvBuffer, 12);
+			memcpy(mLastRotation, recvBuffer + 12, 12);
 		}
 		closesocket(sock_eng);
 	});
@@ -145,15 +153,17 @@ void UWorld::Tick(float _deltaTime)
 	//for (auto _ele : mSpotLights)
 	//	_ele->Tick(_deltaTime);
 
-	//XMFLOAT3 b = mCamera->GetRotation();
 	//b.y -= _deltaTime/* * 10.f*/;
-	//mCamera->SetRotation(b);
+
+	//mCamera->SetRotation(XMFLOAT3(mLastRotation[0] + beginRotation.x, mLastRotation[1] + beginRotation.y, mLastRotation[2] + beginRotation.z));
+	//mCamera->SetPosition(XMFLOAT3(mLastPosition[0] + beginPosition.x, mLastPosition[1] + beginPosition.y, mLastPosition[2] + beginPosition.z));
 
 	//for (int i = 0; i != mSpotLights.size(); ++i)
 	//{
-	//	XMFLOAT3 b = mSpotLights[i]->GetRotation();
-	//	b.z -= _deltaTime;
-	//	mSpotLights[i]->SetRotation(b);
+	//XMFLOAT3 b = mCamera->GetRotation();
+	//b.y -= ((float)rand() / RAND_MAX - 0.5f)* _deltaTime;
+	//b.z -= ((float)rand() / RAND_MAX - 0.5f)* _deltaTime;
+	//mCamera->SetRotation(b);
 	//}
 }
 

@@ -66,11 +66,11 @@ void UMaterials::Init(std::wstring _fileName)
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC desc;
 
 	desc.pRootSignature = mRootSignature;
-	desc.VS = { shaderBuffer[0], shaderBufferSize[0] };
-	desc.HS = { shaderBuffer[1], shaderBufferSize[1] };
-	desc.DS = { shaderBuffer[2], shaderBufferSize[2] };
-	desc.GS = { shaderBuffer[3], shaderBufferSize[3] };
-	desc.PS = { shaderBuffer[4], shaderBufferSize[4] };
+	desc.VS = { shaderBuffer[0], static_cast<SIZE_T>(shaderBufferSize[0]) };
+	desc.HS = { shaderBuffer[1], static_cast<SIZE_T>(shaderBufferSize[1]) };
+	desc.DS = { shaderBuffer[2], static_cast<SIZE_T>(shaderBufferSize[2]) };
+	desc.GS = { shaderBuffer[3], static_cast<SIZE_T>(shaderBufferSize[3]) };
+	desc.PS = { shaderBuffer[4], static_cast<SIZE_T>(shaderBufferSize[4]) };
 
 	UINT numInputElements = 0;
 	D3D12_INPUT_ELEMENT_DESC * inputElements = nullptr;

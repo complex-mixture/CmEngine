@@ -21,8 +21,8 @@ public:
 private:
 	std::mutex mDataMutex;
 	std::thread mRecvThread;
-	float mLastPosition[3];
-	float mLastRotation[3];
+	float mLastPosition[3] = {};
+	float mLastRotation[3] = {};
 
 	ACameraActor * mCamera;
 	ASkyBoxActor * mSkyBox;

@@ -1,3 +1,4 @@
+#include "Common.h"
 #include "RendererUtil.h"
 #include "D3D12RhiGlobal.h"
 

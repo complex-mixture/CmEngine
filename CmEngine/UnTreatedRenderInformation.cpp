@@ -6,7 +6,6 @@
 
 FUntreatedRenderInformation::FUntreatedRenderInformation(FCanvas _canvas, UWorld * _world, FCpuRenderFrameResource * _cpuRenderFrameResource)
 {
-
 	mCanvas = _canvas;
 	mDeltaTime = GetDeltaTime();
 	mTotalTime = GetTotalTime();

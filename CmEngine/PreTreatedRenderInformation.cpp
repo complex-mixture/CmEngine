@@ -127,7 +127,7 @@ FPreTreatedRenderInformation::FPreTreatedRenderInformation(const FUntreatedRende
 		DirectX::XMVECTOR smPosition = XMLoadFloat3(&_utri.mUntreatedStaticMeshs[i].mPosition);
 		DirectX::XMVECTOR toSm = XMVector3Normalize(XMVectorSubtract(smPosition, eyePosition));
 
-		if(XMVectorGetX(XMVector3Dot(cameraForward, toSm)) < 0.f) continue;
+		//if(XMVectorGetX(XMVector3Dot(cameraForward, toSm)) < 0.f) continue;
 
 		mPtStaticMeshs.push_back(FPreTreatedStaticMesh(_utri.mUntreatedStaticMeshs[i]));
 
