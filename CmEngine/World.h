@@ -19,11 +19,6 @@ public:
 	const std::vector<AActor*>& GetActors()const { return mActors; }
 
 private:
-	std::mutex mDataMutex;
-	std::thread mRecvThread;
-	float mLastPosition[3] = {};
-	float mLastRotation[3] = {};
-
 	ACameraActor * mCamera;
 	ASkyBoxActor * mSkyBox;
 	std::vector<AActor*> mActors;

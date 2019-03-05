@@ -54,17 +54,12 @@ struct VertexOut
 
 void VsMain(in VertexIn _in, out VertexOut _out)
 {
-    //_out.positionW = mul(float4(_in.position, 1.f), gWroldMatrix).xyz;
-    //_out.positionH = mul(float4(_out.positionW, 1.f), gViewProjMatrix);
-    //_out.uv = _in.uv;
-    //_out.tangentW = mul(_in.tangent, (float3x3) gWroldMatrix);
-    //_out.binormalW = mul(_in.binormal, (float3x3) gWroldMatrix);
     _out.uv = _in.uv;
     _out.tangentW = mul(_in.tangent, (float3x3) gWroldMatrix);
     _out.binormalW = mul(_in.binormal, (float3x3) gWroldMatrix);
     float3 normal = cross(_out.tangentW, _out.binormalW);
     normal = normalize(normal);
-    _in.position += normal * fmod(gTotalTime, 30.f);
+	_in.position += normal * fmod(gTotalTime, 30.f);
     _out.positionW = mul(float4(_in.position, 1.f), gWroldMatrix).xyz;
     _out.positionH = mul(float4(_out.positionW, 1.f), gViewProjMatrix);
 }
@@ -93,6 +88,6 @@ float4 PsMain(in VertexOut _in) : SV_Target
                     toEye,
                     _in.positionW
                     );
-    
+
     return float4(destColor, 1.f);
 }

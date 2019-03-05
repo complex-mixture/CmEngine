@@ -113,6 +113,19 @@ private:
 	FNoncopyable& operator=(const FNoncopyable&) = delete;
 };
 
+template<typename _Ty>
+struct FLess
+{
+	_CXX17_DEPRECATE_ADAPTOR_TYPEDEFS typedef _Ty first_argument_type;
+	_CXX17_DEPRECATE_ADAPTOR_TYPEDEFS typedef _Ty second_argument_type;
+	_CXX17_DEPRECATE_ADAPTOR_TYPEDEFS typedef bool result_type;
+
+	constexpr bool operator()(const _Ty& _Left, const _Ty& _Right) const 
+	{
+		return memcmp(&_Left, &_Right, sizeof(_Ty)) < 0;
+	}
+};
+
 template<typename _charType>
 void LoadStringFromFile(std::ifstream & _ifs, std::basic_string<_charType> & _dest)
 {

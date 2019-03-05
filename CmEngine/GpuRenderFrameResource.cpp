@@ -6,7 +6,7 @@
 #include "PreTreatedRenderInformation.h"
 #include "Mesh.h"
 #include "TreatedRenderInformation.h"
-#include "TextuerPool.h"
+#include "ResourcePool.h"
 #include "DescriptorHandleManager.h"
 #include "UnTreatedRenderInformation.h"
 #include "Materials.h"

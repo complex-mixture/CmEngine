@@ -7,6 +7,7 @@
 #include "d3dx12.h"
 #include "RendererInterface.h"
 #include "RendererCreater.h"
+#include "ResourcePool.h"
 
 FCpuRenderFrameResource * FRenderModule::RequestCpuFrameRenderResource()
 {
@@ -23,12 +24,15 @@ FGpuRenderFrameResource * FRenderModule::RequestGpuFrameRenderResource()
 void FRenderModule::RenderThreadMain()
 {
 	GRenderThreadId = std::this_thread::get_id();
+	FResourcePool::Get().Init();
 	while (!ShouldExit())
 	{
 		BeginFrame_RenderThread();
 		RenderScene_RenderThread();
 		EndFrame_RenderThead();
+		FResourcePool::Get().Tick();
 	}
+	FResourcePool::Get().Clear();
 }
 
 void FRenderModule::Init()

@@ -7,6 +7,8 @@
 void FBaseRenderer::RenderScene(FTreatedRenderInformation * _renderInformation)
 {
 	auto * ri = _renderInformation;
+	GCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(ri->mDepthStencilBuffer, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_DEPTH_WRITE));
+
 	GCommandList->RSSetViewports(1, &ri->mD3DViewport);
 	GCommandList->RSSetScissorRects(1, &ri->mScissorRect);
 	GCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(ri->mRenderTarget, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_RENDER_TARGET));
@@ -39,6 +41,8 @@ void FBaseRenderer::RenderScene(FTreatedRenderInformation * _renderInformation)
 	}
 
 	GCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(ri->mRenderTarget, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_COMMON));
+	GCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(ri->mDepthStencilBuffer, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_COMMON));
+
 }
 
 void FBaseRenderer::Release()

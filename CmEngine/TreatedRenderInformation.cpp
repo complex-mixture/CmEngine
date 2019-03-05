@@ -1,6 +1,6 @@
 #include "TreatedRenderInformation.h"
 #include "PreTreatedRenderInformation.h"
-#include "TextuerPool.h"
+#include "ResourcePool.h"
 #include "DescriptorHandleManager.h"
 #include "GpuRenderFrameResource.h"
 
@@ -16,11 +16,11 @@ FTreatedRenderInformation::FTreatedRenderInformation(const FPreTreatedRenderInfo
 	desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	desc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 	desc.Texture2D.MipSlice = 0;
-	mDepthStencilBuffer = FTexturePool::Get().AllocateTexture(CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_D24_UNORM_S8_UINT, mD3DViewport.Width, mD3DViewport.Height, 1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL), D3D12_RESOURCE_STATE_DEPTH_WRITE, &CD3DX12_CLEAR_VALUE(DXGI_FORMAT_D24_UNORM_S8_UINT, 1.f, 0));
+	mDepthStencilBuffer = FResourcePool::Get().AllocateResource(CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_D24_UNORM_S8_UINT, mD3DViewport.Width, mD3DViewport.Height, 1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL), &CD3DX12_CLEAR_VALUE(DXGI_FORMAT_D24_UNORM_S8_UINT, 1.f, 0));
 	mDepthStencilView = FDescriptorHandleManager<D3D12_DEPTH_STENCIL_VIEW_DESC>::Get().CreateView(mDepthStencilBuffer, desc).mCpuHandle;
 	_gpuRenderFrameResource->AddTaskOnRenderThreadFlush(
 		[_resource = mDepthStencilBuffer, _view = mDepthStencilView]() {
-		FTexturePool::Get().ReleaseTexture(_resource);
+		FResourcePool::Get().ReleaseResource(_resource);
 		FDescriptorHandleManager<D3D12_DEPTH_STENCIL_VIEW_DESC>::Get().FreeSlot(_view);
 	});
 

@@ -20,15 +20,9 @@ void UWorld::BeginPlay()
 {
 	mCamera = new ACameraActor;
 	mCamera->SetPosition(XMFLOAT3(0.f, 0.f, 120.f));
-	mCamera->SetRotation(XMFLOAT3(0.f, -PI / 18.f, 0.f));
-	//mCamera->SetRotation(XMFLOAT3(0.f, -PI / 2.f, 0.f));
+	mCamera->SetRotation(XMFLOAT3(0.f, -PI / 10.f, 0.f));
 	beginPosition = XMFLOAT3(0.f, 0.f, 120.f);
 	beginRotation = XMFLOAT3(0.f, -PI / 18.f, 0.f);
-
-	//mCamera = new ACameraActor;
-	//mCamera->SetPosition(XMFLOAT3(0.f, 0.f, 100.f));
-	//mCamera->SetRotation(XMFLOAT3(0.f, PI / 2.f, 0.f));
-	//mCamera->SetFarClipDistance(100.f);
 
 	mSkyBox = new ASkyBoxActor;
 	mSkyBox->SetStaticMesh(FMeshManager::Get().LoadResource(L"SkyBox"));
@@ -115,56 +109,13 @@ void UWorld::BeginPlay()
 	newSpotLight->SetOuterConeAngle(PI / 3.f);
 	mActors.push_back(newSpotLight);
 
-	mRecvThread = std::thread([&]() {
-		WSADATA D = {};
-		WSAStartup(MAKEWORD(2, 2), &D);
-
-		SOCKET sock_eng = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-		char recvBuffer[24];
-
-		sockaddr_in addr;
-
-		addr.sin_family = AF_INET;
-		addr.sin_addr.S_un.S_addr = INADDR_ANY;
-		addr.sin_port = htons(2333);
-
-		bind(sock_eng, (sockaddr*)&addr, sizeof(sockaddr_in));
-
-		while (true)
-		{
-			int formLen = sizeof(addr);
-			int recvcount = recvfrom(sock_eng, recvBuffer, 24, 0, (sockaddr*)&addr, &formLen);
-			if (recvcount < 24 || recvcount == SOCKET_ERROR) continue;
-			memcpy(mLastPosition, recvBuffer, 12);
-			memcpy(mLastRotation, recvBuffer + 12, 12);
-		}
-		closesocket(sock_eng);
-	});
 }
 
 void UWorld::Tick(float _deltaTime)
 {
-	//for (auto _ele : mStaticMeshActors)
-	//	_ele->Tick(_deltaTime);
-	//for (auto _ele : mDirectionLights)
-	//	_ele->Tick(_deltaTime);
-	//for (auto _ele : mPointLights)
-	//	_ele->Tick(_deltaTime);
-	//for (auto _ele : mSpotLights)
-	//	_ele->Tick(_deltaTime);
-
-	//b.y -= _deltaTime/* * 10.f*/;
-
-	//mCamera->SetRotation(XMFLOAT3(mLastRotation[0] + beginRotation.x, mLastRotation[1] + beginRotation.y, mLastRotation[2] + beginRotation.z));
-	//mCamera->SetPosition(XMFLOAT3(mLastPosition[0] + beginPosition.x, mLastPosition[1] + beginPosition.y, mLastPosition[2] + beginPosition.z));
-
-	//for (int i = 0; i != mSpotLights.size(); ++i)
-	//{
-	//XMFLOAT3 b = mCamera->GetRotation();
-	//b.y -= ((float)rand() / RAND_MAX - 0.5f)* _deltaTime;
-	//b.z -= ((float)rand() / RAND_MAX - 0.5f)* _deltaTime;
-	//mCamera->SetRotation(b);
-	//}
+	for (auto _ele : mActors)
+		_ele->Tick(_deltaTime);
+	mCamera->Tick(_deltaTime);
 }
 
 void UWorld::EndPlay()

@@ -168,9 +168,6 @@
     <ClInclude Include="PreTreatedRenderInformation.h">
       <Filter>Render\Private</Filter>
     </ClInclude>
-    <ClInclude Include="TextuerPool.h">
-      <Filter>D3D12Rhi</Filter>
-    </ClInclude>
     <ClInclude Include="D3D12RhiUtil.h">
       <Filter>D3D12Rhi</Filter>
     </ClInclude>
@@ -255,6 +252,9 @@
     <ClInclude Include="RendererUtil.h">
       <Filter>Renderer\Private</Filter>
     </ClInclude>
+    <ClInclude Include="ResourcePool.h">
+      <Filter>D3D12Rhi</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3D12RhiModule.cpp">
@@ -298,9 +298,6 @@
     </ClCompile>
     <ClCompile Include="Util.cpp">
       <Filter>Core\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="TextuerPool.cpp">
-      <Filter>D3D12Rhi\Private</Filter>
     </ClCompile>
     <ClCompile Include="DescriptorHandleManagerBase.cpp">
       <Filter>D3D12Rhi\Private</Filter>
@@ -349,6 +346,9 @@
     </ClCompile>
     <ClCompile Include="RendererUtil.cpp">
       <Filter>Renderer\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourcePool.cpp">
+      <Filter>D3D12Rhi\Private</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
