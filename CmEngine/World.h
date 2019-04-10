@@ -19,7 +19,7 @@ public:
 	const std::vector<AActor*>& GetActors()const { return mActors; }
 
 private:
-	ACameraActor * mCamera;
-	ASkyBoxActor * mSkyBox;
+	ACameraActor * mCamera = nullptr;
+	ASkyBoxActor * mSkyBox = nullptr;
 	std::vector<AActor*> mActors;
 };

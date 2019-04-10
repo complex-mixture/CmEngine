@@ -82,8 +82,17 @@
     <Filter Include="Engine\Classes">
       <UniqueIdentifier>{e2750932-4468-4ca6-8ab1-22fd211a19bb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Classes\Light">
+    <Filter Include="Engine\Classes\InWorld">
+      <UniqueIdentifier>{0ec82922-e4fd-42e8-bcce-b01951cd6f66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Classes\InWorld\Light">
       <UniqueIdentifier>{0c271c5b-23d3-47b9-86e1-8b90e5e9c24c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Private\InWrold">
+      <UniqueIdentifier>{24508051-7c61-4c6e-9424-7dd3d0463310}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Classes\InputManager">
+      <UniqueIdentifier>{838fb0a6-d3a4-46c7-b469-ad8a3ca635f0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -205,16 +214,16 @@
       <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="DirectionLightActor.h">
-      <Filter>Engine\Classes\Light</Filter>
+      <Filter>Engine\Classes\InWorld\Light</Filter>
     </ClInclude>
     <ClInclude Include="LightActor.h">
-      <Filter>Engine\Classes\Light</Filter>
+      <Filter>Engine\Classes\InWorld\Light</Filter>
     </ClInclude>
     <ClInclude Include="SpotLightActor.h">
-      <Filter>Engine\Classes\Light</Filter>
+      <Filter>Engine\Classes\InWorld\Light</Filter>
     </ClInclude>
     <ClInclude Include="PointLightActor.h">
-      <Filter>Engine\Classes\Light</Filter>
+      <Filter>Engine\Classes\InWorld\Light</Filter>
     </ClInclude>
     <ClInclude Include="ShaderParameter.h">
       <Filter>ShaderCore\ShaderParameters</Filter>
@@ -231,29 +240,38 @@
     <ClInclude Include="EEntityType.h">
       <Filter>ShaderCore\EEntityType</Filter>
     </ClInclude>
-    <ClInclude Include="Actor.h">
-      <Filter>Engine\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="CameraActor.h">
-      <Filter>Engine\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="StaticMeshActor.h">
-      <Filter>Engine\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="World.h">
-      <Filter>Engine\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine.h">
-      <Filter>Engine\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="SkyBoxActor.h">
-      <Filter>Engine\Classes</Filter>
-    </ClInclude>
     <ClInclude Include="RendererUtil.h">
       <Filter>Renderer\Private</Filter>
     </ClInclude>
     <ClInclude Include="ResourcePool.h">
       <Filter>D3D12Rhi</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>Engine\Classes\InWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraActor.h">
+      <Filter>Engine\Classes\InWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>Engine\Classes\InWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyBoxActor.h">
+      <Filter>Engine\Classes\InWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticMeshActor.h">
+      <Filter>Engine\Classes\InWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>Engine\Classes\InWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="Template.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="InputInterface.h">
+      <Filter>Engine\Classes\InputManager</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManagerInterface.h">
+      <Filter>Engine\Classes\InputManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -338,17 +356,17 @@
     <ClCompile Include="MeshManager.cpp">
       <Filter>ShaderCore\Private\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="StaticMeshActor.cpp">
-      <Filter>Engine\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="World.cpp">
-      <Filter>Engine\Private</Filter>
-    </ClCompile>
     <ClCompile Include="RendererUtil.cpp">
       <Filter>Renderer\Private</Filter>
     </ClCompile>
     <ClCompile Include="ResourcePool.cpp">
       <Filter>D3D12Rhi\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticMeshActor.cpp">
+      <Filter>Engine\Private\InWrold</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Engine\Private\InWrold</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -360,5 +378,8 @@
     <ResourceCompile Include="CmEngine.rc">
       <Filter>Resource</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

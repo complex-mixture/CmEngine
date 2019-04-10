@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 #include <assert.h>
+#include "Template.h"
 
 #define LogA(_format, ...)					\
 do											\
@@ -17,7 +18,7 @@ do											\
 #define LogW(_format, ...)						\
 do												\
 {												\
-	wchar_t buffer[1024];							\
+	wchar_t buffer[1024];						\
 	swprintf_s(buffer, _format, __VA_ARGS__);	\
 	OutputDebugStringW(buffer);					\
 } while (0)
@@ -141,6 +142,13 @@ void SaveStringToFile(std::ofstream & _ofs, const std::basic_string<_charType> &
 	uint64_t stringSize = _source.size();
 	_ofs.write(reinterpret_cast<char*>(&stringSize), sizeof(uint64_t));
 	_ofs.write(reinterpret_cast<const char*>(_source.data()), sizeof(std::basic_string<_charType>::value_type) * stringSize);
+}
+
+#define RegisterOperatorForEnumClass(_enumType, _operator)					\
+__forceinline _enumType operator _operator (_enumType _left, _enumType _right)	\
+{																				\
+	using uint = uint_type<sizeof(_enumType)>;									\
+	return (_enumType)((uint)(_left)_operator(uint)(_right));					\
 }
 
 float GetTotalTime();

@@ -11,6 +11,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MeshManager", "MeshManager\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MaterialsManager", "MaterialsManager\MaterialsManager.vcxproj", "{48AFEF43-6F4C-404C-AFE7-B6C895C92ABA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Document", "Document", "{FA8DAF73-E293-4CF2-8D7D-3731B6B2831A}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		note.md = note.md
+		README.md = README.md
+		开发文档.md = 开发文档.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,5 +72,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {61E5CD08-1E6E-4728-88BE-B462751532CB}
 	EndGlobalSection
 EndGlobal

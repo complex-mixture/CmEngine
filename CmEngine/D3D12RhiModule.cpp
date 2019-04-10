@@ -44,11 +44,12 @@ void FD3D12RhiModuleImpl::Init()
 {
 #ifdef DEBUG
 	ID3D12Debug * debugController = nullptr;
-	VerifyD3D12Result(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)));
-	debugController->EnableDebugLayer();
-	//debugController->Release();
+	if (D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)) == S_OK)
+	{
+		debugController->EnableDebugLayer();
+		debugController->Release();
+	}
 #endif
-
 
 	VerifyD3D12Result(CreateDXGIFactory(IID_PPV_ARGS(&GFactory)));
 
@@ -141,17 +142,20 @@ uint32_t FD3D12RhiModuleImpl::Present()
 void FD3D12RhiModuleImpl::ReportLiveObject()
 {
 #ifdef DEBUG
-	LogA("ReportLiveObject : \n");
 	IDXGIDebug * debug = nullptr;
 	HMODULE handle = LoadLibrary(L"DXGIDebug.dll");
+	if (!handle) return;
 	using DXGIGetDebugInterfaceFuncType = HRESULT(WINAPI *)(REFIID, void **);
 	DXGIGetDebugInterfaceFuncType DXGIGetDebugInterfaceFunc = reinterpret_cast<DXGIGetDebugInterfaceFuncType>(GetProcAddress(handle, "DXGIGetDebugInterface"));
-	DXGIGetDebugInterfaceFunc(IID_PPV_ARGS(&debug));
-	debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
-	debug->Release();
-	FreeLibrary(handle);
-	LogA("ReportLiveObjectEnd\n\n");
+	if (DXGIGetDebugInterfaceFunc && DXGIGetDebugInterfaceFunc(IID_PPV_ARGS(&debug)) == S_OK)
+	{
+		LogA("ReportLiveObject : \n");
+		debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
+		debug->Release();
+		LogA("ReportLiveObjectEnd\n\n");
+	}
 
+	FreeLibrary(handle);
 #endif // DEBUG
 }
 

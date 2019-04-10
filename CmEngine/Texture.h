@@ -29,18 +29,18 @@ public:
 	FDescriptorHandle GetDescriptorHandle()const { return mDescriptorHandle; }
 
 private:
-	uint64_t mWidth;
-	uint64_t mHeight;
-	uint64_t mDepth;
-	uint64_t mMipLevels;
-	uint64_t mArraySize;
-	DXGI_FORMAT mFormat;
+	uint64_t mWidth = 0;
+	uint64_t mHeight = 0;
+	uint64_t mDepth = 0;
+	uint64_t mMipLevels = 0;
+	uint64_t mArraySize = 0;
+	DXGI_FORMAT mFormat = DXGI_FORMAT_UNKNOWN;
 	TexDimension mTexDimension;
 
-	uint64_t mDataLength;
+	uint64_t mDataLength = 0;
 	void * mData = nullptr;
 
 	FDescriptorHandle mDescriptorHandle;
-	ID3D12Resource * mTextureGpu;
-	ID3D12Resource * mTextureUploader;
+	ID3D12Resource * mTextureGpu = nullptr;
+	ID3D12Resource * mTextureUploader = nullptr;
 };

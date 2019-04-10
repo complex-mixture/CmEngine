@@ -38,13 +38,13 @@ public:
 private:
 	uint64_t mVertexId;
 
-	uint32_t mVertexSize;
-	uint32_t mVertexesCount;
-	DXGI_FORMAT mIndexFormat;
-	uint32_t mIndexSize;
-	uint32_t mIndicesCount;
+	uint32_t mVertexSize = 0;
+	uint32_t mVertexesCount = 0;
+	DXGI_FORMAT mIndexFormat = DXGI_FORMAT_UNKNOWN;
+	uint32_t mIndexSize = 0;
+	uint32_t mIndicesCount = 0;
 
-	float mBoundSphereRadius;
+	float mBoundSphereRadius = 0.0f;
 
 	void * mVertexesBuffer = nullptr;
 	void * mIndicesBuffer = nullptr;

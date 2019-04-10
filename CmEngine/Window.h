@@ -12,7 +12,7 @@ public:
 	FWindow(DWORD _windowStyleEx, DWORD _windowStyle, UINT _x, UINT _y, UINT _width, UINT _height, const std::wstring & _windowName);
 	__forceinline HWND GetHwnd()const { return mHwnd; }
 	__forceinline FD3D12Viewport * GetViewport() { return mViewport; }
-	bool IsClosed() { return mHwnd == nullptr; }
+	__forceinline bool IsClosed()const { return mHwnd == nullptr; }
 
 protected:
 	void Close();

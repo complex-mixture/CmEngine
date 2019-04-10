@@ -7,7 +7,7 @@ class FWindow;
 class FWindowManager final :FNoncopyable
 {
 private:
-	HINSTANCE mInstance;
+	HINSTANCE mInstance = NULL;
 	std::unordered_map<HWND, FWindow*> mHwndMap;
 
 public:

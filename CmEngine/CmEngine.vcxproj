@@ -189,6 +189,8 @@
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="GpuRenderFrameResource.h" />
+    <ClInclude Include="InputInterface.h" />
+    <ClInclude Include="InputManagerInterface.h" />
     <ClInclude Include="LightActor.h" />
     <ClInclude Include="Materials.h" />
     <ClInclude Include="MaterialsManager.h" />
@@ -213,6 +215,7 @@
     <ClInclude Include="MeshManager.h" />
     <ClInclude Include="PreTreatedRenderInformation.h" />
     <ClInclude Include="ResourcePool.h" />
+    <ClInclude Include="Template.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureLoaderHelper.h" />
     <ClInclude Include="TextureManager.h" />
@@ -262,6 +265,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\Download\bitbug_favicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
