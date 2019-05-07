@@ -4,16 +4,11 @@
 #include "Util.h"
 #include <string>
 #include "Texture.h"
+#include "Template.h"
 
-class FTextureManager : public FResourceManagerBase<UTexture>, FNoncopyable
+class FTextureManager final : public FResourceManagerBase<UTexture>, public Tpl::TAsSingle<FTextureManager>
 {
 public:
-	static FTextureManager & Get()
-	{
-		static FTextureManager single;
-		return single;
-	}
-
 	void Init();
 	void Clear();
 

@@ -2,9 +2,10 @@
 #include <unordered_map>
 #include <windef.h>
 #include "Util.h"
+#include "Template.h"
 class FWindow;
 
-class FWindowManager final :FNoncopyable
+class FWindowManager final : public Tpl::TAsSingle<FWindowManager>
 {
 private:
 	HINSTANCE mInstance = NULL;
@@ -20,13 +21,7 @@ public:
 	__forceinline size_t GetWindowNumber()const { return mHwndMap.size(); }
 
 	__forceinline HINSTANCE GetInstance()const { return mInstance; }
-	static FWindowManager & Get()
-	{
-		static FWindowManager Single;
-		return Single;
-	}
 
 private:
-	FWindowManager() = default;
 	static LRESULT CALLBACK WndProc(HWND _hwnd, UINT _msg, WPARAM _wParam, LPARAM _lParam);
 };

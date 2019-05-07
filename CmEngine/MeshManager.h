@@ -2,18 +2,12 @@
 #include "Util.h"
 #include <map>
 #include "ResourceManagerBase.h"
+#include "Template.h"
 
 class UMesh;
-class FMeshManager : public FResourceManagerBase<UMesh>, FNoncopyable
+class FMeshManager final : public FResourceManagerBase<UMesh>, public Tpl::TAsSingle<FMeshManager>
 {
-	FMeshManager() {}
 public:
-	static FMeshManager & Get()
-	{
-		static FMeshManager single;
-		return single;
-	}
-
 	void Init();
 	void Clear();
 

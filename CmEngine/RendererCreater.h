@@ -1,16 +1,10 @@
 #pragma once
 #include "RendererInterface.h"
 #include "RenderSetting.h"
+#include "Template.h"
 
-class FRendererCreater
+class FRendererCreater final : public Tpl::TAsSingle<FRendererCreater>
 {
-	FRendererCreater() {}
 public:
-	static FRendererCreater & Get()
-	{
-		static FRendererCreater single;
-		return single;
-	}
-
 	IRendererInterface * CreateRenderer(FRenderSetting _renderSetting);
 };

@@ -1,27 +1,36 @@
 #pragma once
-#include <stdint.h>
+#include "Template.inl"
 
-namespace TemplateImpl
+namespace Tpl
 {
-	template<uint64_t _sizeofInt>
-	struct int_type {};
+	template<typename _type>
+	constexpr auto TypeName = TemplateImpl::GetTypeName<_type>();
 
-	template<uint64_t _sizeofInt>
-	struct uint_type {};
+	template<typename _enumType, _enumType _enumVal>
+	constexpr auto EnumName = TemplateImpl::GetEnumName<_enumType, _enumVal>();
 
-	template<> struct int_type<1> { using type = int8_t; };
-	template<> struct int_type<2> { using type = int16_t; };
-	template<> struct int_type<4> { using type = int32_t; };
-	template<> struct int_type<8> { using type = int64_t; };
-	
-	template<> struct uint_type<1> { using type = uint8_t; };
-	template<> struct uint_type<2> { using type = uint16_t; };
-	template<> struct uint_type<4> { using type = uint32_t; };
-	template<> struct uint_type<8> { using type = uint64_t; };
+	template<typename _type>
+	constexpr auto IdentifyName = TemplateImpl::GetIdentify<_type>();
+
+	template<typename... _argts>
+	constexpr auto ArgumentsName = TemplateImpl::GetTemplateArguments<_argts...>();
+
+	template<typename... _types>
+	struct TypeSequence {};
+
+	template<typename _type>
+	struct TAsSingle
+	{
+	public:
+		using Type = _type;
+
+		TAsSingle() = default;
+		TAsSingle(const TAsSingle&) = delete;
+
+		static Type & Get()
+		{
+			static Type single;
+			return single;
+		}
+	};
 }
-
-template<uint64_t _sizeofInt>
-using int_type = typename TemplateImpl::int_type<_sizeofInt>::type;
-
-template<uint64_t _sizeofInt>
-using uint_type = typename TemplateImpl::uint_type<_sizeofInt>::type;

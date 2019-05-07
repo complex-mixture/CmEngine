@@ -5,6 +5,7 @@
 #include <string>
 #include "Util.h"
 #include "ModuleInterface.h"
+#include "Template.h"
 
 
 struct FModuleInfo
@@ -16,7 +17,7 @@ struct FModuleInfo
 	ModuleCreateFunction mModuleCreateFunction = nullptr;
 };
 
-class FModuleManager
+class FModuleManager final : public Tpl::TAsSingle<FModuleManager>
 {
 public:
 	IModuleInterface * LoadModule(std::wstring _moduleName)
@@ -69,12 +70,6 @@ public:
 		delete _moduleInfo.mModulePtr;
 		_moduleInfo.mModulePtr = nullptr;
 		return true;
-	}
-
-	static FModuleManager & Get()
-	{
-		static FModuleManager _single;
-		return _single;
 	}
 
 	std::map<std::wstring, FModuleInfo> & GetModuleInfos()

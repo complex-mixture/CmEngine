@@ -94,6 +94,36 @@
     <Filter Include="Engine\Classes\InputManager">
       <UniqueIdentifier>{838fb0a6-d3a4-46c7-b469-ad8a3ca635f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CycleCounter">
+      <UniqueIdentifier>{379ea8f7-ecae-43cf-ba30-a303782fb0f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\RenderInformationCollector">
+      <UniqueIdentifier>{858ff63a-b3be-4ffb-b218-4928b299a594}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\RenderInformationCollector\Mask">
+      <UniqueIdentifier>{93338429-95f6-4b6d-a75f-9547e1e8c319}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\RenderInformationCollector\Mask\MaskForReadyForGpuComponent">
+      <UniqueIdentifier>{cda648b6-f364-404d-bf84-600de3806ad8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\RenderInformationCollector\Mask\MaskForReadyForRendererComponent">
+      <UniqueIdentifier>{3650a087-16d3-47cb-82da-8bbca882b60e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\RenderInformationCollector\Component">
+      <UniqueIdentifier>{74be390b-dc28-4d40-9e3f-2e622e3770c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\RenderInformationCollector\Component\ReadyForGpuComponent">
+      <UniqueIdentifier>{4f52f8ec-a079-4384-a069-1f31ddb44d9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\RenderInformationCollector\Component\ReadyForRendererComponent">
+      <UniqueIdentifier>{f35362bf-bee0-4e42-a903-818cc9f9ebdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\RenderInformationCollector\Component\BaseComponent">
+      <UniqueIdentifier>{fb21fb6d-0c58-4a28-9d0c-d5205afee817}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\RenderInformationCollector\Mask\MaskForBaseComponent">
+      <UniqueIdentifier>{0fcc064c-0ef2-4644-8f63-e5645e99ab32}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -168,14 +198,8 @@
     <ClInclude Include="ConstantBufferSruct.h">
       <Filter>Render\Private</Filter>
     </ClInclude>
-    <ClInclude Include="UnTreatedRenderInformation.h">
-      <Filter>Render\Private</Filter>
-    </ClInclude>
     <ClInclude Include="UploadBuffer.h">
       <Filter>D3D12Rhi</Filter>
-    </ClInclude>
-    <ClInclude Include="PreTreatedRenderInformation.h">
-      <Filter>Render\Private</Filter>
     </ClInclude>
     <ClInclude Include="D3D12RhiUtil.h">
       <Filter>D3D12Rhi</Filter>
@@ -209,9 +233,6 @@
     </ClInclude>
     <ClInclude Include="DescriptorHandleManager.h">
       <Filter>D3D12Rhi</Filter>
-    </ClInclude>
-    <ClInclude Include="TreatedRenderInformation.h">
-      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="DirectionLightActor.h">
       <Filter>Engine\Classes\InWorld\Light</Filter>
@@ -272,6 +293,21 @@
     </ClInclude>
     <ClInclude Include="InputManagerInterface.h">
       <Filter>Engine\Classes\InputManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ReadyForGpuComponentBase.h">
+      <Filter>Render\RenderInformationCollector\Component\ReadyForGpuComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="ReadyForCpuComponentBase.h">
+      <Filter>Render\RenderInformationCollector\Component\BaseComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="ReadyForRendererComponentBase.h">
+      <Filter>Render\RenderInformationCollector\Component\ReadyForRendererComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderWorldContext.h">
+      <Filter>Render\RenderInformationCollector</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderWorldContextForRenderer.h">
+      <Filter>Render\RenderInformationCollector</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -338,15 +374,6 @@
     <ClCompile Include="TextureManager.cpp">
       <Filter>ShaderCore\Private\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="UnTreatedRenderInformation.cpp">
-      <Filter>Render\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="PreTreatedRenderInformation.cpp">
-      <Filter>Render\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="TreatedRenderInformation.cpp">
-      <Filter>Render\Private</Filter>
-    </ClCompile>
     <ClCompile Include="TextureLoaderHelper.cpp">
       <Filter>ShaderCore\Private\Texture</Filter>
     </ClCompile>
@@ -380,6 +407,8 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <None Include="Template.inl">
+      <Filter>Core</Filter>
+    </None>
   </ItemGroup>
 </Project>

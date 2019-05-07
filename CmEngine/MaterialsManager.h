@@ -2,18 +2,12 @@
 #include "Util.h"
 #include <map>
 #include "ResourceManagerBase.h"
+#include "Template.h"
 class UMaterials;
 
-class FMaterialsManager : public FResourceManagerBase<UMaterials>, FNoncopyable
+class FMaterialsManager final : public FResourceManagerBase<UMaterials>, public Tpl::TAsSingle<FMaterialsManager>
 {
-	FMaterialsManager() {}
 public:
-	static FMaterialsManager & Get()
-	{
-		static FMaterialsManager single;
-		return single;
-	}
-
 	void Init();
 	void Clear();
 
